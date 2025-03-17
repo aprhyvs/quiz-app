@@ -5,4 +5,4 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse("<h1> It works! Kasarian Langis </h1>")
+    return render(request, "home/index.html")
