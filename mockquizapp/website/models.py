@@ -11,6 +11,8 @@ class StudentData(models.Model):
     gmail = models.CharField(max_length=50 , blank=True, default=None, null=True)
     phone = models.CharField(max_length=50 , blank=True, default=None, null=True)
     admin_id = models.IntegerField(blank=True, default=None, null=True)
+    username = models.CharField(max_length=50 , blank=True, default=None, null=True)
+    password = models.CharField(max_length=50  , blank=True, default=None, null=True)
 
     def __str__(self):
         return f"Student: {self.fname} {self.mname} {self.lname}"
@@ -21,7 +23,11 @@ class StudentData(models.Model):
             'lname': self.lname,
             'address': self.address,
             'gmail': self.gmail,
-            'phone': self.phone
+            'phone': self.phone,
+            'admin_id': self.admin_id,
+            'username': self.username, 
+            'school': self.school,
+            'id': self.pk,
         }
 
 
@@ -47,7 +53,6 @@ class QuizData(models.Model):
             'number_of_correct': self.number_of_correct,
             'number_of_wrong': self.number_of_wrong,
             'student_id': self.student_id,
-            'question_id': self.question_id,
             'file': self.file.path if self.file else None
         }
     
