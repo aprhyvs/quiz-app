@@ -79,13 +79,8 @@ def login_admin(request):
 
 
 def logout_student(request):
-<<<<<<< HEAD
     if request.user.is_authenticated:
         logout(request)
-    return JsonResponse({'status': 'success'} , status=200)
-
-=======
-    logout(request)
     return JsonResponse({'status': 'success'} , status=200)
 
 @csrf_exempt  # Test for later when uploading PDF is available.
@@ -99,4 +94,3 @@ def upload_file(request): #TODO - Make it delete the file upon extracting raw te
         return JsonResponse({"message": "File uploaded successfully!", "file_path": file_path})
 
     return JsonResponse({"error": "No file provided"}, status=400)
->>>>>>> f6e84c753b4aa52f7a633a0c5b197444399ef023
