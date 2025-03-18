@@ -3,6 +3,10 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 from .models import *
 
 
@@ -79,3 +83,15 @@ def login_admin(request):
 def logout_student(request):
     logout(request)
     return JsonResponse({'status': 'success'} , status=200)
+
+@csrf_exempt  # Test for later when uploading PDF is available.
+def upload_file(request): #TODO - Make it delete the file upon extracting raw text to send to AI language model
+    if request.method == "POST" and request.FILES.get("file"):
+        uploaded_file = request.FILES["file"]
+        
+        # Save file manually (or use Django model)
+        file_path = default_storage.save(f"uploads/{uploaded_file.name}", ContentFile(uploaded_file.read()))
+
+        return JsonResponse({"message": "File uploaded successfully!", "file_path": file_path})
+
+    return JsonResponse({"error": "No file provided"}, status=400)
