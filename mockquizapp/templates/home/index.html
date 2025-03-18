@@ -1,28 +1,23 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/home/styles.css' %}">
-</head>
-<body>
 
-    <nav>
-        <p>Name</p>
-        <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-         </ul>
-    </nav>
 
-    <div class="wrapper">
-        <h1>I'm buggin!</h1>    
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur tenetur error, eaque dolores esse, accusamus, dolor quas quis delectus ipsam et dolorem! Voluptatum inventore quas ipsam praesentium culpa? Eum, suscipit.</p>
-    </div>
+{% block head_block %}
 
-</body>
-</html>
+
+    
+{% endblock head_block %}
+    
+
+
+
+{% block body_block %}
+
+
+    {% include 'components/navbar.html' %}
+
+
+    
+{% endblock body_block %}
+    
