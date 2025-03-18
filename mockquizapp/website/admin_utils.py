@@ -12,7 +12,7 @@ def get_monthly_rankings() -> list:
         created_at__month=current_month
     ).values('student_id').annotate(
         total_score=Sum('number_of_correct')
-    ).order_by('-total_score')  # Order by highest score
+    ).order_by('-total_score')[:5]  # Order by highest score
     
     # Add student details to the rankings
     rankings = []
@@ -35,7 +35,7 @@ def get_yearly_rankings():
         created_at__year=current_year
     ).values('student_id').annotate(
         total_score=Sum('number_of_correct')
-    ).order_by('-total_score')  # Order by highest score
+    ).order_by('-total_score')[:5]  # Order by highest score
     
     # Add student details to the rankings
     rankings = []
