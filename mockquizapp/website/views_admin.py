@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 
 from .models import *
+from .admin_utils import *
+from .student_utils import *
 
 
 # STATISTICS
@@ -141,3 +143,32 @@ def delete_student_quiz(request):
         quiz.delete()
         
         return JsonResponse({"message": "Quiz deleted successfully"}, status=200)
+
+
+def get_admin_statistics(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        statsToGet = request.POST.get('statRequest') # statRequest is a table of stats that needs to be retrieved
+        
+        if not statsToGet:
+            return JsonResponse({"error": "Statistics request not provided"}, status=400)
+        
+        if statsToGet == '1':
+            # Get the total number of the registered students
+            totalStudents = StudentData.objects.count()
+            return JsonResponse({"total_students": totalStudents}, status=200)
+        
+        if statsToGet == '2':
+            # Get the top 5 ranking for the month students
+            monthly_rankings = get_monthly_rankings()
+            return JsonResponse({"monthly_rankings": monthly_rankings}, status=200)
+        
+        if statsToGet == '3':
+            # Get the top 5 ranking for the yearly students
+            yearly_rankings = get_yearly_rankings()
+            return JsonResponse({"yearly_rankings": yearly_rankings}, status=200)
+        
+
+

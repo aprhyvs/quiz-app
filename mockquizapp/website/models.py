@@ -42,14 +42,18 @@ class AdminData(models.Model):
 
 
 class QuizData(models.Model):
-    number_of_correct = models.IntegerField( blank=True, default=None, null=True)
-    number_of_wrong = models.IntegerField( blank=True, default=None, null=True)
-    student_id = models.IntegerField( blank=True, default=None, null=True)
+    number_of_correct = models.IntegerField(blank=True, default=None, null=True)
+    number_of_wrong = models.IntegerField(blank=True, default=None, null=True)
+    student_id = models.IntegerField(blank=True, default=None, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    questions = models.JSONField(default=dict , blank=True, null=True)
+    questions = models.JSONField(default=dict, blank=True, null=True)
     
     def __str__(self):
-        return f"Score: {self.score} - {self.student_id}"
+        return f"Score: {self.number_of_correct} - Student ID: {self.student_id}"
+    
+    def calculate_score(self):
+        # Assuming each correct answer gives 1 point
+        return self.number_of_correct or 0
     
     def get_data(self) -> dict:
         return {
