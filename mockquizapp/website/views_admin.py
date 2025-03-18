@@ -170,5 +170,8 @@ def get_admin_statistics(request):
             yearly_rankings = get_yearly_rankings()
             return JsonResponse({"yearly_rankings": yearly_rankings}, status=200)
         
-
+        if statsToGet == '4':
+            # Get the total amount of quizes taken in every month of the students
+            monthly_quizes_taken = get_quiz_count_per_month_for_year()
+            return JsonResponse({"monthly_quizes_taken": monthly_quizes_taken}, status=200)
 
