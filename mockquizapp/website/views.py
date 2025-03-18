@@ -8,6 +8,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
 from .models import *
+from .views_admin import *
+from .views_student import *
 
 
 #============================== Views Pages ===============================
@@ -82,6 +84,8 @@ def logout_student(request):
     if request.user.is_authenticated:
         logout(request)
     return JsonResponse({'status': 'success'} , status=200)
+
+
 
 
 @csrf_exempt  # Test for later when uploading PDF is available.
