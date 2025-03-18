@@ -5,6 +5,16 @@ from django.contrib.auth.models import User
 from .models import *
 
 
+# STATISTICS
+# 1. Total amount of quizes of the students
+# 2. Total amount of correct answers of the students
+# 3. Total amount of wrong answers of the students
+# 4. Graph of monthly total correct answers and wrong answers of students
+# 5. Total of amount quizes take in every month of the students
+# 6. Total number of the students
+
+
+
 def get_list_of_students(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
