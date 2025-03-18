@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from .models import *
 
 
+# STATISTICS
+
+
+
 
 def get_student_statistics(request):
     if not request.user.is_authenticated:

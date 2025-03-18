@@ -46,7 +46,7 @@ class QuizData(models.Model):
     number_of_wrong = models.IntegerField( blank=True, default=None, null=True)
     student_id = models.IntegerField( blank=True, default=None, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    questions = models.JSONField(default=dict)
+    questions = models.JSONField(default=dict , blank=True, null=True)
     
     def __str__(self):
         return f"Score: {self.score} - {self.student_id}"
