@@ -1,8 +1,10 @@
+import json
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 from .models import *
+
 
 
 # STATISTICS
@@ -46,45 +48,73 @@ def get_allStudentStats(student):  #Grabs all the stats of the student and print
 
 
 #Json Response
-def json_getStudentByUsername(request):
+def getStudentByUsernameRequest(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     username = request.POST.get('username' , None)
     student = get_object_or_404(StudentData, username=username)
     return JsonResponse(student , status=200)
 
-def json_getStudentStatistic(request):
+def getStudentStatisticRequest(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    student = getStudentByUsername(request.user.username) #Go find the student data using their username
+
+    student = getStudentByUsername(request.user.username)  # Retrieve student based on username
 
     if request.method == 'POST':
-        statsToGet = request.POST.get('statRequests') # statRequest is a table of stats that needs to be retrieved
-        stats = {}
-    '''
-        student's entire stats look like this:
-        stats = {
-        "allTime": {
-            "quizAmount": 13,
-            "totalItemsAnswered": 260,
-            "totalItemsCorrect": 174,
-            "totalItemsIncorrect": 86
+        try:
+            statsToGet = json.loads(request.body).get('statsRequest', {})  # Parse JSON request
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
+        stats = {}  # Dictionary to store the requested stats
+
+
+
+
+
+
+        ''' Stats Requests table looks like this for example:
+
+        statsRequest = {
+    "allTime": {  # Total statistics
+        "quizAmount": 13,
+        "totalItemsAnswered": 260,
+        "totalItemsCorrect": 174,
+        "totalItemsIncorrect": 86
+    },
+    "monthly": {  # Monthly statistics
+        "March 2025": {
+            "quizAmount": 8,
+            "totalItemsAnswered": 160,
+            "totalItemsCorrect": 100,
+            "totalItemsIncorrect": 60
         },
-        "monthly": {  # Monthly statistics
-            "March 2025": {
-                "quizAmount": 8,
-                "totalItemsAnswered": 160,
-                "totalItemsCorrect": 100,
-                "totalItemsIncorrect": 60
-            },
-            "February 2025": {
-                "quizAmount": 5,
-                "totalItemsAnswered": 100,
-                "totalItemsCorrect": 74,
-                "totalItemsIncorrect": 26
+        "February 2025": {
+            "quizAmount": 5,
+            "totalItemsAnswered": 100,
+            "totalItemsCorrect": 74,
+            "totalItemsIncorrect": 26
         }
     }
 }
-    '''
+        '''
 
-    return JsonResponse(stats , status=200)
+
+        # Retrieve all-time (total) statistics
+        if "allTime" in statsToGet:
+            stats["allTime"] = {}
+            for statname in statsToGet["allTime"]:
+                stats["allTime"][statname] = getStudentStat(0, student, None, statname)
+
+        # Retrieve monthly statistics
+        if "monthly" in statsToGet:
+            stats["monthly"] = {}
+            for month, statnames in statsToGet["monthly"].items():
+                stats["monthly"][month] = {}
+                for statname in statnames:
+                    stats["monthly"][month][statname] = getStudentStat(1, student, month, statname)
+
+        return JsonResponse(stats, status=200)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
