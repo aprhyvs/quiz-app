@@ -6,12 +6,14 @@ from .models import *
 
 
 # STATISTICS
-# 1. Total amount of quizes of the students
-# 2. Total amount of correct answers of the students
-# 3. Total amount of wrong answers of the students
-# 4. Graph of monthly total correct answers and wrong answers of students
-# 5. Total of amount quizes take in every month of the students
-# 6. Total number of the students
+# 1. Total amount of quizes of the students - student visit
+# 2. Total amount of correct answers of the students - student visit
+# 3. Total amount of wrong answers of the students - student visit
+# 4. Graph of monthly total correct answers and wrong answers of students - student visit
+# 5. Graph of total amount of quizes take in every month of the students - admin
+# 6. Total number of the students - admin
+# 7. Top 5 Ranking for the month students  - admin
+# 6. Top 5 Ranking for the yearly students - admin
 
 
 
