@@ -94,6 +94,26 @@ def login_student(request):
 
 
 
+
+'''
+def login_student_test(request):
+        username = "vionsyrion"
+        password = "totnakmaster420"
+        user = authenticate(username=username, password=password)
+        print("test logging in...")
+        if user is not None:
+            login(request, user)
+            print("Login successful")
+            return JsonResponse({'status': 'success', 'url': 'student/dashboard'} , status=200)
+        else:
+            return JsonResponse({'status': 'error, user is none'} , status=400)
+
+'''
+
+
+
+
+
 def login_admin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -111,10 +131,11 @@ def login_admin(request):
 
 
 def logout_student(request):
-    if request.user.is_authenticated:
-        logout(request)
-    return JsonResponse({'status': 'success'} , status=200)
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    logout(request)
 
+    return JsonResponse({'status': 'success'} , status=200)
 
 
 

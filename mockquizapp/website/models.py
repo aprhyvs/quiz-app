@@ -66,29 +66,6 @@ class QuizData(models.Model):
         }
     
 
-#For students' stats
-class TotalStats(models.Model):
-    student = models.OneToOneField(StudentData, on_delete=models.CASCADE, related_name="total_stats")
-    quiz_amount = models.IntegerField(default=0)
-    total_items_answered = models.IntegerField(default=0)
-    total_items_correct = models.IntegerField(default=0)
-    total_items_incorrect = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.student.name} - Total Stats"
-
-class MonthlyStats(models.Model):
-    student = models.ForeignKey(StudentData, on_delete=models.CASCADE, related_name="monthly_stats")
-    month = models.CharField(max_length=20)  # Example: "March 2025"
-    quiz_amount = models.IntegerField(default=0)
-    total_items_answered = models.IntegerField(default=0)
-    total_items_correct = models.IntegerField(default=0)
-    total_items_incorrect = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.student.name} - {self.month} Stats"
-
-
 
 class UploadedFile(models.Model): # File upload model. For handling Jarf(PDF File) uploads later.
     file = models.FileField(upload_to="uploads/")
