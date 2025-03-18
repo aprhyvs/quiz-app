@@ -3,22 +3,26 @@ from django.utils.timezone import now
 from .models import QuizData, StudentData
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.db.models import Count 
+ 
+def get_quiz_count_per_month_for_year():
+    # Automatically get the current year
+    current_year = now().year
 
-def get_quiz_count_per_month_for_year(year):
-    # Filter quizzes for the specified year and extract the month
+    # Filter quizzes for the current year and group by month
     monthly_data = QuizData.objects.filter(
-        created_at__year=year
+        created_at__year=current_year
     ).annotate(
-        month=ExtractMonth('created_at')  # Extract the month from the created_at field
+        month=ExtractMonth('created_at')
     ).values(
-        'month'  # Group by month
+        'month'
     ).annotate(
-        quiz_count=Count('id')  # Count the quizzes for each month
-    ).order_by('month')  # Order by month
+        quiz_count=Count('id')
+    ).order_by('month')
 
     # Format the result as a dictionary for better readability
     monthly_quiz_counts = {entry['month']: entry['quiz_count'] for entry in monthly_data}
     return monthly_quiz_counts
+
 
 def get_monthly_rankings() -> list: 
     current_month = now().month
