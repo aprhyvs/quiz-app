@@ -24,7 +24,16 @@ def getStudentByUsername(username): #Go find the student by only using their use
 
 
 
-#Json Response
+
+def student_start_game(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        file = request.FILES['file']
+        
+
+ 
 def get_student_statistic(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
