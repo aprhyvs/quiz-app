@@ -19,7 +19,7 @@ def get_list_of_students(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     students = StudentData.objects.all()
-    data = { student.id: student.get_data() for student in students}
+    data = { student.pk: student.get_data() for student in students}
     return JsonResponse(data , status=200)
 
 
@@ -96,6 +96,46 @@ def delete_student(request):
         return JsonResponse({"message": "Student deleted successfully"}, status=200)
         
 
+def get_student_quizes(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id' , None)
+        
+        if not student_id:
+            return JsonResponse({"error": "Student ID not provided"}, status=400)
+        
+        student = StudentData.objects.filter(id=student_id).first()
+        if not student:
+            return JsonResponse({"error": "Student not found"}, status=404)
+        
+        quizes = QuizData.objects.filter(student_id=student_id)
+        data = { quiz.pk: quiz.get_data() for quiz in quizes}
+        return JsonResponse(data , status=200)
 
-
-
+def delete_student_quiz(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id' , None)
+        quiz_id = request.POST.get('quiz_id' , None)
+        
+        if not student_id:
+            return JsonResponse({"error": "Student ID not provided"}, status=400)
+        
+        if not quiz_id:
+            return JsonResponse({"error": "Quiz ID not provided"}, status=400)
+        
+        student = StudentData.objects.filter(id=student_id).first()
+        if not student:
+            return JsonResponse({"error": "Student not found"}, status=404)
+        
+        quiz = QuizData.objects.filter(id=quiz_id).first()
+        if not quiz:
+            return JsonResponse({"error": "Quiz not found"}, status=404)
+        
+        quiz.delete()
+        
+        return JsonResponse({"message": "Quiz deleted successfully"}, status=200)
