@@ -1,5 +1,6 @@
 
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.models import User
 
 from .models import *
 
@@ -63,7 +64,26 @@ def update_student_data(request):
         
         return JsonResponse({"message": "Student data updated successfully"}, status=200)
              
+
+
+def delete_student(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id' , None)
         
+        if not student_id:
+            return JsonResponse({"error": "Student ID not provided"}, status=400)
+        
+        student = StudentData.objects.filter(id=student_id).first()
+        if not student:
+            return JsonResponse({"error": "Student not found"}, status=404)
+        
+        User.objects.filter(username=student.username).delete()
+        student.delete()
+        
+        return JsonResponse({"message": "Student deleted successfully"}, status=200)
         
 
 
