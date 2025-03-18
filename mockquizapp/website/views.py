@@ -83,6 +83,7 @@ def logout_student(request):
         logout(request)
     return JsonResponse({'status': 'success'} , status=200)
 
+
 @csrf_exempt  # Test for later when uploading PDF is available.
 def upload_file(request): #TODO - Make it delete the file upon extracting raw text to send to AI language model
     if request.method == "POST" and request.FILES.get("file"):
@@ -94,3 +95,6 @@ def upload_file(request): #TODO - Make it delete the file upon extracting raw te
         return JsonResponse({"message": "File uploaded successfully!", "file_path": file_path})
 
     return JsonResponse({"error": "No file provided"}, status=400)
+
+
+

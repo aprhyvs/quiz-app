@@ -13,6 +13,7 @@ class StudentData(models.Model):
     admin_id = models.IntegerField(blank=True, default=None, null=True)
     username = models.CharField(max_length=50 , blank=True, default=None, null=True)
     password = models.CharField(max_length=50  , blank=True, default=None, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Student: {self.fname} {self.mname} {self.lname}"
@@ -34,6 +35,7 @@ class StudentData(models.Model):
 class AdminData(models.Model):
     username = models.CharField(max_length=50 , blank=True, default=None, null=True)
     password = models.CharField(max_length=50  , blank=True, default=None, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Admin: {self.username}"
@@ -43,7 +45,8 @@ class QuizData(models.Model):
     number_of_correct = models.IntegerField( blank=True, default=None, null=True)
     number_of_wrong = models.IntegerField( blank=True, default=None, null=True)
     student_id = models.IntegerField( blank=True, default=None, null=True)
-    file = models.FileField( blank=True, default=None, null=True)
+    file = models.FileField( blank=True, default=None, null=True) # File upload model. For handling Jarf(PDF File) uploads later.
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Score: {self.score} - {self.student_id}"
