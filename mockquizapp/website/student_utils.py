@@ -7,6 +7,25 @@ from django.db.models.functions import ExtractMonth
 
 from .models import *
 
+import os
+ 
+  
+
+def identify_file_type(uploaded_file):
+    # Get the file extension
+    file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+    
+    if file_extension == '.docx':
+        return 'docx'
+    elif file_extension == '.pdf':
+        return 'pdf'
+    elif file_extension == '.txt':
+        return 'txt'
+    else:
+        return 'invalid'
+
+
+
 
 def getStudentStat():
     return

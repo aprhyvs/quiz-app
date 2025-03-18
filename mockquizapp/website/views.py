@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+
+
 from .models import *
 from .views_admin import *
 from .views_student import *
