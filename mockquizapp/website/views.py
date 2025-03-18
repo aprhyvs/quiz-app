@@ -13,7 +13,7 @@ from .views_student import *
 
 
 #============================== Views Pages ===============================
-def home(request):
+def home(request): 
     return render(request, "home/index.html")
 
  
