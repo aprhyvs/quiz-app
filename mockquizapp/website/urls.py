@@ -15,6 +15,9 @@ urlpatterns = [
     path('api/admin/students', view=get_list_of_students),
     path('api/admin/delete/student', view=delete_student),
     path('api/admin/update/student', view=update_student_data),
+    
+    path('api/admin/get/stats', view=get_admin_statistics),
+    path('api/student/stats', view=get_student_statistic),
 
     #=============================== File Upload ===============================#
     path("upload/", upload_file, name="upload_file"),
