@@ -26,17 +26,47 @@ def home(request):
 #=================================  API Routes =================================
 def register_student(request):
     if request.method == 'POST':
-        student_data = request.POST
+        input_data = request.POST
+        student_data = {}   # create empty student table
+
+        # --check input data one by one. check if input data contains information.
+        if input_data.get('fname', None):
+            student_data.fname = input_data.get('fname')
+        if input_data.get('mname', None):
+            student_data.mname = input_data.get('mname')
+        if input_data.get('lname', None):
+            student_data.lname = input_data.get('lname')
+        if input_data.get('school', None):
+            student_data.school = input_data.get('school')
+        if input_data.get('address', None):
+            student_data.address = input_data.get('address')
+        if input_data.get('gmail', None):
+            student_data.gmail = input_data.get('gmail')
+        if input_data.get('phone', None):
+            student_data.phone = input_data.get('phone')
+        if input_data.get('username', None):
+            username = input_data.get('username')
+            if StudentData.objects.filter(username=username).exists():
+                return JsonResponse({"error": "Username already exists"}, status=400)
+            student_data.username = username
+        if input_data.get('password', None):
+            student_data.password = input_data.get('password')
+
+        """ The table above should look like this example after the function is done checking and setting each information to the table
+
         student_data = {
-            'fname': student_data.get('fname'),
-            'mname': student_data.get('mname'),
-            'lname': student_data.get('lname'), 
-            'address': student_data.get('address'),
-            'gmail': student_data.get('gmail'),
-            'phone': student_data.get('phone'),
-            'username' : student_data.get('username'),
-            'password': student_data.get('password')
+            'fname': "Jeremiah Alvin"
+            'mname': "Perocillo",
+            'lname': "Nava", 
+            'address': "Block 12, Lot 22, Yagba Road, Brgy. Nursery, Milagros City",
+            'gmail': "jeremiahpnava@gmail.com",
+            'phone': "09456487069",
+            'username' : "JereNava420",
+            'password': "$2y$10$P0tkpHtXa30wl9dumSPOjeWWynDVmmp6uSnZUvvqreSSUWVKZTQTy"
         }
+
+        """
+
         # Save student data to database
         StudentData.objects.create(**student_data)
         User.objects.create(
