@@ -5,8 +5,11 @@ from .models import *
 
 
 # STATISTICS
-
-
+# 1. Total amount of quizes
+# 2. Total amount of correct answers
+# 3. Total amount of correct answers
+# 4. Graph of monthly total correct answers and wrong answers
+# 5. Total of amount quizes take in every month
 
 
 def get_student_statistics(request):
