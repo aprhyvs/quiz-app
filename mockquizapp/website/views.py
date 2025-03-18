@@ -44,8 +44,6 @@ def register_student(request):
     
     return JsonResponse({'status': 'error'} , status=400)
 
-
-
 def login_student(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -77,5 +75,7 @@ def login_admin(request):
 
 
 def logout_student(request):
-    logout(request)
+    if request.user.is_authenticated:
+        logout(request)
     return JsonResponse({'status': 'success'} , status=200)
+
