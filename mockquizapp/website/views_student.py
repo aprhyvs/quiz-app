@@ -76,28 +76,16 @@ def getStudentStatisticRequest(request):
 
         ''' Stats Requests table looks like this for example:
 
-        statsRequest = {
-    "allTime": {  # Total statistics
-        "quizAmount": 13,
-        "totalItemsAnswered": 260,
-        "totalItemsCorrect": 174,
-        "totalItemsIncorrect": 86
-    },
-    "monthly": {  # Monthly statistics
-        "March 2025": {
-            "quizAmount": 8,
-            "totalItemsAnswered": 160,
-            "totalItemsCorrect": 100,
-            "totalItemsIncorrect": 60
-        },
-        "February 2025": {
-            "quizAmount": 5,
-            "totalItemsAnswered": 100,
-            "totalItemsCorrect": 74,
-            "totalItemsIncorrect": 26
+        {
+            "statsRequest": {
+                "allTime": ["quizAmount", "totalItemsAnswered"],
+                "monthly": {
+                    "March 2025": ["quizAmount", "totalItemsCorrect"],
+                    "February 2025": ["quizAmount"]
+                }
+            }
         }
-    }
-}
+
         '''
 
 
