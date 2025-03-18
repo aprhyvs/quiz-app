@@ -45,8 +45,8 @@ class QuizData(models.Model):
     number_of_correct = models.IntegerField( blank=True, default=None, null=True)
     number_of_wrong = models.IntegerField( blank=True, default=None, null=True)
     student_id = models.IntegerField( blank=True, default=None, null=True)
-    file = models.FileField( blank=True, default=None, null=True) # File upload model. For handling Jarf(PDF File) uploads later.
     created_at = models.DateTimeField(auto_now_add=True)
+    questions = models.JSONField(default=dict)
     
     def __str__(self):
         return f"Score: {self.score} - {self.student_id}"
@@ -56,7 +56,9 @@ class QuizData(models.Model):
             'number_of_correct': self.number_of_correct,
             'number_of_wrong': self.number_of_wrong,
             'student_id': self.student_id,
-            'file': self.file.path if self.file else None
+            'created_at': self.created_at,
+            'questions': self.questions,
+            'id': self.pk,
         }
     
 
