@@ -56,4 +56,7 @@ class QuizData(models.Model):
             'file': self.file.path if self.file else None
         }
     
-    
+
+class UploadedFile(models.Model): # File upload model. For handling Jarf(PDF File) uploads later.
+    file = models.FileField(upload_to="uploads/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
