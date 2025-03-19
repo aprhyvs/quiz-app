@@ -46,7 +46,20 @@ class QuizData(models.Model):
     number_of_wrong = models.IntegerField(blank=True, default=None, null=True)
     student_id = models.IntegerField(blank=True, default=None, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_answered = models.BooleanField(default=False)
+    number_of_answered_questions = models.IntegerField(default=0)
     questions = models.JSONField(default=dict, blank=True, null=True)
+    """
+        questions = {
+            "1": {
+                "question": "What is the capital of France?",
+                "options": ["London", "Paris", "Berlin", "Madrid"],
+                "correct_answer": "Paris",
+                "answered": False,
+                "answer": None
+            },
+        }
+    """
     
     def __str__(self):
         return f"Score: {self.number_of_correct} - Student ID: {self.student_id}"
