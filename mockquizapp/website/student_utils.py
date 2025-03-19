@@ -23,21 +23,7 @@ def identify_file_type(uploaded_file):
         return 'txt'
     else:
         return 'invalid'
-
-
-
-
-def getStudentStat():
-    return
-
-def get_allStudentStats(student):  #Grabs all the stats of the student and prints.
-    # Get total stats
-    total_stats = {}
-    # Get all monthly stats
-    monthly_stats = student.monthly_stats.all()
-    return total_stats
-
-#JSON Response =================================================================
+ 
 def getStudentStatisticRequest(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)

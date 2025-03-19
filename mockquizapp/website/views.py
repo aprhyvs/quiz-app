@@ -33,26 +33,28 @@ def register_student(request):
 
         # --check input data one by one. check if input data contains information.
         if input_data.get('fname', None):
-            student_data.fname = input_data.get('fname')
+            student_data['fname'] = input_data.get('fname')
         if input_data.get('mname', None):
-            student_data.mname = input_data.get('mname')
+            student_data['mname'] = input_data.get('mname')
         if input_data.get('lname', None):
-            student_data.lname = input_data.get('lname')
+            student_data['lname'] = input_data.get('lname')
         if input_data.get('school', None):
-            student_data.school = input_data.get('school')
+            student_data['school'] = input_data.get('school')
         if input_data.get('address', None):
-            student_data.address = input_data.get('address')
+            student_data['address'] = input_data.get('address')
         if input_data.get('gmail', None):
-            student_data.gmail = input_data.get('gmail')
+            if StudentData.objects.filter(gmail=input_data.get('gmail')).exists():
+                return JsonResponse({"error": "Gmail already exists"}, status=400)
+            student_data['gmail']= input_data.get('gmail')
         if input_data.get('phone', None):
-            student_data.phone = input_data.get('phone')
+            student_data['phone'] = input_data.get('phone')
         if input_data.get('username', None):
             username = input_data.get('username')
             if StudentData.objects.filter(username=username).exists():
                 return JsonResponse({"error": "Username already exists"}, status=400)
-            student_data.username = username
+            student_data['username'] = username
         if input_data.get('password', None):
-            student_data.password = input_data.get('password')
+            student_data['password'] = input_data.get('password')
 
         """ The table above should look like this example after the function is done checking and setting each information to the table
 
