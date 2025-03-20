@@ -48,6 +48,8 @@ class QuizData(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_answered = models.BooleanField(default=False)
     number_of_answered_questions = models.IntegerField(default=0)
+    quiz_title = models.CharField(max_length=50 , blank=True, default=None, null=True)
+    total_worth = models.IntegerField(default=0)
     questions = models.JSONField(default=dict, blank=True, null=True)
     """
         questions = {
@@ -56,7 +58,8 @@ class QuizData(models.Model):
                 "options": ["London", "Paris", "Berlin", "Madrid"],
                 "correct_answer": "Paris",
                 "answered": False,
-                "answer": None
+                "answer": None,
+                "worth" : 100
             },
         }
     """
@@ -76,6 +79,10 @@ class QuizData(models.Model):
             'created_at': self.created_at,
             'questions': self.questions,
             'id': self.pk,
+            'is_answered': self.is_answered,
+            'number_of_answered_questions': self.number_of_answered_questions,
+            'quiz_title': self.quiz_title,
+            'total_worth': self.total_worth,
         }
     
 
