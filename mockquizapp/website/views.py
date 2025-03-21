@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-
+from django.middleware.csrf import get_token
 
 
 from .models import *
@@ -90,7 +90,9 @@ def register_student(request):
         user.save()
         return JsonResponse({'status': 'success'} , status=200)
     
+    return JsonResponse({'csrfToken': get_token(request)})
     return JsonResponse({'status': 'error'} , status=400)
+
 
 def login_student(request):
     print("Fired Login!")
@@ -107,7 +109,7 @@ def login_student(request):
             return JsonResponse({'status': 'success', 'url': 'student/dashboard'} , status=200)
         else:
             return JsonResponse({"error": "Wrong Username or Password!"} , status=400)
-    return JsonResponse({'status': 'error'} , status=400)
+    return JsonResponse({'csrfToken': get_token(request)})
 
 
 
