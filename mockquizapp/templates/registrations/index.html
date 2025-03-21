@@ -21,6 +21,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Registration</title>
     <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
+    <script>
+        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
+    </script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;

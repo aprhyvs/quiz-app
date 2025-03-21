@@ -8,7 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
     <script defer src="{% static 'javascript/login/script.js' %}"></script>
-    
+    <script>
+        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
+    </script>
+
 {% endblock head_block %}
     
 
