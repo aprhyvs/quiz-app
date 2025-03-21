@@ -1,0 +1,86 @@
+body {
+    background-color: #EFEFF0;
+}
+
+/* navbar */ 
+.navbar {
+    padding: 36px 72px;
+}
+
+.navbar h1 {
+    font-family: "Raleway";
+    color: #0F0A0A;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.navbar span {
+    color: #002157;
+}
+
+/* login */
+.wrapper {
+    margin: 0 auto;
+    background-color: #FCFCFC;
+    width: 35%;
+}
+
+.wrapper h1 {
+    font-family: "Raleway";
+    text-align: center;
+    margin: 16px 0;
+}
+
+.wrapper form {
+    display: flex;
+    flex-direction: column;
+    padding: 36px;
+    font-family: "Roboto";
+}
+
+.wrapper label {
+    font-weight: 300;
+}
+
+/* input */
+.wrapper input {
+    font-family: "Roboto";
+    font-weight: 400;
+    border-radius: 8px;
+    border: 2px solid #C1BFBF;
+    height: 40px;
+    margin: 16px 0;
+    padding: 0.5em;
+}
+
+.wrapper input:focus::placeholder {
+    color: #bbb9b9;
+}
+
+.wrapper input:focus {
+    outline: none;
+    border: #666565 2px solid;
+}
+
+.wrapper button {
+    width: 40%;
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-size: 16px;
+    padding: 8px;
+    margin: 8px auto;
+}
+
+/* form button */
+.login{
+    color: white;
+    font-weight: 400;
+    background-color: #002157;
+    border: 2px solid #002157;
+}
+
+.signup {
+    background-color: white;
+    border: none;
+    font-weight: 300;
+}

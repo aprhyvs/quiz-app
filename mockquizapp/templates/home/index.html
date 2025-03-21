@@ -5,8 +5,9 @@
 
 {% block head_block %}
 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home/styles.css' %}">
 
-    
 {% endblock head_block %}
     
 
@@ -15,9 +16,8 @@
 {% block body_block %}
 
 
-    {% include 'components/navbar.html' %}
+    {% include 'components/navbar_homepage.html' %}
 
-
-    
+   
 {% endblock body_block %}
     

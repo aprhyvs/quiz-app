@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block head_block %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
+
+{% endblock head_block %}
+    
+
+
+
+{% block body_block %}
+
+
+    {% include 'components/navbar_login.html' %}
+    <div class="wrapper">
+        <form>
+            <h1>Login to your Account</h1>
+            <label for="Username">Username</label>
+            <input type="text">
+            <label for="Password">Password</label>
+            <input type="password">
+            <button class="login">Login</button>
+            <button class="signup">Create new Account</button>
+        </form>
+    </div>
+
+
+{% endblock body_block %}
+    
