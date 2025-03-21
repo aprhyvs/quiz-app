@@ -18,7 +18,8 @@ from .views_student import *
 def home(request): 
     return render(request, "home/index.html")
 
- 
+def login_page(request):
+    return render(request, "login/index.html")
 
 
 

@@ -8,7 +8,7 @@ urlpatterns = [
     #=============================== Views Pages ===============================#
     path('', home, name='home'),
     path('register-student-demo/', register_student_demo, name='register-student-demo'),
-
+    path('login/', login_page, name='login-page'),
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
     path('api/login/admin', view=login_admin),
