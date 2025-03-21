@@ -7,7 +7,8 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
-
+    <script defer src="{% static 'javascript/login/script.js' %}"></script>
+    
 {% endblock head_block %}
     
 
@@ -18,15 +19,17 @@
 
     {% include 'components/navbar_login.html' %}
     <div class="wrapper">
-        <form>
+        <form id="loginForm">
             <h1>Login to your Account</h1>
             <label for="Username">Username</label>
-            <input type="text">
+            <input type="text" id="username" name="username">
             <label for="Password">Password</label>
-            <input type="password">
+            <input type="password" name="password" id="password">
             <button class="login">Login</button>
             <button class="signup">Create new Account</button>
         </form>
+
+        <p id="responseMessage" class="error"></p>
     </div>
 
 

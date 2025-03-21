@@ -22,6 +22,11 @@ def login_page(request):
     return render(request, "login/index.html")
 
 
+def register_page(request):
+    return render(request, 'registrations/index.html')  # Render the registration page for GET requests
+
+
+
 
 
 
@@ -74,27 +79,34 @@ def register_student(request):
 
         # Save student data to database
         StudentData.objects.create(**student_data)
-        User.objects.create(
-            username=student_data.get('username'),
-            password=student_data.get('password'),
-            first_name=student_data.get('fname'),
-            last_name=student_data.get('lname'),
-            email=student_data.get('gmail')
+        user = User.objects.create(
+            username=student_data['username'],
+            #password=student_data['password'],  # Store hashed password instead
+            first_name=student_data['fname'],
+            last_name=student_data.get('lname', ''),
+            email=student_data['gmail']
         )
+        user.set_password(student_data['password'])  # Hashes the password
+        user.save()
         return JsonResponse({'status': 'success'} , status=200)
     
     return JsonResponse({'status': 'error'} , status=400)
 
 def login_student(request):
+    print("Fired Login!")
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        input_data = json.loads(request.body)
+        print(input_data)
+        username = input_data.get('username')
+        password = input_data.get('password')
+
         user = authenticate(username=username, password=password)
         if user is not None:
+            print("User: " + user.username + " Found!")
             login(request, user)
             return JsonResponse({'status': 'success', 'url': 'student/dashboard'} , status=200)
         else:
-            return JsonResponse({'status': 'error'} , status=400)
+            return JsonResponse({"error": "Wrong Username or Password!"} , status=400)
     return JsonResponse({'status': 'error'} , status=400)
 
 
@@ -144,56 +156,3 @@ def logout_student(request):
 
 
 #=============================================For Testing ================================
-
-def register_student_demo(request):
-    if request.method == 'POST':
-        try:
-            input_data = json.loads(request.body)  # Get JSON data from request
-            student_data = {}
-
-            # Check and store each field if provided
-            if input_data.get('fname'):
-                student_data['fname'] = input_data['fname']
-            if input_data.get('mname'):
-                student_data['mname'] = input_data['mname']
-            if input_data.get('lname'):
-                student_data['lname'] = input_data['lname']
-            if input_data.get('school'):
-                student_data['school'] = input_data['school']
-            if input_data.get('address'):
-                student_data['address'] = input_data['address']
-            if input_data.get('gmail'):
-                if StudentData.objects.filter(gmail=input_data['gmail']).exists():
-                    return JsonResponse({"error": "Email already exists"}, status=400)
-                student_data['gmail'] = input_data['gmail']
-            if input_data.get('phone'):
-                student_data['phone'] = input_data['phone']
-            if input_data.get('username'):
-                if StudentData.objects.filter(username=input_data['username']).exists():
-                    return JsonResponse({"error": "Username already exists"}, status=400)
-                student_data['username'] = input_data['username']
-            if input_data.get('password'):
-                student_data['password'] = input_data['password']  # Consider hashing passwords
-
-            # Save to database
-            student = StudentData.objects.create(**student_data)
-
-            # Also create a corresponding user (Django's auth model)
-            User.objects.create_user(
-                username=student_data['username'],
-                password=student_data['password'],  # Store hashed password instead
-                first_name=student_data['fname'],
-                last_name=student_data.get('lname', ''),
-                email=student_data['gmail']
-            )
-
-            return JsonResponse({'status': 'success'}, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return render(request, 'registrations_demo/index.html')  # Render the registration page for GET requests
-
-
