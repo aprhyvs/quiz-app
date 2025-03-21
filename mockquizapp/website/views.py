@@ -28,7 +28,7 @@ def home(request):
 #=================================  API Routes =================================
 def register_student(request):
     if request.method == 'POST':
-        input_data = request.POST
+        input_data = json.loads(request.body)
         student_data = {}   # create empty student table
 
         # --check input data one by one. check if input data contains information.
@@ -142,18 +142,57 @@ def logout_student(request):
     return JsonResponse({'status': 'success'} , status=200)
 
 
+#=============================================For Testing ================================
 
-@csrf_exempt  # Test for later when uploading PDF is available.
-def upload_file(request): #TODO - Make it delete the file upon extracting raw text to send to AI language model
-    if request.method == "POST" and request.FILES.get("file"):
-        uploaded_file = request.FILES["file"]
-        
-        # Save file manually (or use Django model)
-        file_path = default_storage.save(f"uploads/{uploaded_file.name}", ContentFile(uploaded_file.read()))
+def register_student_demo(request):
+    if request.method == 'POST':
+        try:
+            input_data = json.loads(request.body)  # Get JSON data from request
+            student_data = {}
 
-        return JsonResponse({"message": "File uploaded successfully!", "file_path": file_path})
+            # Check and store each field if provided
+            if input_data.get('fname'):
+                student_data['fname'] = input_data['fname']
+            if input_data.get('mname'):
+                student_data['mname'] = input_data['mname']
+            if input_data.get('lname'):
+                student_data['lname'] = input_data['lname']
+            if input_data.get('school'):
+                student_data['school'] = input_data['school']
+            if input_data.get('address'):
+                student_data['address'] = input_data['address']
+            if input_data.get('gmail'):
+                if StudentData.objects.filter(gmail=input_data['gmail']).exists():
+                    return JsonResponse({"error": "Email already exists"}, status=400)
+                student_data['gmail'] = input_data['gmail']
+            if input_data.get('phone'):
+                student_data['phone'] = input_data['phone']
+            if input_data.get('username'):
+                if StudentData.objects.filter(username=input_data['username']).exists():
+                    return JsonResponse({"error": "Username already exists"}, status=400)
+                student_data['username'] = input_data['username']
+            if input_data.get('password'):
+                student_data['password'] = input_data['password']  # Consider hashing passwords
 
-    return JsonResponse({"error": "No file provided"}, status=400)
+            # Save to database
+            student = StudentData.objects.create(**student_data)
 
+            # Also create a corresponding user (Django's auth model)
+            User.objects.create_user(
+                username=student_data['username'],
+                password=student_data['password'],  # Store hashed password instead
+                first_name=student_data['fname'],
+                last_name=student_data.get('lname', ''),
+                email=student_data['gmail']
+            )
+
+            return JsonResponse({'status': 'success'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return render(request, 'registrations_demo/index.html')  # Render the registration page for GET requests
 
 

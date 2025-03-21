@@ -3,12 +3,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .views import *
-from .views import upload_file
 
 urlpatterns = [
     #=============================== Views Pages ===============================#
     path('', home, name='home'),
-    
+    path('register-student-demo/', register_student_demo, name='register-student-demo'),
+
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
     path('api/login/admin', view=login_admin),
@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/student/stats', view=get_student_statistic),
 
     #=============================== File Upload ===============================#
-    path("upload/", upload_file, name="upload_file"),
+
 
 
     #=============================== Testing ===================================#
