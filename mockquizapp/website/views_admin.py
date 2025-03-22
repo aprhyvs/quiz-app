@@ -22,17 +22,14 @@ from .student_utils import *
 def get_list_of_students(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
+    print("Grabbing all students...")
     students = StudentData.objects.all()
     data = { student.pk: student.get_data() for student in students}
     return JsonResponse(data , status=200)
 
-
-
-
 def update_student_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    
     
     if request.method == 'POST':
         student_id = request.POST.get('student_id' , None)
@@ -78,8 +75,6 @@ def update_student_data(request):
         
         return JsonResponse({"message": "Student data updated successfully"}, status=200)
              
-
-
 def delete_student(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -99,7 +94,6 @@ def delete_student(request):
         
         return JsonResponse({"message": "Student deleted successfully"}, status=200)
         
-
 def get_student_quizes(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -143,7 +137,6 @@ def delete_student_quiz(request):
         quiz.delete()
         
         return JsonResponse({"message": "Quiz deleted successfully"}, status=200)
-
 
 def get_admin_statistics(request):
     if not request.user.is_authenticated:

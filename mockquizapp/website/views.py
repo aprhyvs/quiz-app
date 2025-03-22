@@ -14,7 +14,7 @@ from .views_admin import *
 from .views_student import *
 
 
-#============================== Views Pages ===============================
+#============================== Views Webpages Pages ===============================
 def home(request): 
     return render(request, "home/index.html")
 
@@ -28,18 +28,21 @@ def admin_login_page(request):
     return render(request, "login_admin/index.html")
 
 def admin_dashboard(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
     return render(request, "admin_dashboard/index.html")
 
 def student_dashboard(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
     return render(request, "student_dashboard/index.html")
 
-
-#=================================  API Routes =================================
+#=================================  Views API Routes =================================
 def register_student(request):
     if request.method == 'POST':
-        input_data = json.loads(request.body)
+        input_data = request.POST
         student_data = {}   # create empty student table
-
+        print(input_data)
         # --check input data one by one. check if input data contains information.
         if input_data.get('fname', None):
             student_data['fname'] = input_data.get('fname')
@@ -96,11 +99,10 @@ def register_student(request):
     return JsonResponse({'csrfToken': get_token(request)})
     return JsonResponse({'status': 'error'} , status=400)
 
-
 def login_student(request):
     print("Fired Login!")
     if request.method == 'POST':
-        input_data = json.loads(request.body)
+        input_data = request.POST
         print(input_data)
         username = input_data.get('username')
         password = input_data.get('password')
@@ -114,31 +116,9 @@ def login_student(request):
             return JsonResponse({"error": "Wrong Username or Password!"} , status=400)
     return JsonResponse({'csrfToken': get_token(request)})
 
-
-
-
-'''
-def login_student_test(request):
-        username = "vionsyrion"
-        password = "totnakmaster420"
-        user = authenticate(username=username, password=password)
-        print("test logging in...")
-        if user is not None:
-            login(request, user)
-            print("Login successful")
-            return JsonResponse({'status': 'success', 'url': 'student/dashboard'} , status=200)
-        else:
-            return JsonResponse({'status': 'error, user is none'} , status=400)
-
-'''
-
-
-
-
-
 def login_admin(request):
     if request.method == 'POST':
-        input_data = json.loads(request.body)
+        input_data = request.POST
         username = input_data.get('username')
         password = input_data.get('password')
         user = authenticate(username=username, password=password)
@@ -152,13 +132,11 @@ def login_admin(request):
             return JsonResponse({'error': 'User does not exist'} , status=400)
     return JsonResponse({'status': 'error'} , status=400)
 
-
 def logout_student(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     logout(request)
 
     return JsonResponse({'status': 'success'} , status=200)
-
 
 #=============================================For Testing ================================

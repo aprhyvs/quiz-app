@@ -7,16 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Create FormData object from form fields
         const formData = new FormData(form);
-        const jsonData = Object.fromEntries(formData.entries());
 
         try {
             const response = await fetch("/api/register/student", {  // Adjust endpoint if needed
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRFToken": getCSRFToken(), // CSRF token for Django
                 },
-                body: JSON.stringify(jsonData),
+                body: formData
             });
 
             const data = await response.json();

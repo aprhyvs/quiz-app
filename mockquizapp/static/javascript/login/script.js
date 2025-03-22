@@ -7,16 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Create FormData object from form fields
         const formData = new FormData(form);
-        const jsonData = Object.fromEntries(formData.entries());
 
         try {
             const response = await fetch("/api/login/student", {  // Adjust endpoint if needed
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRFToken": getCSRFToken(), // CSRF token for Django
                 },
-                body: JSON.stringify(jsonData),
+                body: formData,  // Directly send FormData
             });
 
             const data = await response.json();
@@ -24,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 responseMessage.textContent = "Login successful!";
                 responseMessage.style.color = "green";
-                window.location.href = studentDashboardUrl;
+                window.location.href = studentDashboardUrl; // Redirect to dashboard
                 form.reset();
             } else {
                 responseMessage.textContent = data.error || "Login failed!";
