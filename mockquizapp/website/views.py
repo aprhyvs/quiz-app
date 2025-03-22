@@ -132,7 +132,7 @@ def login_admin(request):
             return JsonResponse({'error': 'User does not exist'} , status=400)
     return JsonResponse({'status': 'error'} , status=400)
 
-def logout_student(request):
+def logout(request):
     print("Logging out")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
