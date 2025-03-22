@@ -72,16 +72,16 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirm("Are you sure you want to logout?")) return;
 
         try {
-            const response = await fetch("/logout", {
+            const response = await fetch("/api/logout", {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": getCSRFToken(),
-                    "Content-Type": "application/json",
+
                 },
             });
 
             if (response.ok) {
-                window.location.href = "/login";
+                window.location.href = "/";
             } else {
                 console.error("Logout failed");
             }

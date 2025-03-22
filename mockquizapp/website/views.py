@@ -133,6 +133,7 @@ def login_admin(request):
     return JsonResponse({'status': 'error'} , status=400)
 
 def logout_student(request):
+    print("Logging out")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     logout(request)
