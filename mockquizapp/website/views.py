@@ -30,7 +30,12 @@ def admin_login_page(request):
 def admin_dashboard(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    return render(request, "admin_dashboard/index.html")
+    
+    if request.user.is_staff:
+        return render(request, "admin_dashboard/index.html")
+    
+    return JsonResponse({"error": "User not an admin"}, status=401)
+
 
 def student_dashboard(request):
     if not request.user.is_authenticated:
