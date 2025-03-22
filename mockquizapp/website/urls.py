@@ -16,7 +16,7 @@ urlpatterns = [
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
     path('api/login/admin', view=login_admin),
-    path('api/logout', view=logout),    
+    path('api/logout', view=logout_request),    
     path('api/register/student', view=register_student),
     
     path('api/admin/students', view=get_list_of_students),
