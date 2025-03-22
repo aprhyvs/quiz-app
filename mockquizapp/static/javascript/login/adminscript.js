@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const jsonData = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch("/api/login/student", {  // Adjust endpoint if needed
+            const response = await fetch("/api/login/admin", {  // Adjust endpoint if needed
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 responseMessage.textContent = "Login successful!";
                 responseMessage.style.color = "green";
-                window.location.href = studentDashboardUrl;
+                window.location.href = adminDashboardUrl;
                 form.reset();
             } else {
                 responseMessage.textContent = data.error || "Login failed!";

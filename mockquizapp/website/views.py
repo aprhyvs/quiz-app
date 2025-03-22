@@ -21,14 +21,17 @@ def home(request):
 def login_page(request):
     return render(request, "login/index.html")
 
-
 def register_page(request):
     return render(request, 'registrations/index.html')  # Render the registration page for GET requests
 
+def admin_login_page(request):
+    return render(request, "login_admin/index.html")
 
+def admin_dashboard(request):
+    return render(request, "admin_dashboard/index.html")
 
-
-
+def student_dashboard(request):
+    return render(request, "student_dashboard/index.html")
 
 
 #=================================  API Routes =================================
@@ -106,7 +109,7 @@ def login_student(request):
         if user is not None:
             print("User: " + user.username + " Found!")
             login(request, user)
-            return JsonResponse({'status': 'success', 'url': 'student/dashboard'} , status=200)
+            return JsonResponse({'status': 'success', 'url': 'student_dashboard/'} , status=200)
         else:
             return JsonResponse({"error": "Wrong Username or Password!"} , status=400)
     return JsonResponse({'csrfToken': get_token(request)})
@@ -135,17 +138,18 @@ def login_student_test(request):
 
 def login_admin(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        input_data = json.loads(request.body)
+        username = input_data.get('username')
+        password = input_data.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_staff:
                 login(request, user)
-                return JsonResponse({'status': 'success', 'url': 'admin/dashboard'} , status=200)
+                return JsonResponse({'status': 'success', 'url': 'admin_dashboard/'} , status=200)
             else:
-                return JsonResponse({'status': 'error'} , status=403)
+                return JsonResponse({'error': 'User does not have admin status'} , status=403)
         else:
-            return JsonResponse({'status': 'error'} , status=400)
+            return JsonResponse({'error': 'User does not exist'} , status=400)
     return JsonResponse({'status': 'error'} , status=400)
 
 

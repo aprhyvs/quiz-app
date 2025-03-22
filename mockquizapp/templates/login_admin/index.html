@@ -4,18 +4,16 @@
 
 
 {% block head_block %}
-
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
     <script>
-        const studentDashboardUrl = "{% url 'student-dashboard' %}";
+        const adminDashboardUrl = "{% url 'admin-dashboard' %}";
     </script>
-    
-    <script defer src="{% static 'javascript/login/script.js' %}"></script>
+
+    <script defer src="{% static 'javascript/login/adminscript.js' %}"></script>
     <script>
         document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
     </script>
-
 {% endblock head_block %}
     
 
@@ -27,7 +25,7 @@
     {% include 'components/navbar_login.html' %}
     <div class="wrapper">
         <form id="loginForm">
-            <h1>Login to your Account</h1>
+            <h1>Administrator Login</h1>
             <label for="Username">Username</label>
             <input type="text" id="username" name="username">
             <label for="Password">Password</label>
