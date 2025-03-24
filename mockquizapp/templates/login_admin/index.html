@@ -8,12 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
     <script>
         const adminDashboardUrl = "{% url 'admin-dashboard' %}";
-    </script>
-
-    <script defer src="{% static 'javascript/login/adminscript.js' %}"></script>
-    <script>
         document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
     </script>
+    <script defer src="{% static 'javascript/login_admin/script.js' %}"></script>
+    
 {% endblock head_block %}
     
 

@@ -20,8 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             if (response.ok) {
-                responseMessage.textContent = "Registration successful!";
+                responseMessage.textContent = "Registration successful! Redirecting to Login Page...";
                 responseMessage.style.color = "green";
+
+                setTimeout(function() {
+                    window.location.href = studentLoginUrl;
+                }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
                 form.reset();
             } else {
                 responseMessage.textContent = data.error || "Registration failed!";

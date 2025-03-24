@@ -22,6 +22,7 @@
     <title>Student Registration</title>
     <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
     <script>
+        const studentLoginUrl = "{% url 'login-page' %}";
         document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
     </script>
     
