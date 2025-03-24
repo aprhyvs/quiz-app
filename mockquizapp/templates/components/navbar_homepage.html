@@ -1,5 +1,8 @@
+{% load static %}
+
 <nav class="navbar">
     <div class="left">
+        <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1>GAM<span>IQ</span></h1>
     </div>
 
@@ -8,5 +11,4 @@
         <button onclick="window.location.href='{% url 'register-page' %}'"class="signup">Sign Up</button>
     </div>
 </nav>
-
 

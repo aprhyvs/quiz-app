@@ -5,6 +5,17 @@
     padding: 36px 72px;
 }
 
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.left img {
+    width: 100%;
+    max-width: 64px;
+}
+
 .left h1 {
     font-family: "Raleway";
     color: #0F0A0A;
