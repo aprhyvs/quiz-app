@@ -1,0 +1,39 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 36px 72px;
+}
+
+.left h1 {
+    font-family: "Raleway";
+    color: #0F0A0A;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.left span {
+    color: #002157;
+}
+
+.right button {
+    min-width: 90px;
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px;
+    margin: 0 8px;
+}
+
+.login {
+    color: #002157;
+    background-color: white;
+    border: 2px solid #002157;
+}
+
+.signup {
+    color: white;
+    background-color: #002157;
+    border: 2px solid #002157;
+}
