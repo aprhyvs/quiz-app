@@ -7,6 +7,17 @@ body {
     padding: 36px 72px;
 }
 
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.navbar img {
+    width: 100%;
+    max-width: 64px;
+}
+
 .navbar h1 {
     font-family: "Raleway";
     color: #0F0A0A;
