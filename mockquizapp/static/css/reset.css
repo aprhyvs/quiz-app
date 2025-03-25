@@ -16,10 +16,11 @@ ol[role='list'] {
   list-style: none;
 }
 
-/* heading */ 
+/* heading 
 h1, h2, h3, h4, h5, h6 {
     text-wrap: balance;
 }
+*/
 
 /* body */
 p {

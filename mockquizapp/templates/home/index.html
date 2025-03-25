@@ -18,54 +18,56 @@
 
     {% include 'components/navbar_homepage.html' %}
 
-    <div class="wrapper">
-        <div class="hero-section">
+    <main>
+        <section class="hero">
             <div class="hero-left">
-                <h1>Your Files, Your Quiz: Powered by AI!</h1><br>
-                <p>Your <strong>perfect quiz</strong> is just a click away.</p><br>
-                <p><strong>GAMIQ</strong> creates personalized quizzes that adapt as you go. Challenge yourself, track your progress, and discover how much you can achieve!</p>
+                <h1>Your Files, Your Quiz: Powered by AI!</h1>
+                <p>Your <strong>perfect quiz</strong> is just a click away.</p>
+                <p><strong>GAMIQ</strong> creates personalized quizzes that adapt as you go.
+                Challenge yourself, track your progress, and discover how much you can achieve!</p>
             </div>
             <div class="hero-right">
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="wrapper-info">
-        <div class="information-section">
-            <h1>Why use GAMIQ?</h1>
-            <br>
-            <div class="information-cards">
-                <div class="card">
-                    <h3>Learn Efficiently</h3>
-                    <br>
-                    <p>The AI helps you focus on areas that need improvement and making your study sessions more efficient.</p>
-                </div>
-                <div class="card">
-                    <h3>Reinforces your learning</h3>
-                    <br>
-                    <p>The AI uses varied question types to keep things engaging and help you retain the material.</p>
-                </div>
-                <div class="card">
-                    <h3>Your personalized reviewer</h3>
-                    <br>
-                    <p>The quiz generated is based on the files you upload, offering a personalized review experience like a personal tutor.</p>
+        <section class="info">
+            <div class="info-wrapper">
+                <h1>Why use GAMIQ?</h1>
+               
+                <div class="info-cards">
+                    <div class="card">
+                        <h3>Learn Efficiently</h3>
+                        
+                        <p>The AI helps you focus on areas that need improvement and making your study sessions more efficient.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Reinforces your learning</h3>
+                        
+                        <p>The AI uses varied question types to keep things engaging and help you retain the material.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Your personalized reviewer</h3>
+                        
+                        <p>The quiz generated is based on the files you upload, offering a personalized review experience like a personal tutor.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="wrapper">
-        <div class="cta">
-            <div class="cta-left">
-                <h4>Ready to supercharge your learning?</h4>
-                <br>
-                <p>Start using our personalized AI quiz generator today and take your studies to the next level!</p>
+        <section class="cta">
+            <div class="cta-wrapper">
+                <div class="cta-left">
+                    <h4>Ready to supercharge your learning?</h4>
+                    <br>
+                    <p>Start using our personalized AI quiz generator today and take your studies to the next level!</p>
+                </div>
+                <div class="cta-right">
+                    <button onclick="window.location.href='{% url 'register-page' %}'" >Sign up</button>
+                </div>
             </div>
-            <div class="cta-right">
-                <button onclick="window.location.href='{% url 'register-page' %}'" >Sign up</button>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
+    
 
     <div class="footer">
         <p>GAMIQ 2025</p>
