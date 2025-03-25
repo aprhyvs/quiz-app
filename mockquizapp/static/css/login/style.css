@@ -4,7 +4,7 @@ body {
 
 /* navbar */ 
 .navbar {
-    padding: 36px 72px;
+    padding: 2.25em 4.5em;
 }
 
 .navbar {
@@ -33,34 +33,43 @@ body {
 .wrapper {
     margin: 0 auto;
     background-color: #FCFCFC;
+    border: 2px solid #C1BFBF;
+    border-radius: 8px;
+    padding: 2em;
     width: 35%;
+    max-width: 800px;
 }
 
 .wrapper h1 {
     font-family: "Raleway";
     text-align: center;
-    margin: 16px 0;
+    margin-bottom: 1em;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2.5rem);
 }
 
 .wrapper form {
     display: flex;
     flex-direction: column;
-    padding: 36px;
     font-family: "Roboto";
 }
 
 .wrapper label {
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
     font-weight: 300;
+    margin: 0.5em 0;
 }
 
 /* input */
 .wrapper input {
     font-family: "Roboto";
-    font-weight: 400;
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
+    font-weight: 300;
     border-radius: 8px;
     border: 2px solid #C1BFBF;
-    height: 40px;
-    margin: 16px 0;
+    margin-bottom: 1em;
     padding: 0.5em;
 }
 
@@ -74,12 +83,12 @@ body {
 }
 
 .wrapper button {
-    width: 40%;
     border-radius: 4px;
     font-family: "Roboto";
-    font-size: 16px;
-    padding: 8px;
-    margin: 8px auto;
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    padding: 0.5em 2em;
+    margin: 0.5em auto;
 }
 
 /* form button */

@@ -5,7 +5,8 @@
 
 {% block head_block %}
 
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register/style.css' %}">
     
 {% endblock head_block %}
     
@@ -13,6 +14,9 @@
 
 
 {% block body_block %}
+
+    {% include 'components/navbar_login.html' %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,41 +29,9 @@
         const studentLoginUrl = "{% url 'login-page' %}";
         document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
     </script>
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            max-width: 400px;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        input {
-            padding: 8px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            background-color: blue;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: darkblue;
-        }
-        .error {
-            color: red;
-        }
-    </style>
 </head>
 <body>
 
-    <h2>Register Student</h2>
     <form id="registerForm">
         <input type="text" id="fname" name="fname" placeholder="First Name" required>
         <input type="text" id="mname" name="mname" placeholder="Middle Name">
@@ -77,9 +49,6 @@
 
 </body>
 </html>
-
-    {% include 'components/navbar.html' %}
-
 
     
 {% endblock body_block %}

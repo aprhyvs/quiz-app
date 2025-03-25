@@ -66,11 +66,10 @@ body {
 }
 
 .card-small {
+    width: 20%;
     max-width: 320px;
-    min-height: 400px;
 }
 
 .card-large {
-    max-width: 800px;
-    min-height: 560px;
+    width: 46.75%;
 }
