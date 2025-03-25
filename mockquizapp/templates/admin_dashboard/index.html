@@ -14,6 +14,7 @@
 <script defer src="{% static 'javascript/admin_dashboard/script.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/admin_dashboard/styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/navbar_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/components/logout_admin.css' %}">
     
 {% endblock head_block %}
     
@@ -24,6 +25,9 @@
     {% include 'components/navbar_admin.html' %}
 
 
+
+
+    {% include 'components/logout_admin.html' %}
     
 {% endblock body_block %}
     

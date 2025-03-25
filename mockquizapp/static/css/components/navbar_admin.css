@@ -19,7 +19,8 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-left: 24px;
+    margin-left: 45px;
+    cursor: pointer;
 }
 
 .logo-holder img{
@@ -37,10 +38,14 @@
 .title-bar{
     display: flex;
     width: auto;
-
+    flex:1;
+    justify-content: center;
+    align-items: center;
 }
 
 .title-bar h2{  
+    margin: 0;
+    padding:0;
     font-size: 32px;
     line-height: 38px; 
     text-align: center; 
@@ -48,8 +53,29 @@
 }
 
 
+.nav-but{
+    display: flex;
+    height: 100%;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nav-but svg{
+    width: 24px;
+    height: 24px; 
+}
 
 
+.nav-but h3{ 
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center; 
+    color: #FFFFFF; 
+    margin-left: 12px;
+    margin-right:24px;
+}
 
 
 

@@ -1,3 +1,6 @@
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Admin Dashboard Loaded");
 
@@ -66,30 +69,64 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
     // Logout Function
-    document.querySelector(".sidebar a[href='/logout']").addEventListener("click", async function (event) {
-        event.preventDefault();
+    // document.querySelector(".sidebar a[href='/logout']").addEventListener("click", async function (event) {
+    //     event.preventDefault();
 
-        if (!confirm("Are you sure you want to logout?")) return;
+    //     if (!confirm("Are you sure you want to logout?")) return;
 
-        try {
-            const response = await fetch("/api/logout", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": getCSRFToken(),
+    //     try {
+    //         const response = await fetch("/api/logout", {
+    //             method: "POST",
+    //             headers: {
+    //                 "X-CSRFToken": getCSRFToken(),
 
-                },
-            });
+    //             },
+    //         });
 
-            if (response.ok) {
-                window.location.href = "/";
-            } else {
-                console.error("Logout failed");
-            }
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    });
+    //         if (response.ok) {
+    //             window.location.href = "/";
+    //         } else {
+    //             console.error("Logout failed");
+    //         }
+    //     } catch (error) {
+    //         console.error("Logout error:", error);
+    //     }
+    // });
 
     // Load Student Data
     fetchStudents();
+
+
+
+
+
+
+
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+
+    });
+
+
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+
+    });
+    
+
+
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+
+
+
+
+
+
+
 });
