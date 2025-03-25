@@ -27,7 +27,47 @@
 
 
 
-    {% include 'components/logout_admin.html' %}
+
+    
+
+
+
+    <div class="pop-up" id="logout-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Logout</h1>
+            <h6 class="raleway-regular">Are you sure you want to logout?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-logout-but">Cancel</button>
+                <button id="logout-but" >Logout</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="pop-up" id="edit-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Confirm changes</h1>
+            <h6 class="raleway-regular">Are you sure you want to apply changes to User@email?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-save-but">Cancel</button>
+                <button id="save-but" >Save</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="pop-up" id="delete-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Delete</h1>
+            <h6 class="raleway-regular">Are you sure you want to delete User@email?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-delete-but">Cancel</button>
+                <button id="delete-but" >Logout</button>
+            </div>
+        </div>
+    </div>
+    
     
 {% endblock body_block %}
     
