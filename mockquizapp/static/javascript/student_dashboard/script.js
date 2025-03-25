@@ -54,7 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const quizzesTakenDiv = document.querySelector(".total-quizzes-taken");
         quizzesTakenDiv.innerHTML = `<h3>Total Quizzes Taken</h3>
                     <p class="total-quizzes-taken-number">${studentStats.total_quizzes}</p>`;
-
+        
+        const correctAnswersDiv = document.querySelector(".total-correct-answers");
+        correctAnswersDiv.innerHTML = `<h3>Total Correct Answers</h3>
+                    <p class="total-correct-answers-number">${studentStats.total_correct_answers}</p>`;
+        
+        const wrongAnswersDiv = document.querySelector(".total-wrong-answers");
+        wrongAnswersDiv.innerHTML = `<h3>Total Wrong Answers</h3>
+                    <p class="total-wrong-answers-number">${studentStats.total_wrong_answers}</p>`;
+        
+        
     }
 
     // Load Student Data

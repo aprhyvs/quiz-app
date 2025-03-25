@@ -97,8 +97,8 @@ def get_all_student_data(request): ## Returns all student data and stats
         stats['total_quizzes'] = get_total_quizzes_for_student(student)
         stats['total_correct_answers'] = get_sum_of_correct_answers(student)
         stats['total_wrong_answers'] = get_total_wrong_answers_for_student(student)
-        ##stats['monthlyStatistics'] = get_monthly_correct_and_wrong_for_student(student)
-        ##stats['monthlyQuizzesTaken'] = get_monthly_quizzes_taken_for_student(student)
+        stats['monthlyStatistics'] = get_monthly_correct_and_wrong_for_student(student)
+        stats['monthlyQuizzesTaken'] = get_monthly_quizzes_taken_for_student(student)
 
         data['studentData'] = studentData
         data['stats'] = stats
