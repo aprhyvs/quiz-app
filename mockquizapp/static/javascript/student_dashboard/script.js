@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.log(data);
 
-            //displayStudentData(studentData)
+            displayStudentData(studentData)
             displayStudentStats(studentStats);
 
         } catch (error) {
@@ -43,36 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
-        const contentDiv = document.querySelector(".content");
-        contentDiv.innerHTML = `<h2>Student List</h2>`;
-    
-
-        
+        const studentNameDiv = document.querySelector(".total-quizzes-taken");
+        studentNameDiv.innerHTML = `<h3>Welcome, ${studentData.username}!</h3>`;
 
 
-
-
-
-        for (const studentID in students) {
-            if (students.hasOwnProperty(studentID)) {
-                const student = students[studentID];
-    
-                // Create Bootstrap card
-                const studentCard = document.createElement("div");
-                studentCard.classList.add("card", "mb-3"); // Adds margin-bottom for spacing
-                studentCard.innerHTML = `
-                    <div class="card-body">
-                        <h5 class="card-title">${student.fname} ${student.lname}</h5>
-                        <p class="card-text">School: ${student.school}</p>
-                        <p class="card-text">Email: ${student.gmail}</p>
-                        <p class="card-text">Phone: ${student.phone}</p>
-                        <a href="#" class="btn btn-primary">Configure Student Data</a>
-                    </div>
-                `;
-    
-                contentDiv.appendChild(studentCard);
-            }
-        }
+     
     }
     
     function displayStudentStats(studentStats) {
