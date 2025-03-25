@@ -78,7 +78,10 @@ def get_monthly_correct_and_wrong_for_student(student):
         total_wrong=Sum('number_of_wrong')
     ).order_by('month')
     
-    return data
+    # Convert the queryset to a dictionary
+    monthly_correct_and_wrong = {entry['month']: entry for entry in data}
+    return monthly_correct_and_wrong
+     
 
 def get_monthly_quizzes_taken_for_student(student):
     # Filter by the student_id and group by month
@@ -90,4 +93,7 @@ def get_monthly_quizzes_taken_for_student(student):
         total_quizzes=Sum('id')  # Or use .count() to count records
     ).order_by('month')
     
-    return data
+    # Convert the queryset to a dictionary
+    monthly_quiz_counts = {entry['month']: entry for entry in data}
+    return monthly_quiz_counts
+     
