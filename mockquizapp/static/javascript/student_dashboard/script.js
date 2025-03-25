@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
-        const studentNameDiv = document.querySelector(".total-quizzes-taken");
+        const studentNameDiv = document.querySelector(".student-name-div");
         studentNameDiv.innerHTML = `<h3>Welcome, ${studentData.username}!</h3>`;
 
 
