@@ -24,8 +24,9 @@ urlpatterns = [
     path('api/admin/update/student', view=update_student_data),
     
     path('api/admin/get/stats', view=get_admin_statistics),
-    path('api/student/stats', view=get_student_statistic),
-
+    path('api/student/stats', view=get_all_student_stats),
+    path('api/student/alldata', view=get_all_student_data),
+    path('api/student/data', view=get_student_data),
 
 
     #=============================== File Upload ===============================#
