@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Fetch Student List (Example)
-    async function fetchStudents() {
+    async function fetchAllStudentData() {
         try {
             const response = await fetch("/api/student/alldata", {
                 method: "GET",
@@ -24,24 +24,35 @@ document.addEventListener("DOMContentLoaded", function () {
             
 
             if (!response.ok) 
-                throw new Error("Failed to load students");
+                throw new Error("Failed to load data");
             
             const data = await response.json();
-            const students = data;
+            const studentDatas = data.studentData;
+            const studentData = studentDatas.studentData;
+            const studentStats = studentDatas.stats;
 
-            console.log(students)
-            displayStudents(students);
+            console.log(data);
+
+            //displayStudentData(studentData)
+            displayStudentStats(studentStats);
 
         } catch (error) {
-            console.error("Error fetching students:", error);
+            console.error("Error fetching data:", error);
         }
     }
 
-    // Display Students in Dashboard
-    function displayStudents(students) {
+    // Display Student Data in Dashboard
+    function displayStudentData(studentData) {
         const contentDiv = document.querySelector(".content");
         contentDiv.innerHTML = `<h2>Student List</h2>`;
     
+
+        
+
+
+
+
+
         for (const studentID in students) {
             if (students.hasOwnProperty(studentID)) {
                 const student = students[studentID];
@@ -64,32 +75,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
+    function displayStudentStats(studentStats) {
+        const quizzesTakenDiv = document.querySelector(".total-quizzes-taken");
+        quizzesTakenDiv.innerHTML = `<h3>Total Quizzes Taken</h3>
+                    <p class="total-quizzes-taken-number">${studentStats.total_quizzes}</p>`;
 
-    // Logout Function
-    document.querySelector(".sidebar a[href='/logout']").addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        if (!confirm("Are you sure you want to logout?")) return;
-
-        try {
-            const response = await fetch("/api/logout", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": getCSRFToken(),
-
-                },
-            });
-
-            if (response.ok) {
-                window.location.href = "/";
-            } else {
-                console.error("Logout failed");
-            }
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    });
+    }
 
     // Load Student Data
-    fetchStudents();
+    fetchAllStudentData();
 });

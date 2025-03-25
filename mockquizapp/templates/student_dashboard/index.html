@@ -7,7 +7,9 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
     <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
-    
+    <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
+    <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
+
 {% endblock head_block %}
     
 
@@ -21,8 +23,9 @@
     <main>
         <section class="dashboard">
             <div class="wrapper">
-                <div class="card-small">
-                    <h3>Text</h3>
+                <div class="card-small total-quizzes-taken">
+                    <h3>Total Quizzes Taken</h3>
+                    <p class="total-quizzes-taken-number">0</p>
                 </div>
                 <div class="card-small">
                     <h3>Text</h3>
