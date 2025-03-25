@@ -34,13 +34,17 @@ def get_weekly_rankings() -> list:
     return rankings
 
  
+
 def get_quiz_count_per_month_for_year():
     # Automatically get the current year
     current_year = now().year
 
+    # Prepopulate dictionary with all months set to 0
+    months_with_zero = {month: 0 for month in range(1, 13)}  # 1 to 12 for January to December
+
     # Filter quizzes for the current year and group by month
     monthly_data = QuizData.objects.filter(
-        is_answered = True,
+        is_answered=True,
         created_at__year=current_year
     ).annotate(
         month=ExtractMonth('created_at')
@@ -50,9 +54,20 @@ def get_quiz_count_per_month_for_year():
         quiz_count=Count('id')
     ).order_by('month')
 
-    # Format the result as a dictionary for better readability
-    monthly_quiz_counts = {entry['month']: entry['quiz_count'] for entry in monthly_data}
-    return monthly_quiz_counts
+    # Update the prepopulated dictionary with actual quiz counts
+    for entry in monthly_data:
+        months_with_zero[entry['month']] = entry['quiz_count']
+
+    # Convert month numbers to month names for readability
+    month_names = {
+        1: 'January', 2: 'February', 3: 'March', 4: 'April',
+        5: 'May', 6: 'June', 7: 'July', 8: 'August',
+        9: 'September', 10: 'October', 11: 'November', 12: 'December'
+    }
+    result = [value for key, value in months_with_zero.items()]
+
+    return result
+
 
 
 def get_monthly_rankings() -> list: 

@@ -83,3 +83,47 @@
     background: #002157;
     color: #FDFDFD;
 }
+
+
+.dashboard-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 130px;
+    height: fit-content; 
+    flex-direction: column;
+    width: 100%;
+}
+
+.montly-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%; 
+    height: fit-content; 
+    flex-direction: column;
+
+    box-sizing: border-box;
+    background: #FCFCFC;
+    border: 2px solid #C1BFBF;
+    border-radius: 16px;
+    padding-bottom: 12px;
+} 
+
+.montly-container h1{
+    padding: 0;
+    margin: 20px 0;  
+    align-self: flex-start;
+    margin-left: 34px; 
+    font-size: 24px;
+    line-height: 28px; 
+    color: #0F0A0A; 
+}
+
+.monthly-chart{
+    width: 90%;
+    height: 300px;
+}
+
+
+

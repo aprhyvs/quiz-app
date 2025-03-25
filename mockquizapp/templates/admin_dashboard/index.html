@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="{% static 'css/admin_dashboard/styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/navbar_admin.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/logout_admin.css' %}">
-    
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock head_block %}
     
 
@@ -21,10 +21,25 @@
 {% block body_block %}
     {% include 'components/navbar_admin.html' %}
 
+    <div class="dashboard-container">
 
+        <div class="montly-container">
+            <h1 class="raleway-bold">Overall quizzes taken every month</h1>
+            <div class="monthly-chart">
+                <canvas id="monthly-chart"></canvas>
+            </div>
+        </div>
 
+        <div class="numbering-container">
 
+            <div class="numbering-layout">
+                
+            </div>
 
+        </div>
+
+    </div>
+    
 
 
 
