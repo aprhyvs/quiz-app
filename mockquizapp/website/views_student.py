@@ -75,7 +75,7 @@ def get_all_student_stats(request): ## Returns all student data and stats
 def get_all_student_data(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    if request.method == 'GET':
+    if request.method == 'POST':
         print("Grabbing student...")
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:

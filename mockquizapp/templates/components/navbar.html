@@ -1,10 +1,20 @@
 {% load static %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
+    <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
+    <script defer src="{% static 'javascript/components/navbar.js' %}"></script>
+</head>
 
 <header>
 <nav class="navbar">
     <div class="left">
         <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1>GAM<span>IQ</span></h1>
+    </div>
+
+    <div class="student-name">
+        <h3>Welcome, </h3>
     </div>
 
     <div class="right">
