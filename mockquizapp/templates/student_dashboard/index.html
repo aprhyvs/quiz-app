@@ -5,7 +5,8 @@
 
 {% block head_block %}
 
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
     
 {% endblock head_block %}
     
@@ -17,6 +18,32 @@
 
     {% include 'components/navbar.html' %}
 
+    <main>
+        <section class="dashboard">
+            <div class="wrapper">
+                <div class="card-small">
+                    <h3>Text</h3>
+                </div>
+                <div class="card-small">
+                    <h3>Text</h3>
+                </div>
+                <div class="card-small">
+                    <h3>Text</h3>
+                </div>
+                <div class="card-small">
+                    <h3>Text</h3>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="card-large">
+                    <h3>Text</h3>
+                </div>
+                <div class="card-large">
+                    <h3>Text</h3>
+                </div>
+            </div>
+        </section>
+    </main>
 
     
 {% endblock body_block %}
