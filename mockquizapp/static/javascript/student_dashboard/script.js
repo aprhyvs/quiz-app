@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Invalid data structure:", quizData);
             return;
         }
-        displayMostRecentQuiz(quizData);
+        displayMostRecentQuiz(quizData.quizzes[0]);
     })
 
     .catch(error => console.error("Error fetching student data:", error));
@@ -53,9 +53,29 @@ document.addEventListener("DOMContentLoaded", function () {
         
     }
 
-    function displayMostRecentQuiz(){
-
-
+    function displayMostRecentQuiz(mostRecentQuiz) {
+        // Display the quiz title
+        console.log(mostRecentQuiz);
+        document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
+    
+        // Display number of correct answers
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${mostRecentQuiz.number_of_answered_questions}`;
+    
+        // Determine if the student passed (assuming 60% passing rate)
+        const totalScore = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        const passingScore = Math.ceil(totalScore * 0.75);
+        const statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+        
+        // Update status text
+        const statusElement = document.querySelector(".quiz-status");
+        statusElement.innerText = statusText;
+        statusElement.style.color = statusText === "PASSED" ? "green" : "red";
+    
+        // Update "View" button with a link to view more quiz info
+        const viewButton = document.getElementById("view-quiz-button");
+        viewButton.onclick = function () {
+            
+        };
     }
 });
 
