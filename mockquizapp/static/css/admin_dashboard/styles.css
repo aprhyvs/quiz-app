@@ -94,7 +94,6 @@ body {
     height: fit-content; 
     flex-direction: column;
     width: 100%;
-    padding-bottom: 1000px;
 }
 
 .montly-container{
@@ -255,4 +254,47 @@ body {
 
 }
 
+/* list of registered users */
 
+.wrapper {
+    padding: 2em 4em;
+    background: #FCFCFC;
+    border: 2px solid #C1BFBF;
+    border-radius: 16px; 
+    width: 90%;
+    margin: 1.5em auto;
+}
+
+.wrapper h1 {
+    margin-bottom: 1em;
+}
+
+/* search bar */
+
+.search-container {
+    width: 40%;
+    display: flex;
+    align-items: center; 
+    background: #F1F1EE;
+    border-radius: 8px;
+    border: 2px solid #C1BFBF;
+    padding: 0.5em 0;
+}
+
+.search-icon {
+    margin: 0 1em;    
+}
+
+.search-container input{
+    width: 100%;
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
+    background: none;
+    border: none;
+}
+
+.search-container input:focus{
+    outline: none; 
+    background: transparent; 
+    border: none
+}
