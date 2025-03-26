@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard</title> 
 <script defer src="{% static 'javascript/admin_dashboard/script.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/reset.css' %}">
 <link rel="stylesheet" href="{% static 'css/admin_dashboard/styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/navbar_admin.css' %}">
 <link rel="stylesheet" href="{% static 'css/components/logout_admin.css' %}">
@@ -40,10 +41,6 @@
 
     </div>
     
-
-
-
-
     <div class="pop-up" id="logout-form-pop" style="display: none;">
         <div class="pop-up-content">
             <h1 class="raleway-bold">Logout</h1>
@@ -55,7 +52,6 @@
         </div>
     </div>
     
-    
     <div class="pop-up" id="edit-form-pop" style="display: none;">
         <div class="pop-up-content">
             <h1 class="raleway-bold">Confirm changes</h1>
@@ -66,8 +62,6 @@
             </div>
         </div>
     </div>
-    
-    
     
     <div class="pop-up" id="delete-form-pop" style="display: none;">
         <div class="pop-up-content">

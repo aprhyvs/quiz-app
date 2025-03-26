@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
     <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
     <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
     <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
 
@@ -18,7 +19,7 @@
 {% block body_block %}
 
 
-    {% include 'components/navbar.html' %}
+    {% include 'components/navbar_student.html' %}
 
     <main>
     
