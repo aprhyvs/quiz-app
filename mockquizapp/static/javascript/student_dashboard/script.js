@@ -1,23 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Student Dashboard Loaded");
 
-    getDataFromUrl("/api/student/alldata")
+    getDataFromUrl("/api/student/alldata") //Gets all Student's data and stats
     .then(data => {
-        console.log(data);
-
         if (!data || !data.studentData) {
             console.error("Invalid data structure:", data);
             return;
         }
-
         const studentDatas = data.studentData;
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
-
+        
         displayStudentData(studentData);
         displayStudentStats(studentStats);
     })
+
+    getDataFromUrl("/api/student/quizzes") // Gets all quizzes
+    .then(quizData => {
+        console.log(quizData);
+        if (!quizData) {
+            console.error("Invalid data structure:", quizData);
+            return;
+        }
+        displayMostRecentQuiz(quizData);
+    })
+
     .catch(error => console.error("Error fetching student data:", error));
+
+
+
+
 
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
@@ -39,6 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="total-wrong-answers-number">${studentStats.total_wrong_answers}</p>`;
         
         
+    }
+
+    function displayMostRecentQuiz(){
+
+
     }
 });
 
