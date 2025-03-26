@@ -22,6 +22,7 @@ class StudentData(models.Model):
     def get_data(self) -> dict:
         return {
             'fname': self.fname,
+            'mname' : self.mname,
             'lname': self.lname,
             'address': self.address,
             'gmail': self.gmail,
@@ -30,7 +31,7 @@ class StudentData(models.Model):
             'username': self.username, 
             'school': self.school,
             'id': self.pk,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %Z'),
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
         }
 
 

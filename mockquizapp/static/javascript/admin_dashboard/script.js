@@ -1,7 +1,7 @@
 
 var selected_student = null;
 
-async function displayListOfStudents(){
+async function displayListOfStudents(){ 
     const students = await getDataFromUrl('/api/admin/students');
     if (students){
         const lis_of_user_tag = document.querySelector(".list-of-users");
@@ -35,6 +35,7 @@ async function displayListOfStudents(){
                 });
                 document.getElementById(`delete-button-${studentID}`).addEventListener('click', () => {
                     selected_student = student;
+                    document.getElementById("delete-text").textContent = "Are you sure you want to delete " + student.username + "?";
                     document.getElementById("delete-form-pop").style.display = "flex";
                 });
             }
@@ -84,7 +85,7 @@ async function displayStudentList(studentList) {
     
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const monthlyChart = document.getElementById("monthly-chart");
     setupAdminChartBar(monthlyChart);
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
             'student_id' : selected_student.id
         });
         if (res){
+            document.getElementById("delete-form-pop").style.display = "none";
             document.getElementById("success-text").textContent =  `You have successfully deleted ${selected_student?.username}`;
             document.getElementById("success-form-pop").style.display = "flex";
             document.getElementById(`${selected_student.id}-card`).remove();
@@ -136,6 +138,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         document.getElementById("delete-but").disabled = false;
     })
+
+    document.getElementById("success-but").addEventListener('click', function(){
+        document.getElementById("success-form-pop").style.display = "none";
+    })
+ 
+    displayListOfStudents(); 
 
 
 });

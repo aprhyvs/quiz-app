@@ -85,6 +85,11 @@ body {
     color: #FDFDFD;
 }
 
+#success-but{
+    background: #05b310;
+    color: #FDFDFD;
+}
+
 
 .dashboard-container{
     display: flex;
@@ -321,6 +326,17 @@ body {
     flex-direction: column; 
 }
 
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .user-card{
     display: flex;
     flex-direction: row;
@@ -333,6 +349,7 @@ body {
     transition: all 0.2s ease-in-out;
     border-radius: 8px; 
     cursor: pointer;
+    animation: fade-in 0.5s ease-in-out;
 }
 
 .user-card:hover{ 
