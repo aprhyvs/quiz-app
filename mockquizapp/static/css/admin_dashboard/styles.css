@@ -1,5 +1,6 @@
-
-
+body {
+    background-color: #EFEFF0;;
+}
 
 .pop-up{
     display: flex;
