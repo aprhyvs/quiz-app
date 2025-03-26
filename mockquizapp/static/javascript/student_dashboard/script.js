@@ -71,9 +71,9 @@ document.addEventListener("DOMContentLoaded", function () {
         statusElement.style.color = statusText === "PASSED" ? "green" : "red";
     
         // Update "View" button with a link to view more quiz info
-        const viewButton = document.querySelector(".quiz-status");
+        const viewButton = document.querySelector(".view-quiz-button");
         viewButton.onclick = function () {
-            
+            alert("Kople mo pre! Mabagsak ka nanaman.")
         };
     }
 });
