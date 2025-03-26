@@ -76,9 +76,6 @@ def get_all_student_quizzes(request): ## Grabs all the student's quizzes for use
     student = StudentData.objects.filter(username = request.user.username).first()
     quizzes = QuizData.objects.filter(student_id=student.pk).order_by('-created_at')
     quizzesDict = [quiz.get_data() for quiz in quizzes]
-
-    print(student.pk)
-    print(quizzesDict)
     return JsonResponse({"quizzes": quizzesDict}, status=200)
 
 def get_all_student_data(request): ## Returns all student data and stats

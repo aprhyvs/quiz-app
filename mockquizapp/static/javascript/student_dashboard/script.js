@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     getDataFromUrl("/api/student/quizzes") // Gets all quizzes
     .then(quizData => {
-        console.log(quizData);
         if (!quizData) {
             console.error("Invalid data structure:", quizData);
             return;
@@ -55,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function displayMostRecentQuiz(mostRecentQuiz) {
         // Display the quiz title
-        console.log(mostRecentQuiz);
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
     
         // Display number of correct answers
