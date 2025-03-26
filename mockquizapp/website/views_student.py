@@ -56,7 +56,6 @@ def get_student_data(request):
 
         return JsonResponse({"studentData": studentData}, status=200)
     
-    
 def get_all_student_stats(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -72,6 +71,15 @@ def get_all_student_stats(request): ## Returns all student data and stats
         stats['monthlyStatistics'] = get_monthly_correct_and_wrong_for_student(student)
         stats['monthlyQuizzesTaken'] = get_monthly_quizzes_taken_for_student(student)
         return JsonResponse({"stats": stats}, status=200)
+
+def get_all_student_quizzes(request): ## Grabs all the student's quizzes for use in javascript.
+    student = StudentData.objects.filter(username = request.user.username).first()
+    quizzes = QuizData.objects.filter(student_id=student.pk).order_by('-created_at')
+    quizzesDict = [quiz.get_data() for quiz in quizzes]
+
+    print(student.pk)
+    print(quizzesDict)
+    return JsonResponse({"quizzes": quizzesDict}, status=200)
 
 def get_all_student_data(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
