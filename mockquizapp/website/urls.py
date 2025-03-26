@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/register/student', view=register_student),
     
     path('api/admin/students', view=get_list_of_students),
+    path('api/admin/search/students', view=search_users),
     path('api/admin/delete/student', view=delete_student),
     path('api/admin/update/student', view=update_student_data),
     path('api/admin/get/stats', view=get_admin_statistics),

@@ -55,7 +55,7 @@ async function setupAdminChartBar(monthlyChart){
     })
 
     if (res?.monthly_quizes_taken?.length > 0){ 
-        // values = res.monthly_quizes_taken 
+        values = res.monthly_quizes_taken 
     }
 
     new Chart(monthlyChart, {
@@ -80,14 +80,28 @@ async function setupAdminChartBar(monthlyChart){
     });
     
 }
+ 
 
-async function displayStudentList(studentList) {
-    
+async function getStudentsNumber(){
+    const res = await getDataFromUrlWithParams('/api/admin/get/stats', {
+       'statRequest' : '1'
+    })
+    document.getElementById("number-of-students").textContent = res?.total_students ?? 0 ;
+}
+
+
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
     const monthlyChart = document.getElementById("monthly-chart");
     setupAdminChartBar(monthlyChart);
+    
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "flex"; 
@@ -144,6 +158,65 @@ document.addEventListener("DOMContentLoaded", async function () {
     })
  
     displayListOfStudents(); 
+
+
+    const searchBox = document.getElementById('search-box'); 
+    const handleInput = async (event) => {
+        console.log(`Searching for: ${event.target.value}`);
+        // Add your logic for handling the input here, like sending a search request.
+        const students = await getDataFromUrlWithParams('/api/admin/search/students' , {
+            'search_term' : event.target.value
+        });
+        if (students){
+            const lis_of_user_tag = document.querySelector(".list-of-users");
+            lis_of_user_tag.innerHTML = "";
+            for (const studentID in students) {
+                if (students.hasOwnProperty(studentID)) {
+                    const student = students[studentID];
+                    lis_of_user_tag.insertAdjacentHTML("afterbegin",
+                        `
+                            <div class="user-card" id="${studentID}-card">
+                                <svg  viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M26 0C11.648 0 0 11.648 0 26C0 40.352 11.648 52 26 52C40.352 52 52 40.352 52 26C52 11.648 40.352 0 26 0ZM26 7.8C30.316 7.8 33.8 11.284 33.8 15.6C33.8 19.916 30.316 23.4 26 23.4C21.684 23.4 18.2 19.916 18.2 15.6C18.2 11.284 21.684 7.8 26 7.8ZM26 44.72C19.5 44.72 13.754 41.392 10.4 36.348C10.478 31.174 20.8 28.34 26 28.34C31.174 28.34 41.522 31.174 41.6 36.348C38.246 41.392 32.5 44.72 26 44.72Z" fill="#0F0A0A"/>
+                                </svg>
+                                <h3 class="roboto-bold">${student?.username}</h3>
+                                <h6 class="roboto-light">${student?.fname} ${student?.mname} ${student?.lname}</h6>
+                                <h6 class="roboto-light">${student?.created_at}</h6>
+                                <div class="buttons-container">
+                                    <button class="roboto-bold" id="visit-button-${studentID}">VISIT</button> 
+                                    <button class="roboto-bold" id="edit-button-${studentID}">EDIT</button>
+                                    <button class="roboto-bold" id="delete-button-${studentID}">DELETE</button>
+                                </div>
+                            </div>
+                        `
+                    );
+                    document.getElementById(`visit-button-${studentID}`).addEventListener('click', () => {
+                        sessionStorage.setItem('studentID', studentID);
+                        window.location.href = `/student_analytics`;
+                    });
+                    document.getElementById(`edit-button-${studentID}`).addEventListener('click', () => {
+                        sessionStorage.setItem('studentID', studentID);
+                        window.location.href = `/edit_student`;
+                    });
+                    document.getElementById(`delete-button-${studentID}`).addEventListener('click', () => {
+                        selected_student = student;
+                        document.getElementById("delete-text").textContent = "Are you sure you want to delete " + student.username + "?";
+                        document.getElementById("delete-form-pop").style.display = "flex";
+                    });
+                }
+            }
+
+
+        }
+
+    };
+
+    const debouncedInput = debounce(handleInput, 300); // 300ms delay
+
+    searchBox.addEventListener('input', debouncedInput);
+
+
+    getStudentsNumber();
 
 
 });

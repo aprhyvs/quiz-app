@@ -1,6 +1,7 @@
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from .models import *
 from .admin_utils import *
@@ -179,4 +180,30 @@ def get_admin_statistics(request):
             # Get the total amount of quizes taken in every month of the students
             monthly_quizes_taken = get_quiz_count_per_month_for_year()
             return JsonResponse({"monthly_quizes_taken": monthly_quizes_taken}, status=200)
+
+
+def search_users(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        search_term = request.POST.get('search_term' , None)
+        print("Search term is: " + search_term)
+        if search_term is None:
+            return JsonResponse({"error": "Search term not provided"}, status=400)
+        if search_term == '':
+            users = StudentData.objects.all()
+        else:
+            
+            users = StudentData.objects.filter(
+                Q(username__icontains=search_term) |
+                Q(fname__icontains=search_term) |
+                Q(mname__icontains=search_term) |
+                Q(lname__icontains=search_term)
+            )
+
+        
+        data = { user.pk: user.get_data() for user in users}
+        return JsonResponse(data , status=200)
+
 
