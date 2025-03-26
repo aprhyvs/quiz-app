@@ -33,21 +33,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
         const studentNameDiv = document.querySelector(".student-name");
-        studentNameDiv.innerHTML = `<h3>Welcome, ${studentData.username}!</h3>`;
+        studentNameDiv.innerHTML = `<h3 class="raleway-bold">Welcome, ${studentData.username}!</h3>`;
     }
     
     function displayStudentStats(studentStats) {
-        const quizzesTakenDiv = document.querySelector(".total-quizzes-taken");
-        quizzesTakenDiv.innerHTML = `<h3>Total Quizzes Taken</h3>
-                    <p class="total-quizzes-taken-number">${studentStats.total_quizzes}</p>`;
+        const quizzesTakenDiv = document.querySelector(".total-quizzes-taken-number");
+        quizzesTakenDiv.innerText = `${studentStats.total_quizzes}`;
         
-        const correctAnswersDiv = document.querySelector(".total-correct-answers");
-        correctAnswersDiv.innerHTML = `<h3>Total Correct Answers</h3>
-                    <p class="total-correct-answers-number">${studentStats.total_correct_answers}</p>`;
+        const correctAnswersDiv = document.querySelector(".total-correct-answers-number");
+        correctAnswersDiv.innerText = `${studentStats.total_correct_answers}`;
         
-        const wrongAnswersDiv = document.querySelector(".total-wrong-answers");
-        wrongAnswersDiv.innerHTML = `<h3>Total Wrong Answers</h3>
-                    <p class="total-wrong-answers-number">${studentStats.total_wrong_answers}</p>`;
+        const wrongAnswersDiv = document.querySelector(".total-wrong-answers-number");
+        wrongAnswersDiv.innerText = `${studentStats.total_wrong_answers}`;
         
         
     }
