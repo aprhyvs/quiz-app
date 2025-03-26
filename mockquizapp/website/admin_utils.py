@@ -33,8 +33,6 @@ def get_weekly_rankings() -> list:
 
     return rankings
 
- 
-
 def get_quiz_count_per_month_for_year():
     # Automatically get the current year
     current_year = now().year
@@ -68,8 +66,6 @@ def get_quiz_count_per_month_for_year():
 
     return result
 
-
-
 def get_monthly_rankings() -> list: 
     current_month = now().month
     current_year = now().year
@@ -94,7 +90,6 @@ def get_monthly_rankings() -> list:
     
     return rankings
  
-
 def get_yearly_rankings():
     current_year = now().year
     
@@ -103,7 +98,7 @@ def get_yearly_rankings():
         is_answered = True,
         created_at__year=current_year
     ).values('student_id').annotate(
-        total_score=Sum('number_of_correct')
+        total_score=Sum('total_worth')
     ).order_by('-total_score')[:5]  # Order by highest score
     
     # Add student details to the rankings
@@ -114,11 +109,13 @@ def get_yearly_rankings():
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
         })
-    
+    print(rankings)
     return rankings
 
+def get_student_quizzes(student):
+    quizzes = QuizData.objects.filter(student_id=student.pk, is_answered=True)
+    return quizzes
 
-
-
-
-
+def get_student_quizzes_total_worth(quizzes):
+    quizzes_total_worth = quizzes.aggregate(total_worth_sum=Sum('total_worth'))['total_worth_sum'] or 0
+    return quizzes_total_worth

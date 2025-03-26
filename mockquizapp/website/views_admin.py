@@ -27,6 +27,18 @@ def get_list_of_students(request):
     data = { student.pk: student.get_data() for student in students}
     return JsonResponse(data , status=200)
 
+def update_rankings(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    if not request.user_is_staff:
+        return JsonResponse({"error": "User not authorized to fetch rankings"}, status=403)
+    students = StudentData.objects.all()
+    rankings = {}
+
+    rankings.yearly = get_yearly_rankings()
+    print(rankings)
+    return JsonResponse({"rankings": rankings}, status=200)
+                            
 def update_student_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)

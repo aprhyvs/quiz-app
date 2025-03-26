@@ -22,10 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         displayMostRecentQuiz(quizData.quizzes[0]);
+        showAnswersGraph(quizData.quizzes);
+        showQuizzesTakenGraph(quizData.quizzes);
     })
-
     .catch(error => console.error("Error fetching student data:", error));
 
+    
 
 
 
@@ -73,62 +75,79 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Kople mo pre! Mabagsak ka nanaman.");
         };
     }
-});
 
-// graph below
-// monthly correct and wrong answers
-document.addEventListener("DOMContentLoaded", function () {
-    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Correct Answers',
-                data: [65, 59, 80, 81, 56, 55, 48, 81, 56, 55, 44, 50],
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            },
-            {
-                label: 'Wrong Answers',
-                data: [45, 72, 60, 90, 66, 40, 70, 95, 50, 60, 38, 55],
-                fill: false,
-                borderColor: 'rgb(255, 99, 132)',
-                tension: 0.1
-            }
-        ]
-    };
+    function showAnswersGraph(graphData) {
+        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    const config = {
-        type: 'line',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+        // Initialize arrays to store correct and wrong answers per month
+        const correctAnswers = new Array(12).fill(0);
+        const wrongAnswers = new Array(12).fill(0);
+
+        // Process quiz data and organize it by month
+        graphData.forEach(quiz => {
+        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
+        correctAnswers[quizMonth] += quiz.number_of_correct;
+        wrongAnswers[quizMonth] += quiz.number_of_wrong;
+    });
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Correct Answers',
+                    data: correctAnswers,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Wrong Answers',
+                    data: wrongAnswers,
+                    fill: false,
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                }
+            ]
+        };
+    
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    };
+        };
+    
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(ctx, config);
+    }
 
-    const ctx = document.getElementById('monthlyChart').getContext('2d');
-    new Chart(ctx, config);
-});
-
-// total quizzes taken per month
-
-document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById("quizzesChart").getContext("2d");
+    function showQuizzesTakenGraph(graphData){
+        const ctx = document.getElementById("quizzesChart").getContext("2d");
 
     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const quizzesTaken = new Array(12).fill(0);
+
+
+    graphData.forEach(quiz => {
+        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
+        quizzesTaken[quizMonth]++; // Increment the count for that month
+    });
+
+
     const data = {
         labels: labels,
         datasets: [{
             label: 'Quizzes Taken',
-            data: [65, 59, 80, 81, 56, 55, 40, 81, 56, 55, 40, 65],
+            data: quizzesTaken,
             backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue bars
             borderColor: 'rgb(54, 162, 235)',
             borderWidth: 1
@@ -143,11 +162,22 @@ document.addEventListener("DOMContentLoaded", function () {
             maintainAspectRatio: false, // Prevent unwanted stretching
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
                 }
             }
         }
     };
 
     new Chart(ctx, config);
+    }
 });
+
+// graph below
+// monthly correct and wrong answers
+
+
+// total quizzes taken per month
+

@@ -34,20 +34,17 @@ async function setupAdminChartBar(monthlyChart){
     
 }
 
+async function displayStudentList(studentList) {
+    
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-
-
     const monthlyChart = document.getElementById("monthly-chart");
     setupAdminChartBar(monthlyChart);
-
-
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "flex"; 
-
     });
-
-
     document.getElementById("logout-but").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "none"; 
@@ -55,17 +52,20 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res){   
             window.location.href = "../";
         }
-
     });
-    
-
-
     document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
         event.preventDefault();
         document.getElementById("logout-form-pop").style.display = "none"; 
     });
 
-
+    getDataFromUrl("/api/admin/students") //Gets all Students
+    .then(studentList => {
+        if (!studentList) {
+            console.error("Waran Sulod!!!", data);
+            return;
+        }
+        displayStudentList(studentList);
+    })
 
 
 
