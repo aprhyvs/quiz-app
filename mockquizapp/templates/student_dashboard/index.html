@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
     <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
     <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 {% endblock head_block %}
     
@@ -26,27 +27,29 @@
         <section class="dashboard">
             <div class="wrapper">
                 <div class="card-small total-quizzes-taken">
-                    <h3>Total Quizzes Taken</h3>
-                    <p class="total-quizzes-taken-number">0</p>
+                    <h3 class="raleway-bold">Total Quizzes Taken</h3>
+                    <p class="total-quizzes-taken-number roboto-regular">0</p>
                 </div>
                 <div class="card-small total-correct-answers">
-                    <h3>Total Correct Answers</h3>
-                    <p class="total-correct-answers-number">0</p>
+                    <h3 class="raleway-bold">Total Correct Answers</h3>
+                    <p class="total-correct-answers-number roboto-regular">0</p>
                 </div>
                 <div class="card-small total-wrong-answers">
-                    <h3>Total Wrong Answers</h3>
-                    <p class="total-wrong-answers-number">0</p>
+                    <h3 class="raleway-bold">Total Wrong Answers</h3>
+                    <p class="total-wrong-answers-number roboto-regular">0</p>
                 </div>
                 <div class="card-small most-recent-quiz">
-                    <h3>Most Recent Quiz</h3>
+                    <h3 class="raleway-bold">Most Recent Quiz</h3>
                 </div>
             </div>
             <div class="wrapper">
                 <div class="card-large">
-                    <p>Text</p>
+                    <h3 class="raleway-bold">Monthly correct and wrong answers</h3>
+                    <canvas id="monthlyChart"></canvas>
                 </div>
                 <div class="card-large">
-                    <p>Text</p>
+                    <h3 class="raleway-bold">Total Quizzes Taken per Month</h3>
+                    <canvas id="quizzesChart"></canvas>
                 </div>
             </div>
         </section>
