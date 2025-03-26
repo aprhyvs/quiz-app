@@ -57,10 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
     
         // Display number of correct answers
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${mostRecentQuiz.number_of_answered_questions}`;
+        const totalScore = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalScore}`;
     
         // Determine if the student passed (assuming 60% passing rate)
-        const totalScore = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        
         const passingScore = Math.ceil(totalScore * 0.75);
         const statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
         
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         statusElement.style.color = statusText === "PASSED" ? "green" : "red";
     
         // Update "View" button with a link to view more quiz info
-        const viewButton = document.getElementById("view-quiz-button");
+        const viewButton = document.querySelector(".quiz-status");
         viewButton.onclick = function () {
             
         };
