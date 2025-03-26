@@ -206,3 +206,52 @@
     width: 34px;
     height: 34px;
 }
+
+
+
+.student-counting{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.student-counting h3{
+    width: 90%;   
+    font-size: 18px;
+    line-height: 28px; 
+    color: #0F0A0A;
+    padding: 0;
+    margin: 0;
+    margin-left: 24px;
+    text-align: left;
+    width: fit-content;
+    height: fit-content; 
+    align-self: flex-start;
+    padding-top: 35px;
+}
+
+
+.students-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    flex-direction: column;
+}
+
+.students-data h1{  
+    font-size: 96px; 
+    text-align: center;
+    color: #0F0A0A; 
+}
+
+.students-data h6{  
+    font-size: 25px; 
+    text-align: center;
+    color: #0F0A0A; 
+
+}
+
+
