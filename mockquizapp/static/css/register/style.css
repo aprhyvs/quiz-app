@@ -4,57 +4,110 @@ body {
     background-color: #EFEFF0;
 }
 
-/* navbar */ 
+/* registers */
 
-.navbar {
-    padding: 36px 72px;
+.wrapper {
+    margin: 0 auto;
+    background-color: #FCFCFC;
+    border: 2px solid #C1BFBF;
+    border-radius: 8px;
+    padding: 2em;
+    max-width: 1200px;
+    margin-bottom: 2em;
 }
 
-.navbar {
+.wrapper h1 {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2.5rem);
+}
+
+.wrapper form {
+    font-family: "Roboto";
+}
+
+.wrapper label {
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0.5em 0;
+}
+
+/* fname - lname */
+.name-field {
     display: flex;
-    align-items: center;
-    gap: 1em;
-}
-
-.navbar img {
+    justify-content: space-between; 
     width: 100%;
-    max-width: 64px;
 }
 
-.navbar h1 {
-    font-family: "Raleway";
-    color: #0F0A0A;
-    font-size: 32px;
-    font-weight: 800;
-}
-
-.navbar span {
-    color: #002157;
-}
-
-/* form */
-
-form {
-    max-width: 400px;
-    margin: auto;
+.name-group {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: column; 
+    flex-grow: 1;
+    max-width: 360px; 
 }
-input {
-    padding: 8px;
-    font-size: 16px;
+
+.name-field input {
+    flex-grow: 1;
+    width: 100%;
 }
-button {
-    padding: 10px;
-    background-color: blue;
+
+/* school - password */
+
+.detail-field {
+    display: flex;
+    flex-wrap: wrap; /* Allows inputs to wrap into rows */
+    justify-content: space-between; /* Spreads them evenly */
+    width: 100%;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column; /* Keeps input fields stacked properly */
+    flex: 1 1 calc(50% - 20px); /* Each input takes half the row */
+    max-width: 550px; /* Prevents inputs from getting too big */
+    min-width: 300px; /* Prevents inputs from shrinking too much */
+}
+
+.detail-group input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* input */
+.wrapper input {
+    font-family: "Roboto";
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
+    font-weight: 300;
+    border-radius: 8px;
+    border: 2px solid #C1BFBF;
+    margin-bottom: 1em;
+    padding: 0.5em;
+}
+
+.wrapper input:focus::placeholder {
+    color: #bbb9b9;
+}
+
+.wrapper input:focus {
+    outline: none;
+    border: #666565 2px solid;
+}
+
+.wrapper button {
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    padding: 0.5em 2em;
+    margin: 0.5em auto;
+}
+
+.register{
+    display: flex;
     color: white;
-    border: none;
-    cursor: pointer;
-}
-button:hover {
-    background-color: darkblue;
-}
-.error {
-    color: red;
+    font-weight: 400;
+    background-color: #002157;
+    border: 2px solid #002157;
 }
