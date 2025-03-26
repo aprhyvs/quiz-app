@@ -60,24 +60,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalScore = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
         document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalScore}`;
     
-        // Determine if the student passed (assuming 60% passing rate)
+        // Determine if the student passed (assuming 75% passing rate)
         
         const passingScore = Math.ceil(totalScore * 0.75);
         const statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
-        
-        /*
-        font-family: "Roboto", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 700;
-        font-style: normal;
-        font-variation-settings:
-          "wdth" 100;
-        */
 
         const statusElement = document.getElementById("quiz-status");
-        
-
- 
         statusElement.innerText = statusText;
         statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
 
