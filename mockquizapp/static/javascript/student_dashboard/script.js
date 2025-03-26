@@ -65,15 +65,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const passingScore = Math.ceil(totalScore * 0.75);
         const statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
         
-        // Update status text
-        const statusElement = document.querySelector(".quiz-status");
+        /*
+        font-family: "Roboto", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 700;
+        font-style: normal;
+        font-variation-settings:
+          "wdth" 100;
+        */
+
+        const statusElement = document.getElementById("quiz-status");
+        
+
+ 
         statusElement.innerText = statusText;
-        statusElement.style.color = statusText === "PASSED" ? "green" : "red";
-    
-        // Update "View" button with a link to view more quiz info
-        const viewButton = document.querySelector(".view-quiz-button");
+        statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+
+
+        //  Update "View" button with a link to view more quiz info
+        const viewButton = document.getElementById("view-quiz-button");
         viewButton.onclick = function () {
-            alert("Kople mo pre! Mabagsak ka nanaman.")
+            alert("Kople mo pre! Mabagsak ka nanaman.");
         };
     }
 });
