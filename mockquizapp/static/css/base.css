@@ -13,6 +13,15 @@
     font-style: normal;
   }
 
+  .roboto-light{
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }
+
   .roboto-regular{
     font-family: "Roboto", sans-serif;
     font-optical-sizing: auto;
