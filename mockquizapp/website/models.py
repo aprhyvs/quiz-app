@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -13,7 +14,7 @@ class StudentData(models.Model):
     admin_id = models.IntegerField(blank=True, default=None, null=True)
     username = models.CharField(max_length=50 , blank=True, default=None, null=True)
     password = models.CharField(max_length=50  , blank=True, default=None, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField( default=timezone.now)
 
     def __str__(self):
         return f"Student: {self.fname} {self.mname} {self.lname}"
@@ -29,6 +30,7 @@ class StudentData(models.Model):
             'username': self.username, 
             'school': self.school,
             'id': self.pk,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %Z'),
         }
 
 
