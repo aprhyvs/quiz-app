@@ -279,6 +279,7 @@ body {
     border-radius: 8px;
     border: 2px solid #C1BFBF;
     padding: 0.5em 0;
+    margin: 1em 0;
 }
 
 .search-icon {
@@ -297,4 +298,14 @@ body {
     outline: none; 
     background: transparent; 
     border: none
+}
+
+.user-card {
+    display: flex;
+    background: #F1F1EE;
+    padding: 0.5em 1em;
+}
+
+.user-card svg {
+    width: 32px;    
 }
