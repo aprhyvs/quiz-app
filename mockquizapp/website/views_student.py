@@ -38,7 +38,7 @@ def student_start_game(request):
 def get_student_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    if request.method == 'POST':
+    if request.method == 'GET':
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
@@ -56,14 +56,15 @@ def get_student_data(request):
 
         return JsonResponse({"studentData": studentData}, status=200)
     
+    
 def get_all_student_stats(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    if request.method == 'POST':
+    if request.method == "GET":
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
-        
+        print("Grabbing all student data...")
         stats = {}
         stats['total_quizzes'] = get_total_quizzes_for_student(student)
         stats['total_correct_answers'] = get_sum_of_correct_answers(student)
@@ -75,7 +76,7 @@ def get_all_student_stats(request): ## Returns all student data and stats
 def get_all_student_data(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    if request.method == 'POST':
+    if request:
         print("Grabbing student...")
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
@@ -102,7 +103,7 @@ def get_all_student_data(request): ## Returns all student data and stats
 
         data['studentData'] = studentData
         data['stats'] = stats
-
+        print(data)
         return JsonResponse({"studentData": data}, status=200)
 
 
