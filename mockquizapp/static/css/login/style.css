@@ -82,3 +82,27 @@ body {
     border: none;
     font-weight: 300;
 }
+
+/* errors */
+
+/* Add a red border when there is an error */
+.input-field.error {
+    border-color: #B3261E;
+}
+
+/* Hide error message and SVG by default */
+.error-message {
+    display: none;
+    color: #B3261E;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#errorIcon1 {
+    display: none; /* Hide SVG initially */
+}
+
+#errorIcon2 {
+    display: none; /* Hide SVG initially */
+}

@@ -130,7 +130,7 @@ def login_student(request):
         if user is not None:
             print("User: " + user.username + " Found!")
             login(request, user)
-            return JsonResponse({'status': 'success', 'url': 'student_dashboard/'} , status=200)
+            return JsonResponse({'status': 'success', 'url': '/student_dashboard/'}, status=200)
         else:
             return JsonResponse({"error": "Invalid Username or Password!"} , status=400)
     return JsonResponse({'csrfToken': get_token(request)})

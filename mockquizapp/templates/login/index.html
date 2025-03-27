@@ -29,14 +29,32 @@
     <div class="wrapper">
         <h1>Login to your Account</h1>
         <form id="loginForm">
-            <label for="Username">Username</label>
-            <input type="text" id="username" name="username">
-            <label for="Password">Password</label>
-            <input type="password" name="password" id="password">
-            <button class="login">Login</button>
-            <button class="signup">Create new Account</button>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="input-field">
+
+             <p id="responseMessage" class="error-message">
+                <svg id="errorIcon1" width="24" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 19.6533V19.6667M13 6.33333V15.6667M25 13C25 19.6275 19.6275 25 13 25C6.37259 25 1 19.6275 1 13C1 6.37259 6.37259 1 13 1C19.6275 1 25 6.37259 25 13Z" 
+                        stroke="#B3261E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="errorText1"></span>
+            </p>    
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="input-field">
+
+            <!-- Error message container -->
+            <p id="responseMessage" class="error-message">
+                <svg id="errorIcon2" width="24" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 19.6533V19.6667M13 6.33333V15.6667M25 13C25 19.6275 19.6275 25 13 25C6.37259 25 1 19.6275 1 13C1 6.37259 6.37259 1 13 1C19.6275 1 25 6.37259 25 13Z" 
+                        stroke="#B3261E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="errorText2"></span>
+            </p>
+
+            <button type="submit" class="login">Login</button>
         </form>
-        <p id="responseMessage" class="error"></p>
+       
     </div>
 
 
