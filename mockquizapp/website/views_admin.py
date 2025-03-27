@@ -39,7 +39,7 @@ def update_rankings(request):
     rankings.yearly = get_yearly_rankings()
     print(rankings)
     return JsonResponse({"rankings": rankings}, status=200)
-                            
+
 def update_student_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
