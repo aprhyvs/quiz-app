@@ -13,6 +13,7 @@ urlpatterns = [
     path('admin_dashboard/', admin_dashboard, name='admin-dashboard'),
     path('student_dashboard/', student_dashboard, name='student-dashboard'),
     path('admin_editor/', admin_editor, name='admin-editor'),
+    path('student_analytics/', student_analytics, name='student-analytics'),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
