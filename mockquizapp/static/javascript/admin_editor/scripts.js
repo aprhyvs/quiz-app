@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     
 
-    document.getElementById("register").addEventListener("click", async function (){ 
+    document.getElementById("register").addEventListener("click", async function (event){ 
         event.preventDefault();
         // Check if the input is valid
         if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ) {
