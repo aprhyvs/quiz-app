@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Student Dashboard Loaded");
 
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+    });
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+        const res = await getDataFromUrl("/api/logout");
+        if (res){   
+            window.location.href = "../";
+        }
+    });
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+
+
+
+
     getDataFromUrl("/api/student/alldata") //Gets all Student's data and stats
     .then(data => {
         if (!data || !data.studentData) {
@@ -105,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function getPassedStatus(quiz){
             if (quiz.is_answered == false) return None
-            
+
             const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
             const passingScore = Math.ceil(totalItems * 0.75);
             if (quiz.number_of_correct > passingScore) {
