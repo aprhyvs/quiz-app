@@ -28,6 +28,7 @@ body {
     height: fit-content; 
     flex-direction: column;
     width: 100%;
+    scroll-margin-top: 120px;  
 }
 
 .montly-container{
