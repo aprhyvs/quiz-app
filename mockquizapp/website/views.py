@@ -128,6 +128,10 @@ def login_student(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
+
+            if user.is_staff:
+                return JsonResponse({"error": "Invalid Username or Password!"}, status=403)
+
             print("User: " + user.username + " Found!")
             login(request, user)
             return JsonResponse({'status': 'success', 'url': '/student_dashboard/'}, status=200)

@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Student Dashboard Loaded");
 
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+    });
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+        const res = await getDataFromUrl("/api/logout");
+        if (res){   
+            window.location.href = "../";
+        }
+    });
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+
+
+
+
     getDataFromUrl("/api/student/alldata") //Gets all Student's data and stats
     .then(data => {
         if (!data || !data.studentData) {
@@ -22,15 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         displayMostRecentQuiz(quizData.quizzes[0]);
+        displayPassedAndFailedQuizzes(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
         showQuizzesTakenGraph(quizData.quizzes);
     })
     .catch(error => console.error("Error fetching student data:", error));
-
-    
-
-
-
 
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
@@ -39,14 +56,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     function displayStudentStats(studentStats) {
+        function getPercentage(score, totalItems){
+            return Math.round((score / totalItems) * 100);
+        }
+
         const quizzesTakenDiv = document.querySelector(".total-quizzes-taken-number");
         quizzesTakenDiv.innerText = `${studentStats.total_quizzes}`;
         
-        const correctAnswersDiv = document.querySelector(".total-correct-answers-number");
-        correctAnswersDiv.innerText = `${studentStats.total_correct_answers}`;
-        
-        const wrongAnswersDiv = document.querySelector(".total-wrong-answers-number");
-        wrongAnswersDiv.innerText = `${studentStats.total_wrong_answers}`;
+
+        const totalItems = studentStats.total_correct_answers + studentStats.total_wrong_answers;
+
+        const correctAnswersPercentage = document.querySelector(".total-correct-answers-percentage");
+        const correctAnswersNumber = document.querySelector(".total-correct-answers-number");
+        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
+        correctAnswersPercentage.innerText = `${correctAnswerPercentage}%`;
+        correctAnswersNumber.innerText = `${studentStats.total_correct_answers}`;
+
+
+        const wrongAnswersPercentage = document.querySelector(".total-wrong-answers-percentage");
+        const wrongAnswersNumber = document.querySelector(".total-wrong-answers-number");
+        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
+        wrongAnswersPercentage.innerText = `${wrongAnswerPercentage}%`;
+        wrongAnswersNumber.innerText = `${studentStats.total_wrong_answers}`;
         
         
     }
@@ -54,28 +85,72 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayMostRecentQuiz(mostRecentQuiz) {
         // Display the quiz title
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
-    
-        // Display number of correct answers
-        const totalScore = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalScore}`;
-    
-        // Determine if the student passed (assuming 75% passing rate)
-        
-        const passingScore = Math.ceil(totalScore * 0.75);
-        const statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
 
+        isAnswered = mostRecentQuiz.is_answered;
+
+        // Display number of correct answers
+        const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
+    
+        
+        
+        
+        const passingScore = Math.ceil(totalItems* 0.75);
         const statusElement = document.getElementById("quiz-status");
-        statusElement.innerText = statusText;
-        statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+        let statusText = "UNKNOWN";
+
+        const testOptionsButton = document.getElementById("view-quiz-button");
+
+        if (isAnswered == false){ // Determine if the student has not finished the quiz.
+            statusText = "INCOMPLETE"
+            statusElement.innerText = statusText;
+            statusElement.style.color === "black";
+            testOptionsButton.innerText = "Resume";
+            
+        } else { // Determine if the student passed (assuming 75% passing rate)
+            statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+            statusElement.innerText = statusText;
+            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            testOptionsButton.innerText = "View";
+        }
 
 
         //  Update "View" button with a link to view more quiz info
-        const viewButton = document.getElementById("view-quiz-button");
-        viewButton.onclick = function () {
+        
+        testOptionsButton.onclick = function () {
             alert("Kople mo pre! Mabagsak ka nanaman.");
         };
     }
 
+    function displayPassedAndFailedQuizzes(quizzes) {
+
+        function getPassedStatus(quiz){
+            if (quiz.is_answered == false) return None
+
+            const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
+            const passingScore = Math.ceil(totalItems * 0.75);
+            if (quiz.number_of_correct > passingScore) {
+                passedQuizzes++;
+            } else {
+                failedQuizzes++;
+            }
+        }
+
+        // Display passed and failed quizzes in the dashboard
+        const passedQuizzesDiv = document.querySelector(".passed-quizzes-number");
+        const failedQuizzesDiv = document.querySelector(".failed-quizzes-number");
+        let failedQuizzes = 0;
+        let passedQuizzes = 0;
+
+        for (let i = 0; i < quizzes.length; i++) {
+            const quiz = quizzes[i];
+            getPassedStatus(quiz)
+        }
+
+        passedQuizzesDiv.innerText = passedQuizzes;
+        failedQuizzesDiv.innerText = failedQuizzes;
+
+    }
 
     function showAnswersGraph(graphData) {
         const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

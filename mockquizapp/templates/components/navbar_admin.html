@@ -11,15 +11,31 @@
     </div>
 
     <div class="right">
-        <div class="nav-but">
+        <div class="nav-but" id="dashboard-nav">
             <svg  viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 18C20 16.8954 20.8954 16 22 16H32C33.1046 16 34 16.8954 34 18V32C34 33.1046 33.1046 34 32 34H22C20.8954 34 20 33.1046 20 32V18Z" stroke="#FCFCFC" stroke-width="4" stroke-linecap="round"/>
                 <path d="M2 4C2 2.89544 2.89544 2 4 2H12C13.1046 2 14 2.89544 14 4V18C14 19.1046 13.1046 20 12 20H4C2.89544 20 2 19.1046 2 18V4Z" stroke="#FCFCFC" stroke-width="4" stroke-linecap="round"/>
                 <path d="M2 28C2 26.8954 2.89544 26 4 26H12C13.1046 26 14 26.8954 14 28V32C14 33.1046 13.1046 34 12 34H4C2.89544 34 2 33.1046 2 32V28Z" stroke="#FCFCFC" stroke-width="4" stroke-linecap="round"/>
                 <path d="M20 4C20 2.89544 20.8954 2 22 2H32C33.1046 2 34 2.89544 34 4V8C34 9.10456 33.1046 10 32 10H22C20.8954 10 20 9.10456 20 8V4Z" stroke="#FCFCFC" stroke-width="4" stroke-linecap="round"/>
             </svg>
-            <h3 class="roboto-regular" onclick="window.location.href='../admin_dashboard/'">Dashboard</h3>  
+            <h3 class="roboto-regular">Dashboard</h3>  
         </div>
+        
+        <script>
+            // Extract the path from the current location
+            if (window.location.pathname === '/admin_dashboard/') {
+                // Smooth scroll if already on the dashboard page
+                document.getElementById('dashboard-nav').addEventListener('click', function() {
+                    document.querySelector('.dashboard-container').scrollIntoView({ behavior: 'smooth' });
+                });
+            } else {
+                // Redirect to the dashboard if not already there
+                document.getElementById('dashboard-nav').addEventListener('click', function() {
+                    window.location.href = '/admin_dashboard/';
+                });
+            }
+        </script>
+        
         
         {% if is_visit %}
 

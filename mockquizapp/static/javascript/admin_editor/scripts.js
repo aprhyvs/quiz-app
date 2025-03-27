@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     
 
-    document.getElementById("register").addEventListener("click", async function (){ 
+    document.getElementById("register").addEventListener("click", async function (event){ 
         event.preventDefault();
         // Check if the input is valid
         if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ) {
@@ -103,6 +103,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("success-but").addEventListener('click', function(){
         document.getElementById("success-form-pop").style.display = "none";
         window.location.href = "../admin_dashboard";
+    });
+
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+    });
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+        const res = await getDataFromUrl("/api/logout");
+        if (res){   
+            window.location.href = "../";
+        }
+    });
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
     });
 
 });
