@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block head_block %}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title> 
+<script defer src="{% static 'javascript/admin_editor/scripts.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin_dashboard/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/components/navbar_admin.css' %}">
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/register/style.css' %}">     
+<style>
+    .wrapper{
+        margin-top: 130px;
+    } 
+
+    .register{
+        cursor: pointer;
+    }
+</style>
+{% endblock head_block %}
+
+
+
+{% block body_block %}
+    {% include 'components/navbar_admin.html' %}
+
+
+
+    <div class="wrapper">
+    <h1 class="raleway-bold">Create an account</h1>
+    <form id="registerForm">
+        
+        <div class="name-field">
+            <div class="name-group">
+                <label for="First">First Name</label>
+                <input type="text" id="fname" name="fname" required>
+            </div>
+            <div class="name-group">
+                <label for="Middle">Middle Name</label>
+                <input type="text" id="mname" name="mname">
+            </div>
+            <div class="name-group">
+                <label for="Last">Last Name</label>
+                <input type="text" id="lname" name="lname" required>
+            </div>
+        </div>
+
+        <div class="detail-field">
+            <div class="detail-group">
+                <label for="School">School</label>
+                <input type="text" id="school" name="school">
+            </div>
+            <div class="detail-group">
+                <label for="Address">Address</label>
+                <input type="text" id="address" name="address">
+            </div>
+            <div class="detail-group">
+                <label for="Email">Email</label>
+                <input type="email" id="gmail" name="gmail" required>
+            </div>
+            <div class="detail-group">
+                <label for="Phone Number">Phone Number</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="detail-group">
+                <label for="First">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="detail-group">
+                <label for="Password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        </div>
+        
+        <button class="register" type="submit" id="register">Edit Account Details</button>
+    </form>
+    
+    </div>
+
+
+
+{% endblock body_block %}
+
+

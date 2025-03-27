@@ -156,6 +156,67 @@ def get_student_statistic(request):
     return JsonResponse(student , status=200)
 
 
+
+def get_student_by_id(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id' , None)
+        if not student_id:
+            return JsonResponse({'error': 'No student ID provided.'}, status=400)
+        student = StudentData.objects.filter(id = student_id).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        return JsonResponse(student.get_data(), status=200)
+
+def update_student_data(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id' , None)
+        if not student_id:
+            return JsonResponse({'error': 'No student ID provided.'}, status=400)
+        student = StudentData.objects.filter(id = student_id).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404) 
+        # Update User object in django configuration
+        user = User.objects.filter(username = request.user.username).first()
+        if not user:
+            return JsonResponse({"error": "User not found"}, status=404)
+        
+        
+        if request.POST.get('fname' , None):
+            student.fname =  request.POST.get('fname')
+        if request.POST.get('mname' , None):
+            student.mname = request.POST.get('mname')
+        if request.POST.get('lname' , None):
+            student.lname = request.POST.get('lname')
+        if request.POST.get('school' , None):
+            student.school = request.POST.get('school')
+        if request.POST.get('address' , None):
+            student.address = request.POST.get('address')
+        if request.POST.get('gmail' , None):
+            student.gmail = request.POST.get('gmail')
+        if request.POST.get('phone' , None):
+            student.phone = request.POST.get('phone')
+        if request.POST.get('username' , None):
+            student.username = request.POST.get('username')
+        student.save()
+        
+        if request.POST.get('fname' , None):
+            user.first_name =  request.POST.get('fname')
+        if request.POST.get('lname' , None):
+            user.last_name = request.POST.get('lname')
+        if request.POST.get('username' , None):
+            user.username = request.POST.get('username')
+        if request.POST.get('password' , None):
+            user.set_password(request.POST.get('password'))    
+        user.save()
+        
+        
+        return JsonResponse({"success": "Student data updated successfully."}, status=200)
+        
+
 def upload_file_view(request):
     
     if request.method == 'POST':

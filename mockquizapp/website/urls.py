@@ -12,6 +12,7 @@ urlpatterns = [
     path('login_admin/', admin_login_page, name='admin-login-page'),
     path('admin_dashboard/', admin_dashboard, name='admin-dashboard'),
     path('student_dashboard/', student_dashboard, name='student-dashboard'),
+    path('admin_editor/', admin_editor, name='admin-editor'),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
@@ -25,11 +26,13 @@ urlpatterns = [
     path('api/admin/update/student', view=update_student_data),
     path('api/admin/get/stats', view=get_admin_statistics),
     path('api/admin/get/rankings', view=update_rankings),
+    path('api/admin/get/studentdata', view=get_student_by_id),
 
     path('api/student/stats', view=get_all_student_stats),
     path('api/student/alldata', view=get_all_student_data),
     path('api/student/data', view=get_student_data),
     path('api/student/quizzes', view=get_all_student_quizzes),
+    
 
 
     #=============================== File Upload ===============================#

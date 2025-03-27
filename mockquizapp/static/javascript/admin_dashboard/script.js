@@ -31,7 +31,7 @@ async function displayListOfStudents(){
                 });
                 document.getElementById(`edit-button-${studentID}`).addEventListener('click', () => {
                     sessionStorage.setItem('studentID', studentID);
-                    window.location.href = `/edit_student`;
+                    window.location.href = `/admin_editor`;
                 });
                 document.getElementById(`delete-button-${studentID}`).addEventListener('click', () => {
                     selected_student = student;

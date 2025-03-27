@@ -42,6 +42,11 @@ def student_dashboard(request):
         return JsonResponse({"error": "User not authenticated"}, status=401)
     return render(request, "student_dashboard/index.html")
 
+def admin_editor(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    return render(request, "admin_editor/index.html")
+
 #=================================  Views API Routes =================================
 def register_student(request):
     if request.method == 'POST':
