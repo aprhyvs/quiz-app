@@ -193,7 +193,7 @@ def update_student_data(request):
         gmail = request.POST.get('gmail', None)
         phone = request.POST.get('phone', None)
         username = request.POST.get('username', None) 
-        password = request.POST.get('username', None) 
+        password = request.POST.get('password', None) 
         
         
         
@@ -221,6 +221,7 @@ def update_student_data(request):
                 student.username = username 
                 user.username = username
         if password:
+            print(password)
             user.set_password(password)    
         
         student.save()
