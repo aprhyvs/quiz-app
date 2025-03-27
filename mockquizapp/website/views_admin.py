@@ -29,14 +29,16 @@ def get_list_of_students(request):
     return JsonResponse(data , status=200)
 
 def update_rankings(request):
+    print("Fired Rankings Function")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    if not request.user_is_staff:
+    if not request.user.is_staff:
         return JsonResponse({"error": "User not authorized to fetch rankings"}, status=403)
     students = StudentData.objects.all()
     rankings = {}
+    rankings['weekly'] = get_weekly_rankings()
+    rankings['monthly'] = get_monthly_rankings()
 
-    rankings.yearly = get_yearly_rankings()
     print(rankings)
     return JsonResponse({"rankings": rankings}, status=200)
 

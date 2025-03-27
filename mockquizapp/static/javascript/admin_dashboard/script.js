@@ -46,6 +46,76 @@ async function displayListOfStudents(){
 }
 
 
+
+async function displayRankings(rankingsData) {
+    console.log(rankingsData)
+
+    function displayWeeklyRankings(weeklyRankings){
+        if (!weeklyRankings || weeklyRankings.length === 0) {
+            console.error("No weekly rankings available!");
+            return;
+        }
+        // Select the ranking elements from the HTML
+        const firstRank = document.querySelector(".rank-weekly-first-name");
+        const secondRank = document.querySelector(".rank-weekly-second-name");
+        const thirdRank = document.querySelector(".rank-weekly-third-name");
+        const fourthRank = document.querySelector(".rank-weekly-fourth-name");
+        const fifthRank = document.querySelector(".rank-weekly-fifth-name");
+    
+        // Ensure elements exist before modifying them
+        if (firstRank) {
+            firstRank.textContent = weeklyRankings[0]?.student_name || "Currently Not Available";
+        }
+        if (secondRank) {
+            secondRank.textContent = weeklyRankings[1]?.student_name || "Currently Not Available";
+        }
+        if (thirdRank) {
+            thirdRank.textContent = weeklyRankings[2]?.student_name || "Currently Not Available";
+        }
+        if (fourthRank) {
+            fourthRank.textContent = weeklyRankings[3]?.student_name || "Currently Not Available";
+        }
+        if (fifthRank) {
+            fifthRank.textContent = weeklyRankings[4]?.student_name || "Currently Not Available";
+        }
+    }
+    
+    function displayMonthlyRankings(monthlyRankings){
+        if (!monthlyRankings || monthlyRankings.length === 0) {
+            console.error("No monthly rankings available!");
+            return;
+        }
+        // Select the ranking elements from the HTML
+        const firstRank = document.querySelector(".rank-monthly-first-name");
+        const secondRank = document.querySelector(".rank-monthly-second-name");
+        const thirdRank = document.querySelector(".rank-monthly-third-name");
+        const fourthRank = document.querySelector(".rank-monthly-fourth-name");
+        const fifthRank = document.querySelector(".rank-monthly-fifth-name");
+    
+        // Ensure elements exist before modifying them
+        if (firstRank) {
+            firstRank.textContent = monthlyRankings[0]?.student_name || "Currently Not Available";
+        }
+        if (secondRank) {
+            secondRank.textContent = monthlyRankings[1]?.student_name || "Currently Not Available";
+        }
+        if (thirdRank) {
+            thirdRank.textContent = monthlyRankings[2]?.student_name || "Currently Not Available";
+        }
+        if (fourthRank) {
+            fourthRank.textContent = monthlyRankings[3]?.student_name || "Currently Not Available";
+        }
+        if (fifthRank) {
+            fifthRank.textContent = monthlyRankings[4]?.student_name || "Currently Not Available";
+        }
+    }
+
+    
+    displayWeeklyRankings(rankingsData.rankings.weekly)
+    displayMonthlyRankings(rankingsData.rankings.monthly)
+}
+
+
 async function setupAdminChartBar(monthlyChart){
 
     let values = [12, 19, 3, 5, 2, 3, 20, 12, 19, 3, 5, 2]
@@ -119,15 +189,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("logout-form-pop").style.display = "none"; 
     });
 
-    getDataFromUrl("/api/admin/students") //Gets all Students
-    .then(studentList => {
-        if (!studentList) {
+    getDataFromUrl("/api/admin/get/rankings") //Gets all Students
+    .then(rankings => {
+        if (!rankings) {
             console.error("Waran Sulod!!!", data);
             return;
         }
-        displayStudentList(studentList);
+        displayRankings(rankings);
     })
-
 
 
 
