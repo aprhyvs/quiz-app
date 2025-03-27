@@ -7,11 +7,11 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
     <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin_visit/styles.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
     <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
-    <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script defer src="{% static 'javascript/admin_visit/scripts.js' %}"></script> 
+    <link rel="stylesheet" href="{% static 'css/components/navbar_admin.css' %}"> 
 {% endblock head_block %}
     
 
@@ -21,9 +21,20 @@
 {% block body_block %}
 
 
-    {% include 'components/navbar_student.html' %}
+    {% include 'components/navbar_admin.html' with is_visit=True %}
 
-    
+    <div class="pop-up" id="logout-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Logout</h1>
+            <h6 class="raleway-regular">Are you sure you want to logout?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-logout-but">Cancel</button>
+                <button id="logout-but" >Logout</button>
+            </div>
+        </div>
+    </div>
+
+
     <main>
     
         <section class="dashboard">
