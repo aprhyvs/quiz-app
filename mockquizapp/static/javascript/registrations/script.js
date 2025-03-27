@@ -1,3 +1,5 @@
+const edit_form_pop = document.getElementById("edit-form-pop");
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
     const responseMessage = document.getElementById("responseMessage");
@@ -45,4 +47,39 @@ document.addEventListener("DOMContentLoaded", function () {
             ?.split("=")[1];
         return cookieValue || "";
     }
+});
+
+document.getElementById("register").addEventListener("click", async function (event){ 
+    event.preventDefault();
+    // Check if the input is valid
+    if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ) {
+        alert("Please fill in all the required fields"); 
+        return;
+    }
+    document.getElementById("edit-text").textContent = `Is all of the information correct?`;
+    edit_form_pop.style.display = "flex";
+});
+
+document.getElementById("cancel-save-but").addEventListener("click", function () {
+    edit_form_pop.style.display = "none";
+});
+
+document.getElementById("save-but").addEventListener("click", async function (){
+    if (document.getElementById("save-but").disabled) return;
+    document.getElementById("save-but").disabled = true;
+    
+    // Check if the input is valid
+    if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value) {
+        alert("Please fill in all the required fields");
+        document.getElementById("save-but").disabled = false;
+        return;
+    }
+}
+)
+
+// success modal
+
+document.getElementById("success-but").addEventListener('click', function(){
+    document.getElementById("success-form-pop").style.display = "none";
+    window.location.href = "../login";
 });

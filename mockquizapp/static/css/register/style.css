@@ -111,3 +111,13 @@ body {
     background-color: #002157;
     border: 2px solid #002157;
 }
+
+#save-but{
+    background: #002157;
+    color: #FDFDFD;
+}
+
+#success-but{
+    background: #05b310;
+    color: #FDFDFD;
+}

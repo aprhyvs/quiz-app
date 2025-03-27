@@ -8,6 +8,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/register/style.css' %}">    
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_login.css' %}">
+
+    <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
+    <script>
+        const studentLoginUrl = "{% url 'login-page' %}";
+        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
+    </script>
     
 {% endblock head_block %}
     
@@ -17,21 +23,26 @@
 {% block body_block %}
 
     {% include 'components/navbar_login.html' %}
+<div class="pop-up" id="edit-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Confirm changes</h1>
+            <h6 class="raleway-regular" id="edit-text"></h6>
+            <div class="pop-up-but">
+                <button id="cancel-save-but">Cancel</button>
+                <button id="save-but" >Save</button>
+            </div>
+        </div>
+    </div>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration</title>
-    <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
-    <script>
-        const studentLoginUrl = "{% url 'login-page' %}";
-        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
-    </script>
-</head>
-<body>
+      <div class="pop-up" id="success-form-pop"  style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Success</h1>
+            <h6 class="raleway-regular" id="success-text"></h6>
+            <div class="pop-up-but"> 
+                <button id="success-but" >Go Back</button>
+            </div>
+        </div>
+    </div>
 
     <div class="wrapper">
     <h1 class="raleway-bold">Create an account</h1>
@@ -79,13 +90,10 @@
             </div>
         </div>
         
-        <button class="register" type="submit">Signup</button>
+        <button class="register" id="register" type="submit">Signup</button>
     </form>
 
-    <p id="responseMessage" class="error"></p>
     </div>
-</body>
-</html>
 
     
 {% endblock body_block %}

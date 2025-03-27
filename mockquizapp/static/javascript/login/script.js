@@ -25,11 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch("/api/login/student", {
                 method: "POST",
                 headers: {
-<<<<<<< HEAD
-                    "X-CSRFToken": getCSRFToken(), 
-=======
                     "X-CSRFToken": csrf_token, // CSRF token for Django
->>>>>>> 3cbc6715e504e0788d9b5cacab9c9900546762a5
                 },
                 body: formData,
             });
@@ -79,17 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-<<<<<<< HEAD
-    // Function to get CSRF token from cookies
-    function getCSRFToken() {
-        return document.cookie.split("; ")
-            .find((row) => row.startsWith("csrftoken="))
-            ?.split("=")[1] || "";
-    }
-=======
     document.querySelector(".signup").addEventListener("click", async function (event) { 
         window.location.href="/register-student";
     });
 
->>>>>>> 3cbc6715e504e0788d9b5cacab9c9900546762a5
 });
