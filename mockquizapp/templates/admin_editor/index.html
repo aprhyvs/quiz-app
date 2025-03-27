@@ -32,11 +32,31 @@
 {% block body_block %}
     {% include 'components/navbar_admin.html' %}
 
+    <div class="pop-up" id="edit-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Confirm changes</h1>
+            <h6 class="raleway-regular" id="edit-text"></h6>
+            <div class="pop-up-but">
+                <button id="cancel-save-but">Cancel</button>
+                <button id="save-but" >Save</button>
+            </div>
+        </div>
+    </div>
 
+    
+    <div class="pop-up" id="success-form-pop"  style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Success</h1>
+            <h6 class="raleway-regular" id="success-text"></h6>
+            <div class="pop-up-but"> 
+                <button id="success-but" >Go Back</button>
+            </div>
+        </div>
+    </div>
 
     <div class="wrapper">
-    <h1 class="raleway-bold">Create an account</h1>
-    <form id="registerForm">
+    <h1 class="raleway-bold">Edit Account Details</h1>
+    <form id="registerForm" >
         
         <div class="name-field">
             <div class="name-group">
@@ -80,7 +100,7 @@
             </div>
         </div>
         
-        <button class="register" type="submit" id="register">Edit Account Details</button>
+        <button class="register" id="register">Proceed</button>
     </form>
     
     </div>

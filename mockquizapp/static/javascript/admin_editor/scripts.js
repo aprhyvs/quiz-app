@@ -1,7 +1,7 @@
 
 
 
-
+var res;
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -15,11 +15,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const username = document.getElementById("username");
     const password = document.getElementById("password"); 
 
+    const edit_form_pop = document.getElementById("edit-form-pop");
 
 
     const studentID = sessionStorage.getItem('studentID');
+    
     if (studentID) {
-        const res = await getDataFromUrlWithParams(`/api/admin/get/studentdata`,{
+        res = await getDataFromUrlWithParams(`/api/admin/get/studentdata`,{
             'student_id': studentID
         });
         if (res) {
@@ -35,19 +37,46 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    setInterval(() =>
+    {
+        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ) {
+            document.getElementById("register").disabled = true;
+            document.getElementById("register").style.opacity = 0.5;
+        } else {
+            document.getElementById("register").disabled = false;
+            document.getElementById("register").style.opacity = 1;
+        }
+    }, 100);
 
-    document.getElementById("register").addEventListener("click", async function (){
-        if (document.getElementById("register").disabled) return;
-        document.getElementById("register").disabled = true;
+    
+
+    document.getElementById("register").addEventListener("click", async function (){ 
+        event.preventDefault();
+        // Check if the input is valid
+        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ) {
+            alert("Please fill in all the required fields"); 
+            return;
+        }
+        document.getElementById("edit-text").textContent = `Are you sure you want to apply changes to ${res.username}?`;
+        edit_form_pop.style.display = "flex";
+    });
+
+    document.getElementById("cancel-save-but").addEventListener("click", function () {
+        edit_form_pop.style.display = "none";
+    });
+        
+    document.getElementById("save-but").addEventListener("click", async function (){
+        if (document.getElementById("save-but").disabled) return;
+        document.getElementById("save-but").disabled = true;
         
         // Check if the input is valid
-        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value ||!password.value) {
+        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!address.value ||!phone.value ||!username.value) {
             alert("Please fill in all the required fields");
-            document.getElementById("register").disabled = false;
+            document.getElementById("save-but").disabled = false;
             return;
         }
 
-        const res = await getDataFromUrlWithParams(`/api/admin/edit/studentdata`,{
+        const res2 = await getDataFromUrlWithParams(`/api/admin/update/student`,{
             'student_id': studentID,
             'fname': fname.value,
             'mname': mname.value,
@@ -60,10 +89,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             'password': password.value
         })
 
+        if (res2){
+            document.getElementById("edit-form-pop").style.display = "none";
+            document.getElementById("success-text").textContent = "Changes applied successfully";
+            document.getElementById("success-form-pop").style.display = "flex";
+        }
+
 
         
-        document.getElementById("register").disabled = false;
+        document.getElementById("save-but").disabled = false;
     } );
 
+    document.getElementById("success-but").addEventListener('click', function(){
+        document.getElementById("success-form-pop").style.display = "none";
+        window.location.href = "../admin_dashboard";
+    });
 
 });

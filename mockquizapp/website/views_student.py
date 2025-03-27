@@ -180,37 +180,50 @@ def update_student_data(request):
         if not student:
             return JsonResponse({'error': 'Student not found.'}, status=404) 
         # Update User object in django configuration
-        user = User.objects.filter(username = request.user.username).first()
+        user = User.objects.filter(username = student.username).first()
         if not user:
             return JsonResponse({"error": "User not found"}, status=404)
         
         
-        if request.POST.get('fname' , None):
-            student.fname =  request.POST.get('fname')
-        if request.POST.get('mname' , None):
-            student.mname = request.POST.get('mname')
-        if request.POST.get('lname' , None):
-            student.lname = request.POST.get('lname')
-        if request.POST.get('school' , None):
-            student.school = request.POST.get('school')
-        if request.POST.get('address' , None):
-            student.address = request.POST.get('address')
-        if request.POST.get('gmail' , None):
-            student.gmail = request.POST.get('gmail')
-        if request.POST.get('phone' , None):
-            student.phone = request.POST.get('phone')
-        if request.POST.get('username' , None):
-            student.username = request.POST.get('username')
-        student.save()
+        fname = request.POST.get('fname' , None)
+        mname = request.POST.get('mname', None)
+        lname = request.POST.get('lname', None)
+        school = request.POST.get('school', None)
+        address = request.POST.get('address', None)
+        gmail = request.POST.get('gmail', None)
+        phone = request.POST.get('phone', None)
+        username = request.POST.get('username', None) 
+        password = request.POST.get('username', None) 
         
-        if request.POST.get('fname' , None):
-            user.first_name =  request.POST.get('fname')
-        if request.POST.get('lname' , None):
-            user.last_name = request.POST.get('lname')
-        if request.POST.get('username' , None):
-            user.username = request.POST.get('username')
-        if request.POST.get('password' , None):
-            user.set_password(request.POST.get('password'))    
+        
+        
+        if fname:
+            student.fname =  fname
+        if mname:
+            student.mname = mname
+        if lname:
+            student.lname = lname
+        if school:
+            student.school = school
+        if address:
+            student.address = address
+        if gmail:
+            student.gmail = gmail
+        if phone:
+            student.phone = phone
+        
+        if fname:
+            user.first_name =  fname
+        if lname:
+            user.last_name = lname
+        if username:
+            if student.username != username:
+                student.username = username 
+                user.username = username
+        if password:
+            user.set_password(password)    
+        
+        student.save()
         user.save()
         
         
