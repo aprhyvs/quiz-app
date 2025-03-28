@@ -54,6 +54,10 @@ class QuizData(models.Model):
     quiz_title = models.CharField(max_length=50 , default="")
     total_worth = models.IntegerField(default=0)
     questions = models.JSONField(default=dict)
+    upload_stage = models.IntegerField(default=0)
+    raw_file_content = models.TextField(default="" )
+    file_type = models.CharField(max_length=50 , default="")
+
     """
         questions = {
             "1": {
@@ -66,16 +70,13 @@ class QuizData(models.Model):
             },
         }
     """
-    upload_stage = models.SmallIntegerField(default=0)
     """
+    upload_stage:
         0 = Creating a questions
         1 = Done Creating Questions and Ready to convert python objects dictionary
         2 = Questions are converted to python objects dictionary and Ready to create quiz title
         3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
-    raw_file_content = models.TextField(default="" )
-    file_type = models.CharField(max_length=50 , default="")
-
     
     
     def __str__(self):
