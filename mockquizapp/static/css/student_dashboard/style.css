@@ -100,3 +100,31 @@ body {
     max-width: 100%; /* Prevents stretching beyond parent */
     min-height: 300px; /* Fixes height */
 }
+
+/* quiz */
+
+.quiz {
+    width: 90%;
+    padding: 4em 2em;
+    margin: 2em auto;
+}
+
+.wrapper-quiz {
+    display: flex;
+    justify-content: space-between;
+    padding: 2em 4em;
+    background: #FCFCFC;
+    border: 2px solid #C1BFBF;
+    border-radius: 16px;
+    margin-bottom: 2em; 
+}
+
+.wrapper-quiz button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+
+    color: white;
+    background-color: #002157;
+    border: none;
+}

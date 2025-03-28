@@ -11,10 +11,11 @@
         <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1>GAM<span>IQ</span></h1>
     </div>
-
+    {% if request.path != '/student_quizpage/' %}
         <div class="student-name">
             <h3>Welcome, </h3>
         </div>
+    {% endif %}
 
     <div class="right">
         <div class="nav-but">
