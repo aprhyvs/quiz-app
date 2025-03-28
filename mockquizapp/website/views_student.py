@@ -72,6 +72,8 @@ def get_all_student_quizzes(request): ## Grabs all the student's quizzes for use
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     student = StudentData.objects.filter(username = request.user.username).first()
+    if not student: 
+        return JsonResponse({"error": "Student not found"}, status=404)
     quizzesDict = get_all_student_quizzes_util(student)
     return JsonResponse({"quizzes": quizzesDict}, status=200)
 
