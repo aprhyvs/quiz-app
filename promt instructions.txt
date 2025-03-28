@@ -1,0 +1,184 @@
+
+
+create a 21 questions with ( A, B, C, D ) selection then also point out the answer and the selection must be maximum 5 words only based on this content 
+``` 
+Science is the systematic pursuit of knowledge and understanding of the natural world, driven by curiosity and observation. It uses evidence-based methods such as experimentation, measurement, and reasoning to uncover the principles and laws governing everything from the tiniest particles to vast cosmic phenomena. Through fields like biology, physics, chemistry, and astronomy, science has revolutionized our understanding of life, the universe, and everything in between. It's not just about discovery—it fuels innovation, shapes our future, and gives us tools to tackle humanity’s biggest challenges. 
+```
+
+
+
+ 
+
+
+
+convert this questions into python dictionaries with this format 
+```
+{
+        "1": {
+           "question": "<questions>",
+           "options": ["<A>", "<B>", "<C>", "<D>"],
+           "correct_answer": "<correct answer>",
+        }, 
+        "2": {
+           "question": "<questions>",
+           "options": ["<A>", "<B>", "<C>", "<D>"],
+           "correct_answer": "<correct answer>",
+        },
+        ...
+   }
+
+```
+
+and here is the questions
+```
+Here’s a set of 21 questions based on the provided content, with multiple-choice options. Each answer is indicated below the question:
+
+1. **What drives the pursuit of science?**  
+   A. Observation and curiosity  
+   B. Random guesses  
+   C. Tradition and myths  
+   D. Personal opinions  
+   **Answer: A**
+
+2. **What does science aim to understand?**  
+   A. Myths and legends  
+   B. Natural world  
+   C. Human imagination  
+   D. Fictional stories  
+   **Answer: B**
+
+3. **Which method is evidence-based?**  
+   A. Speculation  
+   B. Experimentation  
+   C. Guesswork  
+   D. Superstition  
+   **Answer: B**
+
+4. **What does science use to measure?**  
+   A. Observation  
+   B. Random guesses  
+   C. Coin tossing  
+   D. Reasoning  
+   **Answer: A**
+
+5. **What kind of principles does science uncover?**  
+   A. Fictional tales  
+   B. Scientific laws  
+   C. Personal beliefs  
+   D. Ancient myths  
+   **Answer: B**
+
+6. **Science explores the tiniest what?**  
+   A. Atoms  
+   B. Particles  
+   C. Planets  
+   D. Molecules  
+   **Answer: B**
+
+7. **Science also studies vast what?**  
+   A. Lands  
+   B. Oceans  
+   C. Cosmic phenomena  
+   D. Mountains  
+   **Answer: C**
+
+8. **Which field studies living organisms?**  
+   A. Chemistry  
+   B. Astronomy  
+   C. Biology  
+   D. Physics  
+   **Answer: C**
+
+9. **Which field studies the universe?**  
+   A. Biology  
+   B. Physics  
+   C. Astronomy  
+   D. Chemistry  
+   **Answer: C**
+
+10. **Which field studies matter's composition?**  
+    A. Biology  
+    B. Physics  
+    C. Astronomy  
+    D. Chemistry  
+    **Answer: D**
+
+11. **Physics studies what?**  
+    A. Human body  
+    B. Forces and matter  
+    C. Plant growth  
+    D. Stars and galaxies  
+    **Answer: B**
+
+12. **What revolutionized our understanding?**  
+    A. Science  
+    B. Mythology  
+    C. Arts  
+    D. Fiction  
+    **Answer: A**
+
+13. **Science fuels what?**  
+    A. Tradition  
+    B. Innovation  
+    C. Fear  
+    D. Confusion  
+    **Answer: B**
+
+14. **What does science shape?**  
+    A. History  
+    B. Present  
+    C. Future  
+    D. Past  
+    **Answer: C**
+
+15. **Science provides tools to solve?**  
+    A. Human conflicts  
+    B. Humanity's challenges  
+    C. Personal issues  
+    D. Imaginary problems  
+    **Answer: B**
+
+16. **Science is not just about?**  
+    A. Discovery  
+    B. Speculation  
+    C. Innovation  
+    D. Problem-solving  
+    **Answer: A**
+
+17. **What kind of approach does science take?**  
+    A. Systematic  
+    B. Sporadic  
+    C. Erratic  
+    D. Intuitive  
+    **Answer: A**
+
+18. **What drives scientific methods?**  
+    A. Observation  
+    B. Curiosity  
+    C. Random guesses  
+    D. Faith  
+    **Answer: B**
+
+19. **What underpins scientific study?**  
+    A. Experiments  
+    B. Mythology  
+    C. Faith  
+    D. Intuition  
+    **Answer: A**
+
+20. **What does science tackle?**  
+    A. Entertainment problems  
+    B. Humanity’s challenges  
+    C. Minor issues  
+    D. Historical conflicts  
+    **Answer: B**
+
+21. **What has science revolutionized?**  
+    A. Fiction writing  
+    B. Everyday life  
+    C. Understanding the universe  
+    D. Human emotions  
+    **Answer: C**
+
+Let me know if you'd like any adjustments or further elaboration! 🚀
+```

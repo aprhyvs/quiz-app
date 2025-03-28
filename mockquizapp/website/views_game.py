@@ -47,44 +47,49 @@ def upload_file_view(request):
             elif total_lines > 0:
                 file_content = '\n'.join(lines)
             else:
-                file_content = None
-            
-            if not file_content:
                 return JsonResponse({'error': 'No content found in the file.'}, status=400)
             
             
         elif file_type == 'pdf':
             reader = PdfReader(uploaded_file)
             total_pages = len(reader.pages)
+            pages_that_has_text = []
+            for page_num in range(total_pages):
+                page_text = reader.pages[page_num].extract_text()
+                if page_text.strip():
+                    pages_that_has_text.append(page_num)
             
-            if total_pages > 0:
-                selected_page = random.randint(0, total_pages - 1)  # Select a random page
-                page_text = reader.pages[selected_page].extract_text()
-                extracted_text =  page_text.strip() if page_text.strip() else None
+            if len(pages_that_has_text) > 21:
+                selected_pages = random.sample(pages_that_has_text, 21)
+                file_content = '\n'.join(reader.pages[page_num].extract_text() for page_num in selected_pages)
+            elif len(pages_that_has_text) > 0:
+                file_content = '\n'.join(reader.pages[page_num].extract_text() for page_num in pages_that_has_text)
             else:
-                extracted_text =  None
-            
-            
+                return JsonResponse({'error': 'No text found in any of the pages.'}, status=400)
+              
         elif file_type == 'docx':
             document = Document(uploaded_file)
             paragraphs = [p.text for p in document.paragraphs if p.text.strip()]  # Non-empty paragraphs
             total_pages = len(paragraphs)  # Treating paragraphs as "pages" for simplicity
 
-            if total_pages > 0:
-                selected_page = random.randint(0, total_pages - 1)  # Select a random page (paragraph)
-                extracted_text = paragraphs[selected_page]
+            if total_pages > 21:
+                selected_pages = random.sample(range(total_pages), 21)
+                file_content = '\n'.join(paragraphs[page_num] for page_num in selected_pages)
+            elif total_pages > 0:
+                file_content = '\n'.join(paragraphs)
             else:
-                extracted_text = None
+                return JsonResponse({'error': 'No content found in the file.'}, status=400)
+            # if total_pages > 0:
+            #     selected_page = random.randint(0, total_pages - 1)  # Select a random page (paragraph)
+            #     extracted_text = paragraphs[selected_page]
+            # else:
+            #     extracted_text = None
         
         else:
-            extracted_text = None
-            
-            
-        if not extracted_text:
             return JsonResponse({'error': 'Failed to extract text from the uploaded file.'}, status=500)
         
         # TODO: Generate questionaire based on the text of the uploaded file
-        
+        data = file_content
         # TODO: Create new QuizData object to save the current session
         # TODO: Return response that the user can now start the quizes based on the uploaded file
                 
