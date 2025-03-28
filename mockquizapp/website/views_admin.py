@@ -205,7 +205,8 @@ def search_users(request):
         
         data = { user.pk: user.get_data() for user in users}
         return JsonResponse(data , status=200)
-
+    
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def get_all_student_data_and_stats_from_id(request):
