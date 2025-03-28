@@ -1,6 +1,38 @@
 
 
+#pip install cohere
+#pip install -U g4f[all]
+g4f_client = None
+cohere_client = None
 
+
+
+try:
+    # Error: unsupported operand type(s) for |: 'type' and 'type'
+    # Don't panic it is working fine
+    from g4f.client import Client
+    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt
+    import g4f.debug
+
+    g4f.debug.logging = True
+    g4f.debug.version_check = False
+    g4f_client = Client(
+        provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
+    )
+except Exception as e:
+    print(f"Error: {e}")
+
+
+try:
+    import cohere
+    cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
+except Exception as e:
+    print(f"Error: {e}")
+    
+    
+    
+    
+import re
 import random
 from docx import Document
 from PyPDF2 import PdfReader
@@ -14,29 +46,6 @@ from .models import *
 from .admin_utils import *
 from .student_utils import *
 
-import cohere
-#pip install cohere
-#pip install -U g4f[all]
-g4f_client = None
-cohere_client = None
-try:
-    from g4f.client import Client
-    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt
-    import g4f.debug
-    import re
-
-    g4f.debug.logging = True
-    g4f.debug.version_check = False
-    g4f_client = Client(
-        provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
-    )
-except Exception as e:
-    print(f"Error: {e}")
-
-try:
-    cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
-except Exception as e:
-    print(f"Error: {e}")
 
 
 def generate_response_cohere(command : str , system : str):

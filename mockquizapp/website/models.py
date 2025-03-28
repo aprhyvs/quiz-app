@@ -81,10 +81,7 @@ class QuizData(models.Model):
     
     def __str__(self):
         return f"Score: {self.number_of_correct} - Student ID: {self.student_id}"
-    
-    def calculate_score(self):
-        # Assuming each correct answer gives 1 point
-        return self.number_of_correct or 0
+     
     
     def get_data(self) -> dict:
         return {
