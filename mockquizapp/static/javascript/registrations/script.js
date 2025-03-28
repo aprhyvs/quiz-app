@@ -1,5 +1,7 @@
 const edit_form_pop = document.getElementById("edit-form-pop");
-
+const error_pop_up = document.getElementById("error-form-pop");
+const error_pop_up_text = document.getElementById("error-text");
+const success_pop_up = document.getElementById("success-form-pop");
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
 
@@ -21,19 +23,23 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             if (response.ok) { // if successful...
-
-                setTimeout(function() {
-                    window.location.href = studentLoginUrl;
-                }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
-                form.reset();
+                success_pop_up.style.display = "flex";
+                
             } else { // If the server returns an error related to form data...
-                if (data.error == "Gmail already exists") {
-                    alert("Email already exists");
-                }
-                if (data.error == "Gmail already exists") {
-                    alert("Username already exists");
-                }
                 edit_form_pop.style.display = "none";
+                
+                let errorPopUpText = "Generic Error";
+                if (data.error == "Gmail already exists") {
+                    errorPopUpText = "Invalid Email Address";
+                }
+                if (data.error == "Username already exists") {
+                    errorPopUpText = "Invalid Username";
+                }
+                error_pop_up.style.display = "flex";
+                error_pop_up_text.textContent = errorPopUpText;
+
+                document.getElementById("save-but").disabled = false;
+                
 
             
             }
@@ -54,6 +60,10 @@ document.getElementById("register").addEventListener("click", async function (ev
     }
     document.getElementById("edit-text").textContent = `Is all of the information correct?`;
     edit_form_pop.style.display = "flex";
+});
+
+document.getElementById("error-but").addEventListener("click", function () {
+    error_pop_up.style.display = "none";
 });
 
 document.getElementById("cancel-save-but").addEventListener("click", function () {
