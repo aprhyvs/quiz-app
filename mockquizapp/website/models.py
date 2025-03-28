@@ -69,12 +69,12 @@ class QuizData(models.Model):
     upload_stage = models.SmallIntegerField(default=0)
     """
         0 = Creating a questions
-        1 = Done Creating Questions and Converting to python objects dictionary
+        1 = Done Creating Questions and Ready to convert python objects dictionary
         2 = Questions are converted to python objects dictionary and Ready to create quiz title
         3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
-    raw_file_content = models.TextField(default=None, blank=True, null=True)
-    file_type = models.CharField(max_length=50 , blank=True, default=None, null=True)
+    raw_file_content = models.TextField(default="", )
+    file_type = models.CharField(max_length=50 , default="")
 
     
     
@@ -97,10 +97,13 @@ class QuizData(models.Model):
             'number_of_answered_questions': self.number_of_answered_questions,
             'quiz_title': self.quiz_title,
             'total_worth': self.total_worth,
+            'upload_stage': self.upload_stage,
+            'raw_file_content': self.raw_file_content,
+            'file_type': self.file_type,   
         }
     
 
 
-class UploadedFile(models.Model): # File upload model. For handling Jarf(PDF File) uploads later.
+class UploadedFile(models.Model):
     file = models.FileField(upload_to="uploads/")
     uploaded_at = models.DateTimeField(auto_now_add=True)

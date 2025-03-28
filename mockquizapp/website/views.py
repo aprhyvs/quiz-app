@@ -12,6 +12,7 @@ from django.middleware.csrf import get_token
 from .models import *
 from .views_admin import *
 from .views_student import *
+from .views_game import *
 
 
 #============================== Views Webpages Pages ===============================

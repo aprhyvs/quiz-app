@@ -17,22 +17,33 @@ from .student_utils import *
 import cohere
 #pip install cohere
 #pip install -U g4f[all]
+g4f_client = None
+cohere_client = None
+try:
+    from g4f.client import Client
+    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt
+    import g4f.debug
+    import re
 
-from g4f.client import Client
-from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt
-import g4f.debug
+    g4f.debug.logging = True
+    g4f.debug.version_check = False
+    g4f_client = Client(
+        provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
+    )
+except Exception as e:
+    print(f"Error: {e}")
 
+try:
+    cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
+except Exception as e:
+    print(f"Error: {e}")
 
-g4f.debug.logging = True
-g4f.debug.version_check = False
-
-g4f_client = Client(
-    provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
-)
-cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
 
 def generate_response_cohere(command : str , system : str):
     global cohere_client
+    if cohere_client is None:
+        print("Cohere client not initialized")
+        return None
     try: 
         response = cohere_client.chat(
             model="command-r", 
@@ -58,6 +69,9 @@ def generate_response_cohere(command : str , system : str):
 
 def generate_response_g4f( command : str ):
     global g4f_client
+    if g4f_client is None:
+        print("G4F client not initialized")
+        return None
     try:
         response = g4f_client.chat.completions.create(
             model="",
@@ -71,6 +85,28 @@ def generate_response_g4f( command : str ):
         return None
 
 
+def text_to_dictionary(response: str):
+    if not isinstance(response, str):
+        print("Response must be a string")
+        return None
+
+    try:
+        # Use a regex pattern to extract the full JSON content
+        match = re.search(r'\{[\s\S]*\}', response)
+        if match:
+            # Extract the matched JSON-like text
+            json_text = match.group(0)
+
+            # Parse the JSON
+            return json.loads(json_text)
+        else:
+            print("No JSON-like content found in the response")
+            return None
+    except json.JSONDecodeError as e:
+        print(f"JSON parsing error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    return None
 
 
 
@@ -82,6 +118,10 @@ def upload_file_view_status_1(request):
 
         if not uploaded_file:
             return JsonResponse({'error': 'No file uploaded.'}, status=400)
+        
+        student = StudentData.objects.filter(username = request.user.username).first()
+        if student is None:
+            return JsonResponse({'error': 'Failed to find a student record.'}, status=404)
 
         # Identify file type
         file_type = identify_file_type(uploaded_file)
@@ -157,9 +197,6 @@ def upload_file_view_status_1(request):
             if questionairs is None:
                 return JsonResponse({'error': 'Failed to generate questionaire.'}, status=500)
         
-        student = StudentData.objects.filter(username = request.user.username).first()
-        if student is None:
-            return JsonResponse({'error': 'Failed to find a student record.'}, status=404)
         # TODO: Save the questionaire in the database
         try:
             
@@ -171,49 +208,47 @@ def upload_file_view_status_1(request):
                 number_of_answered_questions = 0,
                 total_worth = 0,
                 raw_file_content = file_content,
-                file_type = file_type
-                
+                file_type = file_type,
+                upload_stage = 1
             )
-            
-            # number_of_correct = models.IntegerField(blank=True, default=None, null=True)
-            # number_of_wrong = models.IntegerField(blank=True, default=None, null=True)
-            # student_id = models.IntegerField(blank=True, default=None, null=True)
-            # created_at = models.DateTimeField(auto_now_add=True)
-            # is_answered = models.BooleanField(default=False)
-            # number_of_answered_questions = models.IntegerField(default=0)
-            # quiz_title = models.CharField(max_length=50 , blank=True, default=None, null=True)
-            # total_worth = models.IntegerField(default=0)
-            # questions = models.JSONField(default=dict, blank=True, null=True)
-            # """
-            #     questions = {
-            #         "1": {
-            #             "question": "What is the capital of France?",
-            #             "options": ["London", "Paris", "Berlin", "Madrid"],
-            #             "correct_answer": "Paris",
-            #             "answered": False,
-            #             "answer": None,
-            #             "worth" : 100
-            #         },
-            #     }
-            # """
-            # upload_stage = models.SmallIntegerField(default=0)
-            # """
-            #     0 = Creating a questions
-            #     1 = Done Creating Questions and Converting to python objects dictionary
-            #     2 = Questions are converted to python objects dictionary and ready for answering
-            # """
-            # raw_file_content = models.TextField(default=None, blank=True, null=True)
-            # file_type = models.CharField(max_length=50 , blank=True, default=None, null=True)
-
-            
+            return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
         except Exception as e:
             print(f"Error: {e}")
             return JsonResponse({'error': 'Failed to save questionaire in the database.'}, status=500)
         
         
         
+
+def upload_file_view_status_2(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        stage = request.POST.get('stage', None)
+        if not stage:
+            return JsonResponse({'error': 'No stage provided.'}, status=400)
         
-        # TODO: Generate a python object from generated questionaire from the uploaded file
+        if not str(stage).isdigit():
+            return JsonResponse({'error': 'Invalid stage.'}, status=400)
+        
+        stage = int(stage)
+        if stage != 1:
+            return JsonResponse({'error': 'Invalid stage.'}, status=400)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = quiz_id).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        # TODO: Generate a python object from generated questionaire from the uploaded 
+        
+        
         # TODO: Create new QuizData object to save the current session
         # TODO: Return response that the user can now start the quizes based on the uploaded file
                 
