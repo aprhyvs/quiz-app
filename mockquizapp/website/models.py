@@ -56,7 +56,7 @@ class QuizData(models.Model):
     questions = models.JSONField(default=dict)
     upload_stage = models.IntegerField(default=0)
     raw_file_content = models.TextField(default="" )
-    file_type = models.CharField(max_length=50 , default="")
+    file_ext = models.CharField(max_length=50 , default="")
 
     """
         questions = {
@@ -100,11 +100,8 @@ class QuizData(models.Model):
             'total_worth': self.total_worth,
             'upload_stage': self.upload_stage,
             'raw_file_content': self.raw_file_content,
-            'file_type': self.file_type
+            'file_ext': self.file_ext
         }
     
 
-
-class UploadedFile(models.Model):
-    file = models.FileField(upload_to="uploads/")
-    uploaded_at = models.DateTimeField(default=timezone.now)
+ 
