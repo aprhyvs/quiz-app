@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/student/quizzes', view=get_all_student_quizzes),
     
     path('api/student/upload/stage1', view=upload_file_view_status_1),
+    path('api/student/upload/stage2', view=upload_file_view_status_2),
 
 
     #=============================== File Upload ===============================#

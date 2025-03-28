@@ -191,9 +191,9 @@ def upload_file_view_status_1(request):
         # TODO: Generate questionaire based on the text of the uploaded file
         
         # generate questionair in g4f
-        questionairs = generate_response_g4f(file_content)
+        questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT_WITH_CONTENT.format(content=file_content))
         if questionairs is None:
-            questionairs = generate_response_cohere(file_content)
+            questionairs = generate_response_cohere(file_content, CREATE_QUESTIONS_PROMPT)
             if questionairs is None:
                 return JsonResponse({'error': 'Failed to generate questionaire.'}, status=500)
         
@@ -215,7 +215,8 @@ def upload_file_view_status_1(request):
         except Exception as e:
             print(f"Error: {e}")
             return JsonResponse({'error': 'Failed to save questionaire in the database.'}, status=500)
-        
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
         
         
 
@@ -242,15 +243,63 @@ def upload_file_view_status_2(request):
         if not str(quiz_id).isdigit():
             return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
         
-        quiz = QuizData.objects.filter(id = quiz_id).first()
+        quiz = QuizData.objects.filter(id = int(quiz_id), upload_stage = 1).first()
         if not quiz:
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         # TODO: Generate a python object from generated questionaire from the uploaded 
+        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS.format(questions=quiz.raw_file_content))
+        if not questionaire_dict_text:
+            questionaire_dict_text = generate_response_cohere(quiz.raw_file_content , CONVERT_QUESTIONS_TO_OBJECT)
+            if not questionaire_dict_text:
+                return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
         
         
-        # TODO: Create new QuizData object to save the current session
-        # TODO: Return response that the user can now start the quizes based on the uploaded file
+        converted_dict = text_to_dictionary(questionaire_dict_text)
+        if not converted_dict:
+            return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
+        
+        # TODO: Save the questionaire in the database
+        try:
+            quiz.upload_stage = 2
+            quiz.questions = converted_dict
+            quiz.save()
+            return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': 'Failed to save questionaire in the database.'}, status=500)
+        
+        
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
                 
+
+
+def upload_file_view_status_3(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
     
- 
+    if request.method == 'POST':
+        stage = request.POST.get('stage', None)
+        if not stage:
+            return JsonResponse({'error': 'No stage provided.'}, status=400)
+        
+        if not str(stage).isdigit():
+            return JsonResponse({'error': 'Invalid stage.'}, status=400)
+        
+        stage = int(stage)
+        if stage!= 2:
+            return JsonResponse({'error': 'Invalid stage.'}, status=400)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        quiz = QuizData.objects.filter(id = int(quiz_id), upload_stage = 2).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        #TODO: Create a title for the quiz and save it in the database
+        # minimize_content = qu
+
