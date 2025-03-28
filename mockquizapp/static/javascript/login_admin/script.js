@@ -20,17 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             if (response.ok) {
-                responseMessage.textContent = "Login successful!";
-                responseMessage.style.color = "green";
+                // responseMessage.textContent = "Login successful!";
+                // responseMessage.style.color = "green";
                 window.location.href = adminDashboardUrl;
                 form.reset();
             } else {
-                responseMessage.textContent = data.error || "Login failed!";
-                responseMessage.style.color = "red";
+                // responseMessage.textContent = data.error || "Login failed!";
+                // responseMessage.style.color = "red";
             }
         } catch (error) {
-            responseMessage.textContent = "An error occurred. Please try again.";
-            responseMessage.style.color = "red";
+            // responseMessage.textContent = "An error occurred. Please try again.";
+            // responseMessage.style.color = "red";
         }
     });
 

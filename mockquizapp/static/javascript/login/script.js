@@ -72,9 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         } catch (error) {
-            errorText.textContent = "An error occurred. Please try again.";
+            errorText1.textContent = "An error occurred. Please try again.";
+            errorText2.textContent = "An error occurred. Please try again.";
             responseMessage.style.display = "flex";
-            errorIcon.style.display = "inline";
+            errorIcon1.style.display = "inline";
+            errorIcon2.style.display = "inline";
             usernameField.classList.add("error");
             passwordField.classList.add("error");
         }
