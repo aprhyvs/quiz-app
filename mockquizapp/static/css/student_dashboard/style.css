@@ -68,6 +68,7 @@ body {
 
 .most-recent-quiz p{
     font-size: 1.5rem;
+    margin: 1em 0;
     text-align: center;
 }
 
@@ -80,7 +81,8 @@ body {
     border-radius: 4px;
     font-size: 1rem;
     padding: 0.5em 2em;
-    margin: 0.5em auto;
+    display: block;
+    margin: 0 auto;
     cursor: pointer;
 
     color: white;
@@ -88,6 +90,7 @@ body {
     background-color: #002157;
     border: none;
 }
+
 
 .card-large {
     width: 46.75%;
