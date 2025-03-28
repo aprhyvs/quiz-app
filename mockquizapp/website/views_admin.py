@@ -201,30 +201,10 @@ def search_users(request):
                 Q(fname__icontains=search_term) |
                 Q(mname__icontains=search_term) |
                 Q(lname__icontains=search_term)
-            )
-
+            ) 
         
         data = { user.pk: user.get_data() for user in users}
         return JsonResponse(data , status=200)
-
-def getStudentData(request):
-
-    if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
-    if not request.user.is_staff:
-        return JsonResponse({"error": "User not authorized to fetch student data"}, status=403)
-    if request.method == 'POST':
-        student_id = request.POST.get('student_id' , None)
-    if not student_id:
-        return JsonResponse({"error": "Student ID not provided"}, status=400)
-    student = get_student_from_id(student_id)
-    if not student:
-        return JsonResponse({"error": "Student not found"}, status=404)
-    
-    data = {}
-    data['student_id'] = student.id
-
-    return JsonResponse(data, status=200)
 
 
 

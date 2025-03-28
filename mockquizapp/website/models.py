@@ -4,16 +4,16 @@ from django.utils import timezone
 # Create your models here.
 
 class StudentData(models.Model):
-    fname = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    mname = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    lname = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    school = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    address = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    gmail = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    phone = models.CharField(max_length=50 , blank=True, default=None, null=True)
+    fname = models.CharField(max_length=50 , default="")
+    mname = models.CharField(max_length=50 , default="")
+    lname = models.CharField(max_length=50 , default="")
+    school = models.CharField(max_length=50 , default="")
+    address = models.CharField(max_length=50 , default="")
+    gmail = models.CharField(max_length=50 , default="")
+    phone = models.CharField(max_length=50 , default="")
     admin_id = models.IntegerField(blank=True, default=None, null=True)
-    username = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    password = models.CharField(max_length=50  , blank=True, default=None, null=True)
+    username = models.CharField(max_length=50 , default="")
+    password = models.CharField(max_length=50  , default="")
     created_at = models.DateTimeField( default=timezone.now)
 
     def __str__(self):
@@ -36,8 +36,8 @@ class StudentData(models.Model):
 
 
 class AdminData(models.Model):
-    username = models.CharField(max_length=50 , blank=True, default=None, null=True)
-    password = models.CharField(max_length=50  , blank=True, default=None, null=True)
+    username = models.CharField(max_length=50 , default="")
+    password = models.CharField(max_length=50  , default="")
     created_at = models.DateTimeField( default=timezone.now)
     
     def __str__(self):
@@ -45,15 +45,15 @@ class AdminData(models.Model):
 
 
 class QuizData(models.Model):
-    number_of_correct = models.IntegerField(blank=True, default=None, null=True)
-    number_of_wrong = models.IntegerField(blank=True, default=None, null=True)
+    number_of_correct = models.IntegerField(default=0)
+    number_of_wrong = models.IntegerField(default=0)
     student_id = models.IntegerField(blank=True, default=None, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     is_answered = models.BooleanField(default=False)
     number_of_answered_questions = models.IntegerField(default=0)
-    quiz_title = models.CharField(max_length=50 , blank=True, default=None, null=True)
+    quiz_title = models.CharField(max_length=50 , default="")
     total_worth = models.IntegerField(default=0)
-    questions = models.JSONField(default=dict, blank=True, null=True)
+    questions = models.JSONField(default=dict)
     """
         questions = {
             "1": {
@@ -106,4 +106,4 @@ class QuizData(models.Model):
 
 class UploadedFile(models.Model):
     file = models.FileField(upload_to="uploads/")
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(default=timezone.now)
