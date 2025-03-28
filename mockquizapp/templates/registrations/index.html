@@ -10,10 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_login.css' %}">
 
     <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
-    <script>
-        const studentLoginUrl = "{% url 'login-page' %}";
-        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
-    </script>
     
 {% endblock head_block %}
     
