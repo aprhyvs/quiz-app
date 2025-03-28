@@ -10,13 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_login.css' %}">
 
     <script defer src="{% static 'javascript/registrations/script.js' %}"></script>
-
-    <style>
-        #error-but{
-            cursor: pointer; 
-            background-color: #002157; 
-        }
-    </style>
+ 
     
 {% endblock head_block %}
     
@@ -26,10 +20,10 @@
 {% block body_block %}
 
     {% include 'components/navbar_login.html' %}
-    <div class="pop-up" id="error-form-pop"  style="display: none;">
+    <div class="pop-up" id="error-form-pop"  style="display: none;" >
         <div class="pop-up-content">
             <h1 class="raleway-bold">Error Occur!</h1>
-            <h6 class="raleway-regular" id="error-text"></h6>
+            <h6 class="raleway-regular" id="error-text">Username is already been used</h6>
             <div class="pop-up-but"> 
                 <button id="error-but" >I Understand</button>
             </div>

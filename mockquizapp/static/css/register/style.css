@@ -115,9 +115,22 @@ body {
 #save-but{
     background: #002157;
     color: #FDFDFD;
+    cursor: pointer; 
 }
 
 #success-but{
     background: #05b310;
     color: #FDFDFD;
+    cursor: pointer; 
+}
+
+#error-but{
+    cursor: pointer; 
+    background-color: #002157; 
+    color: #FDFDFD;
+}
+
+
+#error-form-pop h1{
+    color: #C80A0A;
 }
