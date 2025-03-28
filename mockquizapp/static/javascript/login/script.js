@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Reset previous errors
         responseMessage.style.display = "none";
+        errorText1.textContent = ""; 
         errorIcon1.style.display = "none";
+        errorText2.textContent = ""; 
         errorIcon2.style.display = "none";
         usernameField.classList.remove("error");
         passwordField.classList.remove("error");
@@ -29,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: formData,
             });
-
+            
             const data = await response.json();
 
             if (response.ok) {
@@ -51,16 +53,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.error === "Enter a valid username") {
                     errorText1.textContent = data.error; //span
                     errorIcon1.style.display = "inline";
-                    usernameField.classList.add("error"); // Red border for username
-                } else if (data.error === "Enter password") {
+                    usernameField.classList.add("error"); // Red border for 
+                }
+                if (data.error === "Enter password") {
                     errorText2.textContent = data.error; 
                     errorIcon2.style.display = "inline";
                     passwordField.classList.add("error"); // Red border for password
-                } else if (data.error === "Invalid Username or Password!") {
+                }
+                if (data.error === "Invalid Username") {
                     errorText1.textContent = "Invalid username"; 
                     errorIcon1.style.display = "inline";
                     usernameField.classList.add("error");
-                   
+                }
+                if (data.error === "Invalid Password") {
                     errorText2.textContent = "Invalid Password"; 
                     errorIcon2.style.display = "inline";
                     passwordField.classList.add("error");

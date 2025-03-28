@@ -117,7 +117,6 @@ def login_student(request):
     print("Fired Login!")
     if request.method == 'POST':
         input_data = request.POST
-        print(input_data)
         username = input_data.get('username')
         if not username:
             return JsonResponse({"error": "Enter a valid username"}, status=400)
@@ -126,17 +125,26 @@ def login_student(request):
             return JsonResponse({"error": "Enter password"}, status=400)
         
         user = authenticate(username=username, password=password)
-
+        
+        
         if user is not None:
 
             if user.is_staff:
-                return JsonResponse({"error": "Invalid Username or Password!"}, status=403)
+                return JsonResponse({"error": "Invalid Username"}, status=403)
 
             print("User: " + user.username + " Found!")
             login(request, user)
             return JsonResponse({'status': 'success', 'url': '/student_dashboard/'}, status=200)
         else:
-            return JsonResponse({"error": "Invalid Username or Password!"} , status=400)
+            studentName = StudentData.objects.filter(username = input_data.get('username')).first()
+            if studentName:
+                print("Username found but wrong password")
+                print(studentName.username)
+                return JsonResponse({"error": "Invalid Password"}, status=403)
+                
+            print("No username found")
+            return JsonResponse({"error": "Invalid Username"} , status=400)
+        
     return JsonResponse({'csrfToken': get_token(request)})
 
 def login_admin(request):
