@@ -1,8 +1,6 @@
 {% load static %}
 
 <nav class="navbar">
-     <a href="{% url 'home' %}">
-        <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
-        <h1>GAM<span>IQ</span></h1>
-    </a>
+        <img onclick="window.location.href='{% url 'home' %}'" src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
+        <h1 onclick="window.location.href='{% url 'home' %}'">GAM<span>IQ</span></h1>
 </nav>
