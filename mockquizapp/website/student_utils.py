@@ -37,6 +37,8 @@ def getStudentQuizListRequest(request):
         return JsonResponse({"error": "User not authenticated"}, status=401)
     student = request.user
     quizzes = QuizData.objects.filter(student_id=student.id).order_by('-created_at')
+    if not quizzes:
+        return JsonResponse({"error": "No quizzes found"}, status=404)
     data = {quiz.pk: quiz.get_data() for quiz in quizzes}
     return JsonResponse(data, status=200)
 
@@ -69,6 +71,8 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         return data
 
 def get_all_student_quizzes_util(student): ## Grabs all the student's quizzes for use in javascript.
+    if not student:
+        return None
     quizzes = QuizData.objects.filter(student_id=student.pk).order_by('-created_at')
     quizzesDict = [quiz.get_data() for quiz in quizzes]
     return quizzesDict
