@@ -272,3 +272,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // total quizzes taken per month
 
+// upload quiz modal
+
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("uploadQuizModal");
+    const openModalBtn = document.getElementById("uploadQuizButton");
+    const closeModalBtns = document.querySelectorAll(".close");
+
+    openModalBtn.addEventListener("click", function () {
+        modal.style.display = "block";
+    });
+
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    });
+
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
