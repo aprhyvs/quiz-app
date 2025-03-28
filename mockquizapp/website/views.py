@@ -30,16 +30,19 @@ def admin_login_page(request):
 
 def admin_dashboard(request):
     if not request.user.is_authenticated:
-        return redirect('home')
+        if not AdminData.objects.filter(username=request.user.username).exists():
+            return redirect('home')
+    
     
     if request.user.is_staff:
         return render(request, "admin_dashboard/index.html")
     
     return redirect('home')
 
-def student_analytics(request):
+def student_analytics(request): 
     if not request.user.is_authenticated:
-        return redirect('home')
+        if not AdminData.objects.filter(username=request.user.username).exists():
+            return redirect('home')
     return render(request, "admin_visit/index.html")
 
 def student_quizpage(request):
@@ -54,7 +57,8 @@ def student_dashboard(request):
 
 def admin_editor(request):
     if not request.user.is_authenticated:
-        return redirect('home')
+        if not AdminData.objects.filter(username=request.user.username).exists():
+            return redirect('home')
     return render(request, "admin_editor/index.html")
 
 #=================================  Views API Routes =================================
@@ -85,7 +89,7 @@ def register_student(request):
             student_data['phone'] = input_data.get('phone')
         if input_data.get('username', None):
             username = input_data.get('username')
-            if StudentData.objects.filter(username=username).exists():
+            if StudentData.objects.filter(username=username).exists() or AdminData.objects.filter(username=username).exists():
                 return JsonResponse({"error": "Username already exists"}, status=400)
             student_data['username'] = username
         if input_data.get('password', None):
