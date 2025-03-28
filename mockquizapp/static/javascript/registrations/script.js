@@ -2,7 +2,6 @@ const edit_form_pop = document.getElementById("edit-form-pop");
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
-    const responseMessage = document.getElementById("responseMessage");
 
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -21,21 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
 
-            if (response.ok) {
-                responseMessage.textContent = "Registration successful! Redirecting to Login Page...";
-                responseMessage.style.color = "green";
+            if (response.ok) { // if successful...
 
                 setTimeout(function() {
                     window.location.href = studentLoginUrl;
                 }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
                 form.reset();
-            } else {
-                responseMessage.textContent = data.error || "Registration failed!";
-                responseMessage.style.color = "red";
+            } else { // If the server returns an error related to form data...
+            
             }
-        } catch (error) {
-            responseMessage.textContent = "An error occurred. Please try again.";
-            responseMessage.style.color = "red";
+        } catch (error) { // if there is an unidentified erorr...
+
         }
     });
 
@@ -67,6 +62,16 @@ document.getElementById("save-but").addEventListener("click", async function (){
         document.getElementById("save-but").disabled = false;
         return;
     }
+
+    // Trigger the form submit event
+    const form = document.querySelector("#registerForm");  // Replace with the actual form ID
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    
+    // Close the confirmation popup
+    document.getElementById("edit-form-pop").style.display = "none";
+    
+
+    
 }
 )
 

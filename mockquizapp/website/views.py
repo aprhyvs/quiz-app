@@ -56,7 +56,6 @@ def register_student(request):
     if request.method == 'POST':
         input_data = request.POST
         student_data = {}   # create empty student table
-        print(input_data)
         # --check input data one by one. check if input data contains information.
         if input_data.get('fname', None):
             student_data['fname'] = input_data.get('fname')
@@ -75,27 +74,15 @@ def register_student(request):
         if input_data.get('phone', None):
             student_data['phone'] = input_data.get('phone')
         if input_data.get('username', None):
+
             username = input_data.get('username')
             if StudentData.objects.filter(username=username).exists():
+
                 return JsonResponse({"error": "Username already exists"}, status=400)
             student_data['username'] = username
         if input_data.get('password', None):
+
             student_data['password'] = input_data.get('password')
-
-        """ The table above should look like this example after the function is done checking and setting each information to the table
-
-        student_data = {
-            'fname': "Jeremiah Alvin"
-            'mname': "Perocillo",
-            'lname': "Nava", 
-            'address': "Block 12, Lot 22, Yagba Road, Brgy. Nursery, Milagros City",
-            'gmail': "jeremiahpnava@gmail.com",
-            'phone': "09456487069",
-            'username' : "JereNava420",
-            'password': "$2y$10$P0tkpHtXa30wl9dumSPOjeWWynDVmmp6uSnZUvvqreSSUWVKZTQTy"
-        }
-
-        """
 
         # Save student data to database
         StudentData.objects.create(**student_data)
@@ -109,12 +96,9 @@ def register_student(request):
         user.set_password(student_data['password'])  # Hashes the password
         user.save()
         return JsonResponse({'status': 'success'} , status=200)
-    
-    return JsonResponse({'csrfToken': get_token(request)})
     return JsonResponse({'status': 'error'} , status=400)
 
 def login_student(request):
-    print("Fired Login!")
     if request.method == 'POST':
         input_data = request.POST
         username = input_data.get('username')
@@ -132,17 +116,14 @@ def login_student(request):
             if user.is_staff:
                 return JsonResponse({"error": "Invalid Username"}, status=403)
 
-            print("User: " + user.username + " Found!")
+
             login(request, user)
             return JsonResponse({'status': 'success', 'url': '/student_dashboard/'}, status=200)
         else:
             studentName = StudentData.objects.filter(username = input_data.get('username')).first()
             if studentName:
-                print("Username found but wrong password")
-                print(studentName.username)
+
                 return JsonResponse({"error": "Invalid Password"}, status=403)
-                
-            print("No username found")
             return JsonResponse({"error": "Invalid Username"} , status=400)
         
     return JsonResponse({'csrfToken': get_token(request)})
@@ -164,7 +145,6 @@ def login_admin(request):
     return JsonResponse({'status': 'error'} , status=400)
 
 def logout_request(request):
-    print("Logging out")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     logout(request)
