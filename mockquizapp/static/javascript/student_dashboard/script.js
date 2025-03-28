@@ -86,7 +86,18 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayMostRecentQuiz(mostRecentQuiz) {
         // Display the quiz title
         if (!mostRecentQuiz) {
-            
+            console.log("No more quiz yet");
+            let statusText = "NONE";
+            const statusElement = document.getElementById("quiz-status");
+            const statusParent = document.querySelector(".quiz-status-parent")
+            const testOptionsButton = document.getElementById("view-quiz-button");
+
+            statusParent.innerHTML = `<span id="quiz-status" style="color: black;">${statusText}</span>`;
+            statusElement.innerText = statusText;
+            statusParent.style.color = "black";
+            testOptionsButton.innerText = "Play";
+
+            return;
         }
 
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
