@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             'student_id': studentID
         });
 
-        document.getElementById("title-nav").textContent = res?.username ?? "N/A";
+        document.getElementById("title-nav").textContent = `Student Analytics: ${res?.username ?? "N/A"}`;
     }
 
 
