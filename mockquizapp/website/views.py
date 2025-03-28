@@ -55,6 +55,9 @@ def admin_editor(request):
 def register_student(request):
     if request.method == 'POST':
         input_data = request.POST
+        if not input_data:
+            return JsonResponse({"error": "No input data provided"}, status=400)
+        print(input_data)
         student_data = {}   # create empty student table
         # --check input data one by one. check if input data contains information.
         if input_data.get('fname', None):
@@ -69,21 +72,18 @@ def register_student(request):
             student_data['address'] = input_data.get('address')
         if input_data.get('gmail', None):
             if StudentData.objects.filter(gmail=input_data.get('gmail')).exists():
+                print("Gmail already exists!")
                 return JsonResponse({"error": "Gmail already exists"}, status=400)
             student_data['gmail']= input_data.get('gmail')
         if input_data.get('phone', None):
             student_data['phone'] = input_data.get('phone')
         if input_data.get('username', None):
-
             username = input_data.get('username')
             if StudentData.objects.filter(username=username).exists():
-
                 return JsonResponse({"error": "Username already exists"}, status=400)
             student_data['username'] = username
         if input_data.get('password', None):
-
             student_data['password'] = input_data.get('password')
-
         # Save student data to database
         StudentData.objects.create(**student_data)
         user = User.objects.create(
@@ -96,7 +96,8 @@ def register_student(request):
         user.set_password(student_data['password'])  # Hashes the password
         user.save()
         return JsonResponse({'status': 'success'} , status=200)
-    return JsonResponse({'status': 'error'} , status=400)
+    
+    return JsonResponse({'csrfToken': get_token(request)})
 
 def login_student(request):
     if request.method == 'POST':

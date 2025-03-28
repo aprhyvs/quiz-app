@@ -27,6 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
                 form.reset();
             } else { // If the server returns an error related to form data...
+                if (data.error == "Gmail already exists") {
+                    alert("Email already exists");
+                }
+                if (data.error == "Gmail already exists") {
+                    alert("Username already exists");
+                }
+                edit_form_pop.style.display = "none";
+
             
             }
         } catch (error) { // if there is an unidentified erorr...
@@ -68,7 +76,7 @@ document.getElementById("save-but").addEventListener("click", async function (){
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     
     // Close the confirmation popup
-    document.getElementById("edit-form-pop").style.display = "none";
+    edit_form_pop.style.display = "none";
     
 
     
