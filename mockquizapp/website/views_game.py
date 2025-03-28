@@ -15,7 +15,7 @@ from .admin_utils import *
 from .student_utils import *
 
 
-def upload_file_view(request):
+def upload_file_view_status_1(request):
     
     if request.method == 'POST':
         uploaded_file = request.FILES.get('file')
@@ -89,7 +89,7 @@ def upload_file_view(request):
             return JsonResponse({'error': 'Failed to extract text from the uploaded file.'}, status=500)
         
         # TODO: Generate questionaire based on the text of the uploaded file
-        data = file_content
+        
         # TODO: Create new QuizData object to save the current session
         # TODO: Return response that the user can now start the quizes based on the uploaded file
                 

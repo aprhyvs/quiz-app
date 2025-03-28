@@ -66,6 +66,16 @@ class QuizData(models.Model):
             },
         }
     """
+    upload_stage = models.SmallIntegerField(default=0)
+    """
+        0 = Creating a questions
+        1 = Done Creating Questions and Converting to python objects dictionary
+        2 = Questions are converted to python objects dictionary and ready for answering
+    """
+    raw_file_content = models.TextField(default=None, blank=True, null=True)
+    file_type = models.CharField(max_length=50 , blank=True, default=None, null=True)
+
+    
     
     def __str__(self):
         return f"Score: {self.number_of_correct} - Student ID: {self.student_id}"
