@@ -179,9 +179,15 @@ Convert these questions into Python dictionaries:
 """
 
 CREATE_TITLE_PROMPT_WITH_CONTENT = """
-Generate a title for a quiz based on the following content:
+Generate a 5-word quiz title based on the following content in this format:
+{{"title": "<title>"}}
+
 {content}
+
 """
 
-
+CREATE_TITLE_PROMPT = """
+Generate a 5-word quiz title based on the following content in this format:
+{{"title": "<title>"}}
+"""
 

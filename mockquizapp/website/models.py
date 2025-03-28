@@ -70,7 +70,8 @@ class QuizData(models.Model):
     """
         0 = Creating a questions
         1 = Done Creating Questions and Converting to python objects dictionary
-        2 = Questions are converted to python objects dictionary and ready for answering
+        2 = Questions are converted to python objects dictionary and Ready to create quiz title
+        3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
     raw_file_content = models.TextField(default=None, blank=True, null=True)
     file_type = models.CharField(max_length=50 , blank=True, default=None, null=True)
