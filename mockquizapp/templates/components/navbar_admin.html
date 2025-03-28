@@ -5,10 +5,11 @@
         <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1>GAM<span>IQ</span></h1>
     </div>
-
+    {% if request.path != '/student_analytics/' %}
     <div class="student-name">
         <h3 class="raleway-bold" id="title-nav">Overall Statistics</h3>
     </div>
+    {% endif %}
 
     <div class="right">
         <div class="nav-but" id="dashboard-nav">
