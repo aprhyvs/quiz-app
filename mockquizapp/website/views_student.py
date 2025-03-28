@@ -9,9 +9,6 @@ from .admin_utils import *
 from .student_utils import *
 
 
-import random
-from docx import Document
-from PyPDF2 import PdfReader
 # pip install python-docx
 # pip install PyPDF2
 
@@ -206,65 +203,3 @@ def update_student_data(request):
         
         return JsonResponse({"success": "Student data updated successfully."}, status=200)
         
-
-def upload_file_view(request):
-    
-    if request.method == 'POST':
-        uploaded_file = request.FILES.get('file')
-
-        if not uploaded_file:
-            return JsonResponse({'error': 'No file uploaded.'}, status=400)
-
-        # Identify file type
-        file_type = identify_file_type(uploaded_file)
-
-        if file_type == 'invalid':
-            return JsonResponse({'error': 'Unsupported file type. Only .docx, .pdf, and .txt are allowed.'}, status=400)
-
-        # Process the file based on its type
-        if file_type == 'txt':  
-            lines = uploaded_file.read().decode('utf-8').splitlines()  # Decode and split into lines
-            total_lines = len(lines)
-            if total_lines > 0:
-                selected_line = random.randint(0, total_lines - 1)  # Select a random line
-                extracted_text = lines[selected_line]
-            else:
-                extracted_text = None
-                
-                
-        elif file_type == 'pdf':
-            reader = PdfReader(uploaded_file)
-            total_pages = len(reader.pages)
-            
-            if total_pages > 0:
-                selected_page = random.randint(0, total_pages - 1)  # Select a random page
-                page_text = reader.pages[selected_page].extract_text()
-                extracted_text =  page_text.strip() if page_text.strip() else None
-            else:
-                extracted_text =  None
-            
-            
-        elif file_type == 'docx':
-            document = Document(uploaded_file)
-            paragraphs = [p.text for p in document.paragraphs if p.text.strip()]  # Non-empty paragraphs
-            total_pages = len(paragraphs)  # Treating paragraphs as "pages" for simplicity
-
-            if total_pages > 0:
-                selected_page = random.randint(0, total_pages - 1)  # Select a random page (paragraph)
-                extracted_text = paragraphs[selected_page]
-            else:
-                extracted_text = None
-        
-        else:
-            extracted_text = None
-            
-            
-        if not extracted_text:
-            return JsonResponse({'error': 'Failed to extract text from the uploaded file.'}, status=500)
-        
-        # TODO: Generate questionaire based on the text of the uploaded file
-        # TODO: Create new QuizData object to save the current session
-        # TODO: Return response that the user can now start the quizes based on the uploaded file
-                
-    
- 
