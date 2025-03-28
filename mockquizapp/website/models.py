@@ -99,7 +99,7 @@ class QuizData(models.Model):
             'total_worth': self.total_worth,
             'upload_stage': self.upload_stage,
             'raw_file_content': self.raw_file_content,
-            'file_type': self.file_type,   
+            'file_type': self.file_type
         }
     
 

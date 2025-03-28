@@ -301,5 +301,25 @@ def upload_file_view_status_3(request):
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         #TODO: Create a title for the quiz and save it in the database
-        # minimize_content = qu
+        minimize_content = quiz.raw_file_content[:300] if len(quiz.raw_file_content) > 300 else quiz.raw_file_content
+        title = generate_response_g4f(CREATE_TITLE_PROMPT_WITH_CONTENT.format(content=minimize_content))
+        if not title:
+            title = generate_response_cohere(minimize_content, CREATE_TITLE_PROMPT)
+            if not title:
+                return JsonResponse({'error': 'Failed to generate title.'}, status=500)
+            
+        converted_title = text_to_dictionary(title)
+        if not converted_title:
+            return JsonResponse({'error': 'Failed to convert title to dictionary.'}, status=500)
+        
+        real_title = converted_title.get('title' , None)
+        if not real_title:
+            return JsonResponse({'error': 'Failed to extract title from generated text.'}, status=500)
+        
+        quiz.quiz_title = real_title
+        quiz.upload_stage = 3
+        quiz.save()
+        return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage, "data": quiz.get_data() }, status=200)
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
