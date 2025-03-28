@@ -134,7 +134,7 @@ def get_monthly_quizzes_taken_for_student(student):
 
 
 
-CREATE_QUESTIONS_PROMPT = """
+CREATE_QUESTIONS_PROMPT_WITH_CONTENT = """
 Generate 21 questions with A, B, C, D options based on this content:
 {content}
 
@@ -142,8 +142,16 @@ Generate 21 questions with A, B, C, D options based on this content:
 - Clearly identify the correct answer.
 """
 
+ 
+CREATE_QUESTIONS_PROMPT = """
+Generate 21 questions with A, B, C, D options based on the provided content.
 
-CONVERT_QUESTIONS_TO_OBJECT = """
+- Each option must be no more than 5 words.
+- Clearly identify the correct answer.
+"""
+
+
+CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS = """
 Convert the following questions into Python dictionaries using this format:
 {
     "<index>": {
@@ -158,7 +166,22 @@ Questions:
 {questions}
 """
 
+CONVERT_QUESTIONS_TO_OBJECT = """
+Convert these questions into Python dictionaries:
+{
+    "<index>": {
+        "question": "<question>",
+        "options": ["<A>", "<B>", "<C>", "<D>"],
+        "correct_answer": "<correct_answer>",
+    },
+    ...
+}
+"""
 
+CREATE_TITLE_PROMPT_WITH_CONTENT = """
+Generate a title for a quiz based on the following content:
+{content}
+"""
 
 
 
