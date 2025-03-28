@@ -129,4 +129,36 @@ def get_monthly_quizzes_taken_for_student(student):
     # Convert the queryset to a dictionary
     monthly_quiz_counts = {entry['month']: entry for entry in data}
     return monthly_quiz_counts
-     
+
+
+
+
+
+CREATE_QUESTIONS_PROMPT = """
+Generate 21 questions with A, B, C, D options based on this content:
+{content}
+
+- Each option must be no more than 5 words.
+- Clearly identify the correct answer.
+"""
+
+
+CONVERT_QUESTIONS_TO_OBJECT = """
+Convert the following questions into Python dictionaries using this format:
+{
+    "<index>": {
+        "question": "<question>",
+        "options": ["<A>", "<B>", "<C>", "<D>"],
+        "correct_answer": "<correct_answer>",
+    },
+    ...
+}
+
+Questions:
+{questions}
+"""
+
+
+
+
+
