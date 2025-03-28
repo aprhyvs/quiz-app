@@ -38,7 +38,7 @@ class StudentData(models.Model):
 class AdminData(models.Model):
     username = models.CharField(max_length=50 , blank=True, default=None, null=True)
     password = models.CharField(max_length=50  , blank=True, default=None, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField( default=timezone.now)
     
     def __str__(self):
         return f"Admin: {self.username}"
@@ -48,7 +48,7 @@ class QuizData(models.Model):
     number_of_correct = models.IntegerField(blank=True, default=None, null=True)
     number_of_wrong = models.IntegerField(blank=True, default=None, null=True)
     student_id = models.IntegerField(blank=True, default=None, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     is_answered = models.BooleanField(default=False)
     number_of_answered_questions = models.IntegerField(default=0)
     quiz_title = models.CharField(max_length=50 , blank=True, default=None, null=True)

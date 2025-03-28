@@ -163,8 +163,15 @@ def upload_file_view_status_1(request):
         # TODO: Save the questionaire in the database
         try:
             
-            QuizData.objects.create(
+            quiz = QuizData.objects.create(
                 student_id = student.pk,
+                is_answered = False,
+                number_of_correct = 0,
+                number_of_wrong = 0,
+                number_of_answered_questions = 0,
+                total_worth = 0,
+                raw_file_content = file_content,
+                file_type = file_type
                 
             )
             
