@@ -9,8 +9,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         const studentDatas = res;
         if (studentDatas) {
-            console.log(studentDatas);
             initiateStudentDatas(studentDatas);
+        }
+
+        res2 = await getDataFromUrlWithParams(`/api/admin/get/studentgetallquizzes`,{
+            'student_id': studentID
+        });
+        const studentQuizzes = res2;
+        if (studentDatas) {
+            console.log(studentDatas);
+            initiateStudentQuizzes(studentQuizzes);
         }
     }
     function initiateStudentDatas(studentDatas){
@@ -21,6 +29,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         displayStudentData(studentData);
         displayStudentStats(studentStats);
     }
+
+    function initiateStudentQuizzes(studentQuizzes){
+        const quizData = studentQuizzes;
+        console.log(quizData)
+        displayMostRecentQuiz(quizData.quizzes[0]);
+        displayPassedAndFailedQuizzes(quizData.quizzes);
+        showAnswersGraph(quizData.quizzes);
+        showQuizzesTakenGraph(quizData.quizzes);
+    }
+
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "flex"; 

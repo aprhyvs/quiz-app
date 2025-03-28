@@ -68,13 +68,15 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         print(data)
         return data
 
-
+def get_all_student_quizzes_util(student): ## Grabs all the student's quizzes for use in javascript.
+    quizzes = QuizData.objects.filter(student_id=student.pk).order_by('-created_at')
+    quizzesDict = [quiz.get_data() for quiz in quizzes]
+    return quizzesDict
 
 def get_total_quizzes_for_student(student):
     # Filter QuizData based on the student's ID
     total_quizzes = QuizData.objects.filter(student_id=student.id).count()
     return total_quizzes
-
 
 def get_sum_of_correct_answers(student):
     # Filter QuizData based on the student's ID and sum the number_of_correct field
@@ -85,7 +87,6 @@ def get_sum_of_correct_answers(student):
     # Return the sum, defaulting to 0 if no correct answers are found
     return total_correct_answers or 0
  
-
 def get_total_wrong_answers_for_student(student):
     # Filter QuizData based on the student's ID and sum the number_of_wrong field
     total_wrong_answers = QuizData.objects.filter(student_id=student.id).aggregate(
