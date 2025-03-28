@@ -41,6 +41,11 @@ def student_analytics(request):
         return JsonResponse({"error": "User not authenticated"}, status=401)
     return render(request, "admin_visit/index.html")
 
+def student_visit(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    return render(request, "student_visit/index.html")
+
 def student_dashboard(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)

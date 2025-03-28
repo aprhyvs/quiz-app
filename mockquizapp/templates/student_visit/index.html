@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block head_block %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
+    <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
+    <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock head_block %}
+    
+
+
+
+{% block body_block %}
+
+
+    {% include 'components/navbar_student.html' %}
+
+    <main>
+    
+        <section class="dashboard">
+            <div class="wrapper">
+                <div class="card-small total-quizzes-taken">
+                    <h3 class="raleway-bold">Total Quizzes Taken</h3>
+                    <p class="total-quizzes-taken-number roboto-bold"></p>
+                    <div class="text-stats">
+                        <div>
+                            <h4 class="roboto-bold"></h4>
+                            <p class="passed-quizzes-number roboto-bold"></p>
+                            <p class="roboto-light">Passed</p>
+                        </div>
+                        <div>
+                            <h4 class="roboto-bold"></h4>
+                            <p class="failed-quizzes-number roboto-bold"></p>
+                            <p class="roboto-light">Failed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-small total-correct-answers">
+                    <h3 class="raleway-bold">Total Correct Answers</h3>
+                    <p class="total-correct-answers-percentage roboto-bold"></p>
+                    <div class="text-stats answers">
+                        <h4 class="roboto-bold"></h4>
+                        <p class="total-correct-answers-number roboto-bold"></p>
+                        <p class="roboto-light">questions answered <strong>correctly</strong>
+                    </div>
+                </div>
+                <div class="card-small total-wrong-answers">
+                    <h3 class="raleway-bold">Total Wrong Answers</h3>
+                    <p class="total-wrong-answers-percentage roboto-bold"></p>
+                    <div class="text-stats answers">
+                        <h4 class="roboto-bold"></h4>
+                        <p class="total-wrong-answers-number roboto-bold"></p>
+                        <p class="roboto-light">questions answered <strong>incorrectly</strong>
+                    </div>
+                </div>
+                <div class="card-small most-recent-quiz">
+                    <h3 class="raleway-bold">Most Recent Quiz</h3>
+                    <p class="raleway-bold quiz-title"></p><br>
+                    <p class="roboto-bold score-set"></p><br>
+                    <p class="roboto-light">Status: <span id="quiz-status"></span><br>
+                    <button class="roboto-bold view-quiz-button" id="view-quiz-button">View</button>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="card-large">
+                    <h3 class="raleway-bold">Monthly correct and wrong answers</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+                <div class="card-large">
+                    <h3 class="raleway-bold">Total Quizzes Taken per Month</h3>
+                    <canvas id="quizzesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="pop-up" id="logout-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Logout</h1>
+            <h6 class="raleway-regular">Are you sure you want to logout?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-logout-but">Cancel</button>
+                <button id="logout-but" >Logout</button>
+            </div>
+        </div>
+    </div>
+    
+        </section>
+    </main>
+    
+{% endblock body_block %}
+    

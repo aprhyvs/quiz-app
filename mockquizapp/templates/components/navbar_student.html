@@ -12,9 +12,11 @@
         <h1>GAM<span>IQ</span></h1>
     </div>
 
-    <div class="student-name">
-        <h3>Welcome, </h3>
-    </div>
+    {% if request.path != '/student_visit/' %}
+        <div class="student-name">
+            <h3>Welcome, </h3>
+        </div>
+    {% endif %}
 
     <div class="right">
         <div class="nav-but">
