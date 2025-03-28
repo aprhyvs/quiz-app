@@ -1,11 +1,11 @@
-.navbar {
-    padding: 2.25em 4.5em;
-}
+
 
 .navbar {
+    padding: 2.25em 4.5em;
     display: flex;
     align-items: center;
     gap: 1em;
+    cursor: pointer;
 }
 
 .navbar img {
