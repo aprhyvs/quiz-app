@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -30,31 +30,31 @@ def admin_login_page(request):
 
 def admin_dashboard(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+        return redirect('home')
     
     if request.user.is_staff:
         return render(request, "admin_dashboard/index.html")
     
-    return JsonResponse({"error": "User not an admin"}, status=401)
+    return redirect('home')
 
 def student_analytics(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+        return redirect('home')
     return render(request, "admin_visit/index.html")
 
 def student_quizpage(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+        return redirect('home')
     return render(request, "quiz_page/index.html")
 
 def student_dashboard(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+        return redirect('home')
     return render(request, "student_dashboard/index.html")
 
 def admin_editor(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+        return redirect('home')
     return render(request, "admin_editor/index.html")
 
 #=================================  Views API Routes =================================
