@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     function displayStudentStats(studentStats) {
         function getPercentage(score, totalItems){
+            if (!score) return 0;
             return Math.round((score / totalItems) * 100);
         }
 
@@ -84,6 +85,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function displayMostRecentQuiz(mostRecentQuiz) {
         // Display the quiz title
+        if (!mostRecentQuiz) {
+            
+        }
+
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
 
         isAnswered = mostRecentQuiz.is_answered;
