@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/admin/get/stats', view=get_admin_statistics),
     path('api/admin/get/rankings', view=update_rankings),
     path('api/admin/get/studentdata', view=get_student_by_id),
+    path('api/admin/get/studentgetalldata', view=get_all_student_data_and_stats_from_id),
     path('api/admin/update/student', view=update_student_data),
 
     path('api/student/stats', view=get_all_student_stats),

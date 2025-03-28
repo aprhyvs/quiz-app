@@ -34,7 +34,6 @@ def student_start_game(request):
     if request.method == 'POST':
         file = request.FILES['file']
 
-
 def get_student_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -86,29 +85,7 @@ def get_all_student_data(request): ## Returns all student data and stats
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
-        data = {}
-        studentData = {}
-        studentData['fname'] = student.fname
-        studentData['mname'] = student.mname
-        studentData['lname'] = student.lname
-        studentData['school'] = student.school
-        studentData['address'] = student.address
-        studentData['gmail'] = student.gmail
-        studentData['phone'] = student.phone
-        studentData['admin_id'] = student.admin_id
-        studentData['username'] = student.username
-        studentData['created_at'] = student.created_at
-    
-        stats = {}
-        stats['total_quizzes'] = get_total_quizzes_for_student(student)
-        stats['total_correct_answers'] = get_sum_of_correct_answers(student)
-        stats['total_wrong_answers'] = get_total_wrong_answers_for_student(student)
-        stats['monthlyStatistics'] = get_monthly_correct_and_wrong_for_student(student)
-        stats['monthlyQuizzesTaken'] = get_monthly_quizzes_taken_for_student(student)
-
-        data['studentData'] = studentData
-        data['stats'] = stats
-        print(data)
+        data = get_all_student_data_util(student)
         return JsonResponse({"studentData": data}, status=200)
 
 
@@ -154,8 +131,6 @@ def get_student_statistic(request):
     
     
     return JsonResponse(student , status=200)
-
-
 
 def get_student_by_id(request):
     if not request.user.is_authenticated:

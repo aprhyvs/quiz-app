@@ -114,5 +114,14 @@ def get_student_quizzes(student):
     return quizzes
 
 def get_student_quizzes_total_worth(quizzes):
+
     quizzes_total_worth = quizzes.aggregate(total_worth_sum=Sum('total_worth'))['total_worth_sum'] or 0
     return quizzes_total_worth
+
+def get_student_by_id_admin_util(student_id):
+        if not student_id:
+            return
+        student = StudentData.objects.filter(id = student_id).first()
+        if not student:
+            return
+        return student
