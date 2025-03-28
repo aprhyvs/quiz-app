@@ -319,7 +319,7 @@ def upload_file_view_status_3(request):
         quiz.quiz_title = real_title
         quiz.upload_stage = 3
         quiz.save()
-        return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage, "data": quiz.get_data() }, status=200)
+        return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
     
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
 

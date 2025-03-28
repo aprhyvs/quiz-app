@@ -40,6 +40,7 @@ urlpatterns = [
     
     path('api/student/upload/stage1', view=upload_file_view_status_1),
     path('api/student/upload/stage2', view=upload_file_view_status_2),
+    path('api/student/upload/stage3', view=upload_file_view_status_3),
 
 
     #=============================== File Upload ===============================#
