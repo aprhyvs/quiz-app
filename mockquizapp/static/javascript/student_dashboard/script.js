@@ -97,6 +97,10 @@ document.addEventListener("DOMContentLoaded", function () {
             statusParent.style.color = "black";
             testOptionsButton.innerText = "Play";
 
+            testOptionsButton.addEventListener("click", function (event) {
+                
+            });
+
             return;
         }
 
@@ -133,9 +137,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //  Update "View" button with a link to view more quiz info
         
-        testOptionsButton.onclick = function () {
+        testOptionsButton.addEventListener("click", function (event) {
             alert("Kople mo pre! Mabagsak ka nanaman.");
-        };
+        });
     }
 
     function displayPassedAndFailedQuizzes(quizzes) {
@@ -278,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
-
+    
     openModalBtn.addEventListener("click", function () {
         modal.style.display = "block";
     });
@@ -294,4 +298,6 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.style.display = "none";
         }
     });
+
+    
 });
