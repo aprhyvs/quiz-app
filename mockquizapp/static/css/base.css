@@ -12,7 +12,7 @@
   --gold: #D9A90E;
   --footer: #2B3341;
 }
-:root[data-theme="dark"]{
+.darkmode{
   --text: #f5f0f0;
   --background: #030303;
   --primary: #a8caff;

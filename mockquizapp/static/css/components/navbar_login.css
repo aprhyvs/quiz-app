@@ -36,6 +36,14 @@
 
 .right svg {
     color: var(--primary);
-    cursor: pointer;
 }
  
+#theme-switch {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+#theme-switch svg{
+    pointer-events: auto;
+}

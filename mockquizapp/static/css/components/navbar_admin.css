@@ -49,10 +49,19 @@
 
 .right svg {
     color: var(--background);
-    cursor: pointer;
     width: 32px;
     height: 32px; 
 }   
+
+#theme-switch {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+#theme-switch svg{
+    pointer-events: auto;
+}
 
 .nav-but{
     display: flex;

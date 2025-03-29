@@ -33,7 +33,7 @@
     gap: 1.5em;
 }
 
-.right button {
+.right button:not(#theme-switch) {
     min-width: 90px;
     border-radius: 4px;
     font-family: "Roboto";
@@ -58,5 +58,14 @@
 
 .right svg {
     color: var(--primary);
+}
+
+#theme-switch {
     cursor: pointer;
+    border: none;
+    background: none;
+}
+
+#theme-switch svg{
+    pointer-events: auto;
 }

@@ -24,7 +24,7 @@
     <script>
         var csrf_token = "{{ csrf_token }}"; // Set CSRF token in cookies
     </script>
-    <script src="{% static 'javascript/base.js' %}"></script>
+    <script defer src="{% static 'javascript/base.js' %}"></script>
 
     {% block head_block %}
         
