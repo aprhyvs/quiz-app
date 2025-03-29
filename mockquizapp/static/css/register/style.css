@@ -26,6 +26,30 @@ body {
     color: var(--text);
 }
 
+.add-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em auto;
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 8em;
+    width: 15%;
+    max-width: 160px;
+    min-height: 160px;  
+}
+
+.add-image button {
+    color: var(--outline);
+    border: none;
+    background: none;
+}
+
+.add-image button p {
+    color: var(--background);
+    font-size: 2rem;
+}
+
 .wrapper label {
     font-size: 1rem;
     font-weight: 300;

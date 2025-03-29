@@ -32,13 +32,13 @@
 }
 
 .left h1 {
-    color: var(--text); 
+    color: var(--background); 
     font-size: 1rem;
     font-size: clamp(1rem, 0.8rem + 1vw, 2rem);
 }
 
 .student-name{
-    color: var(--text);
+    color: var(--background); 
     font-size: 1rem;
     font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
 }
@@ -50,7 +50,7 @@
 }
 
 .nav-but{
-    color: var(--text);
+    color: var(--background); 
     display: flex;
     gap: 0.5em;
     align-items: center;
@@ -58,7 +58,7 @@
 }
 
 .nav-but svg{
-    color: var(--text);
+    color: var(--background); 
     width: 24px;
     height: 24px; 
 }

@@ -3,9 +3,14 @@
 .navbar {
     padding: 2.25em 4.5em;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1em;
     cursor: pointer;
+}
+.left {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
 }
 
 .navbar img {
@@ -15,6 +20,8 @@
 
 .navbar h1 {
     color: var(--text);
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.8rem + 1vw, 2rem);
     font-size: 32px;
 }
 
