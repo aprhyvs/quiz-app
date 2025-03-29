@@ -25,11 +25,17 @@ function displayListOfQuizzes(quizzes){
         testOptionsButton.addEventListener("click", function (event) {
         });
     }
+
+    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
+        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
+            const quiz = quizzes[i];
+
+        }
+    }
     
 
     
     if (quizzes){
-        const most_recent_quiz = document.querySelector(".most-recent-quiz");
         console.log(quizzes)
         if (!quizzes[0]) {
             console.log("No more quiz yet");
@@ -44,7 +50,6 @@ function displayListOfQuizzes(quizzes){
             testOptionsButton.innerText = "Play";
 
             testOptionsButton.addEventListener("click", function (event) {
-        
             });
 
         return;
@@ -53,7 +58,7 @@ function displayListOfQuizzes(quizzes){
         displayMostRecentQuiz(quizzes[0]);
 
         for (const quiz in quizzes) {
-            //Add the other quizzes here later.
+            //Add the other quizzes logic here later.
         }
 
 
