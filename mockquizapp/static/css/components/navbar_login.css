@@ -28,3 +28,14 @@
 .navbar span {
     color: var(--primary);
 }
+
+.right {
+    display: flex;
+    align-items: center;
+}
+
+.right svg {
+    color: var(--primary);
+    cursor: pointer;
+}
+ 

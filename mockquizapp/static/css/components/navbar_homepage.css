@@ -29,7 +29,8 @@
 
 .right {
     display: flex;
-    gap: 2em;
+    align-items: center;
+    gap: 1.5em;
 }
 
 .right button {
@@ -53,4 +54,9 @@
     color: var(--background);
     background-color: var(--primary);
     border: 2px solid var(--primary);
+}
+
+.right svg {
+    color: var(--primary);
+    cursor: pointer;
 }
