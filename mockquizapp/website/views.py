@@ -45,10 +45,10 @@ def student_analytics(request):
             return redirect('home')
     return render(request, "admin_visit/index.html")
 
-def student_quizpage(request):
+def student_quizzespage(request):
     if not request.user.is_authenticated:
         return redirect('home')
-    return render(request, "quiz_page/index.html")
+    return render(request, "quizzes_page/index.html")
 
 def student_dashboard(request):
     if not request.user.is_authenticated:

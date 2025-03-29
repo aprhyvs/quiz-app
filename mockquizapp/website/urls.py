@@ -14,7 +14,7 @@ urlpatterns = [
     path('student_dashboard/', student_dashboard, name='student-dashboard'),
     path('admin_editor/', admin_editor, name='admin-editor'),
     path('student_analytics/', student_analytics, name='student-analytics'),
-    path('student_quizpage/', student_quizpage, name='student-quizpage'),
+    path('student_quizzespage/', student_quizzespage, name='student-quizzespage'),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),

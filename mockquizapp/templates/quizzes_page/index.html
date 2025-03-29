@@ -6,10 +6,10 @@
 {% block head_block %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/quizzes_page/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
     <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
-    <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
+    <script defer src="{% static 'javascript/quizzes_page/script.js' %}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
 {% endblock head_block %}
@@ -33,7 +33,7 @@
                 <h3 class="raleway-bold">Most Recent Quiz</h3>
                 <p class="raleway-bold quiz-title"></p><br>
                 <p class="roboto-bold score-set"></p><br>
-                <p class="roboto-light">Status: <span id="quiz-status"></span><br>
+                <p class="roboto-light quiz-status-parent">Status: <span id="quiz-status"></span><br> </p>
                 <button class="roboto-bold view-quiz-button" id="view-quiz-button">View</button>
             </div>
         </div>

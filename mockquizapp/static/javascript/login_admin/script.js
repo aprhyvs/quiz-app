@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch("/api/login/admin", {  // Adjust endpoint if needed
                 method: "POST",
                 headers: {
-                    "X-CSRFToken": getCSRFToken(), // CSRF token for Django
+                    "X-CSRFToken": csrf_token, // CSRF token for Django
                 },
                 body: formData
             });
@@ -35,11 +35,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Function to get CSRF token from Django
-    function getCSRFToken() {
-        const cookieValue = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("csrftoken="))
-            ?.split("=")[1];
-        return cookieValue || "";
-    }
 });

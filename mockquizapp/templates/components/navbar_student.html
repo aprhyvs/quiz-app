@@ -11,7 +11,7 @@
         <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1>GAM<span>IQ</span></h1>
     </div>
-    {% if request.path != '/student_quizpage/' %}
+    {% if request.path != '/student_quizzespage/' %}
         <div class="student-name">
             <h3>Welcome, </h3>
         </div>
@@ -28,7 +28,7 @@
             <h3 class="roboto-regular">Dashboard</h3>  
         </div>
 
-        <div class="nav-but" onclick="window.location.href={% url 'student-quizpage' %}">
+        <div class="nav-but" onclick="window.location.href={% url 'student-quizzespage' %}">
             <svg width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M0 33L9 36L18 27H30L39 36L48 33L45.744 8.1852C45.3228 3.54948 41.436 0 36.7812 0H11.2189C6.56409 0 2.67732 3.54948 2.25589 8.18517L0 33ZM36 12C37.6569 12 39 10.6568 39 9C39 7.34316 37.6569 6 36 6C34.3431 6 33 7.34316 33 9C33 10.6568 34.3431 12 36 12ZM36 18C36 19.6568 34.6569 21 33 21C31.3431 21 30 19.6568 30 18C30 16.3432 31.3431 15 33 15C34.6569 15 36 16.3432 36 18ZM15 18C18.3137 18 21 15.3137 21 12C21 8.68629 18.3137 6 15 6C11.6863 6 9 8.68629 9 12C9 15.3137 11.6863 18 15 18Z" fill="#FCFCFC"/>
             </svg>
