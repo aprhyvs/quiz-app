@@ -200,7 +200,8 @@ body {
 
 p.grey {
     font-size: 16px;
-    color: #00000080
+    color: color-mix(in srgb, var(--text) 80%, white 20%);
+
 }
 
 .modal-content {

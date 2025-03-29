@@ -75,19 +75,19 @@ body {
 }
 
 #logout-but, #delete-but{  
-    background: #C80A0A;
-    color: #FDFDFD;
+    background: var(--dark-red);
+    color: var(--background);
 }
 
 
 #save-but{
-    background: #002157;
-    color: #FDFDFD;
+    background: var(--primary);
+    color: var(--background);
 }
 
 #success-but{
-    background: #05b310;
-    color: #FDFDFD;
+    background: var(--green);
+    color: var(--background);
 }
 
 
@@ -194,7 +194,7 @@ body {
 .rank-weekly h5{  
     font-size: 16px;
     line-height: 28px;
-    color: #000000;
+    color: var(--text);
 }
 
 .rank-weekly h6{
@@ -354,7 +354,7 @@ body {
 }
 
 .user-card:hover{ 
-    background: #F1F1EE;
+    background: color-mix(in srgb, var(--secondary) 80%, white 20%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 

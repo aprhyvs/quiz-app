@@ -18,11 +18,9 @@
 }
 
 .left h1 {
-    font-family: "Raleway";
     color: var(--text);
     font-size: 2rem;
     font-size: clamp(2rem, 1.8rem + 1vw, 3rem);
-    font-weight: 800;
 }
 
 .left span {

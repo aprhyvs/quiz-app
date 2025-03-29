@@ -30,13 +30,13 @@
 }
 
 .left h1 {
-    font-family: "Raleway";
+    color: var(--text);
     font-size: 1rem;
     font-size: clamp(1rem, 0.8rem + 1vw, 2rem);
-    font-weight: 800;
 }
 
 .student-name{
+    color: var(--text);
     font-size: 1rem;
     font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
 }
@@ -54,7 +54,12 @@
     cursor: pointer;
 }
 
+.nav-but h3{
+    color: var(--text);
+}
+
 .nav-but svg{
+    color: var(--text);
     width: 24px;
     height: 24px; 
 }

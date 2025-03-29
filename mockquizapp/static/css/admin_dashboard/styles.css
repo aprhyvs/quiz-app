@@ -87,6 +87,10 @@ body {
     align-items: center;
 }
 
+.numbering-layout h3 {
+    color: var(--text);
+}
+
 .ranking-layout{
     display: flex;
     flex-direction: column;
@@ -124,7 +128,7 @@ body {
 .rank-weekly h5{  
     font-size: 16px;
     line-height: 28px;
-    color: #000000;
+    color: var(--text);
 }
 
 .rank-weekly h6{
@@ -210,7 +214,7 @@ body {
     width: 40%;
     display: flex;
     align-items: center; 
-    background: #F1F1EE;
+    background: var(--secondary);
     border-radius: 8px;
     border: 2px solid var(--outline);
     padding: 0.5em 0;
@@ -268,10 +272,12 @@ body {
 }
 
 .user-card{
+    background: var(--secondary);
     display: flex;
     flex-direction: row;
     height: fit-content;
     width: 100%;
+    margin: 0.5em 0;
     justify-content: flex-start;
     align-items: center;
     padding-top: 20px;
@@ -283,7 +289,7 @@ body {
 }
 
 .user-card:hover{ 
-    background: #F1F1EE;
+    background: color-mix(in srgb, var(--secondary) 80%, white 20%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
