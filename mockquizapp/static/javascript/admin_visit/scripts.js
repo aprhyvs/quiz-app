@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             statusElement.innerText = statusText;
             statusParent.style.color = "black";
             testOptionsButton.style.display = "none";
-
+            testOptionsButton.addEventListener("click", function (event) {
+                
+            });
             return;
         }
 
@@ -139,9 +141,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         //  Update "View" button with a link to view more quiz info
         
-        testOptionsButton.onclick = function () {
-            alert("Kople mo pre! Mabagsak ka nanaman.");
-        };
+        testOptionsButton.addEventListener("click", function (event) {
+                
+        });
     }
 
     function displayPassedAndFailedQuizzes(quizzes) {

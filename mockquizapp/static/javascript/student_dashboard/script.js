@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //  Update "View" button with a link to view more quiz info
         
         testOptionsButton.addEventListener("click", function (event) {
-            alert("Kople mo pre! Mabagsak ka nanaman.");
+            
         });
     }
 
