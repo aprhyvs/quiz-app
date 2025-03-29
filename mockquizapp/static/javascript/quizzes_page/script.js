@@ -56,10 +56,7 @@ function displayListOfQuizzes(quizzes){
         }
 
         displayMostRecentQuiz(quizzes[0]);
-
-        for (const quiz in quizzes) {
-            //Add the other quizzes logic here later.
-        }
+        displayOtherQuizzes(quizzes);
 
 
     }
