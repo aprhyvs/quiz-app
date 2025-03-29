@@ -1,8 +1,8 @@
 /* navbar */ 
 
 .navbar {
-    background-color: #002157;
-    color: #FCFCFC;
+    background-color: var(--primary);
+    color: var(--background);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,18 +27,18 @@
 .left img {
     width: 100%;
     max-width: 40px;
-    border: 2.5px solid white;
+    border: 2.5px solid var(--background);
     border-radius: 1.5em;
 }
 
 .left h1 {
-    font-family: "Raleway";
+    color: var(--text); 
     font-size: 1rem;
     font-size: clamp(1rem, 0.8rem + 1vw, 2rem);
-    font-weight: 800;
 }
 
 .student-name{
+    color: var(--text);
     font-size: 1rem;
     font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
 }
@@ -50,6 +50,7 @@
 }
 
 .nav-but{
+    color: var(--text);
     display: flex;
     gap: 0.5em;
     align-items: center;
@@ -57,6 +58,7 @@
 }
 
 .nav-but svg{
+    color: var(--text);
     width: 24px;
     height: 24px; 
 }

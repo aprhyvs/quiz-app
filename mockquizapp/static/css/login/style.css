@@ -4,14 +4,14 @@
 }
 
 body {
-    background-color: #EFEFF0;
+    background-color: var(--secondary);
 }
 
 /* login */
 .wrapper {
     margin: 0 auto;
-    background-color: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background-color: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 8px;
     padding: 2em;
     width: 35%;
@@ -19,7 +19,7 @@ body {
 }
 
 .wrapper h1 {
-    font-family: "Raleway";
+    color: var(--text);
     text-align: center;
     margin-bottom: 1em;
     font-size: 1.5rem;
@@ -33,6 +33,7 @@ body {
 }
 
 .wrapper label {
+    color: var(--text);
     font-size: 1rem;
     font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
     font-weight: 300;
@@ -41,12 +42,14 @@ body {
 
 /* input */
 .wrapper input {
+    background-color: var(--background);
+    color: var(--text);
     font-family: "Roboto";
     font-size: 1rem;
     font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
     font-weight: 300;
     border-radius: 8px;
-    border: 2px solid #C1BFBF;
+    border: 2px solid var(--outline);
     margin-bottom: 1em;
     padding: 0.5em;
 }
@@ -72,24 +75,22 @@ body {
 
 /* form button */
 .login{
-    color: white;
+    color: var(--background);
     font-weight: 400;
-    background-color: #002157;
-    border: 2px solid #002157;
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
 }
 
 .signup {
-    background-color: white;
+    color: var(--text);
+    background-color: var(--background);
     border: none;
-    font-weight: 300;
     border-radius: 4px;
-    font-family: "Roboto";
     font-size: 1rem;
     font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
     padding: 0.5em 2em;
     margin: 0.5em auto;
     cursor: pointer;
-    color: inherit;
     text-decoration: none;
 }
 
@@ -97,13 +98,13 @@ body {
 
 /* Add a red border when there is an error */
 .input-field.error {
-    border-color: #B3261E;
+    border-color: var(--dark-red);
 }
 
 /* Hide error message and SVG by default */
 .error-message {
     display: none;
-    color: #B3261E;
+    color: var(--dark-red);
     display: flex;
     align-items: center;
     gap: 0.5rem;

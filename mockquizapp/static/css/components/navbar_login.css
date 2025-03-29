@@ -14,12 +14,10 @@
 }
 
 .navbar h1 {
-    font-family: "Raleway";
-    color: #0F0A0A;
+    color: var(--text);
     font-size: 32px;
-    font-weight: 800;
 }
 
 .navbar span {
-    color: #002157;
+    color: var(--primary);
 }

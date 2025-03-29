@@ -1,7 +1,7 @@
 /* body */
 
 body {
-    background-color: #EFEFF0;
+    background-color: var(--secondary);
 }
 
 /* dashboard */
@@ -28,9 +28,9 @@ body {
 
 .card-small,
 .card-large {
-    background-color: #FCFCFC;
+    background-color: var(--background);
     padding: 2em;
-    border: 2px solid #C1BFBF;
+    border: 2px solid var(--outline);
     border-radius: 8px;
 }
 
@@ -73,7 +73,7 @@ body {
 }
 
 .most-recent-quiz span{
-    color: #43ACAC;
+    color: var(--green);
     font-weight: 700;
 }
 
@@ -85,9 +85,9 @@ body {
     margin: 0 auto;
     cursor: pointer;
 
-    color: white;
+    color: var(--background);
     font-weight: 400;
-    background-color: #002157;
+    background-color: var(--primary);
     border: none;
 }
 
@@ -114,11 +114,12 @@ body {
 }
 
 .wrapper-quiz {
+    color: var(--text);
     display: flex;
     justify-content: space-between;
     padding: 2em 4em;
-    background: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 16px;
     margin-bottom: 2em; 
 }
@@ -128,8 +129,8 @@ body {
     font-size: 1rem;
     padding: 0.5em 2em;
 
-    color: white;
-    background-color: #002157;
+    color: var(--background);
+    background-color: var(--primary);
     border: none;
     cursor: pointer;
 }
@@ -154,6 +155,10 @@ body {
     align-items: center;
 }
 
+.upload-box svg {
+    color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
 /* Ensures content is inside the SVG */
 .upload-content {
     position: absolute;
@@ -168,24 +173,29 @@ body {
     margin: 1em auto;
     cursor: pointer;
 
-    color: white;
+    color: var(--background);
     font-weight: 400;
-    background-color: #002157;
+    background-color: var(--primary);
     border: none;
 }
 
 .upload-content svg {
+    color: var(--primary);
     padding: 1em;
+}
+
+.upload-content h2,
+.upload-content p {
+    color: var(--text);
+    margin: 0.5em 0;
 }
 
 .upload-content h2 {
     font-size: 30px;
-    margin: 0.5em 0;
 }
 
 .upload-content p {
     font-size: 24px;
-    margin: 0.5em 0;
 }
 
 p.grey {
@@ -194,7 +204,7 @@ p.grey {
 }
 
 .modal-content {
-    background-color: #FCFCFC;
+    background-color: var(--background);
     position: absolute;  /* center of screen */
     top: 50%;  
     left: 50%;  

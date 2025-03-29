@@ -1,6 +1,6 @@
 .navbar {
-    background-color: #002157;
-    color: #FCFCFC;
+    background-color: var(--primary);
+    color: var(--background);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,7 +25,7 @@
 .left img {
     width: 100%;
     max-width: 40px;
-    border: 2.5px solid white;
+    border: 2.5px solid var(--background);
     border-radius: 1.5em;
 }
 

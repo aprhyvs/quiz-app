@@ -1,5 +1,5 @@
 body {
-    background-color: #EFEFF0;;
+    background-color: var(--secondary);
 }
 
 .pop-up{
@@ -23,7 +23,7 @@ body {
     height: fit-content;
     padding-top: 34px;
     padding-bottom: 34px;
-    background: #FCFCFC;
+    background: var(--background);
     border: 2px solid rgba(15, 10, 10, 0.25);
     border-radius: 16px;
     display: flex;
@@ -40,7 +40,7 @@ body {
     font-size: 35px;
     line-height: 56px;
     text-align: center; 
-    color: #0F0A0A; 
+    color: var(--text); 
 }
 
 .pop-up-content h6{
@@ -49,7 +49,7 @@ body {
     text-align: center;   
     line-height: 35px;
     text-align: center; 
-    color: #0F0A0A;   
+    color: var(--text);   
     font-size: 25px;   
 }
 
@@ -69,7 +69,7 @@ body {
     border-radius: 4px;   
     font-size: 16px; 
     text-align: center;
-    color: #0F0A0A;
+    color: var(--text);
     border: none;
     cursor: pointer;
 }
@@ -110,8 +110,8 @@ body {
     flex-direction: column;
 
     box-sizing: border-box;
-    background: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 16px;
     padding-bottom: 12px;
 } 
@@ -123,7 +123,7 @@ body {
     margin-left: 34px; 
     font-size: 24px;
     line-height: 28px; 
-    color: #0F0A0A; 
+    color: var(--text); 
 }
 
 .monthly-chart{
@@ -150,8 +150,8 @@ body {
     width:auto;
     flex:1;
     height: 340px;
-    background: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 16px; 
     justify-content: center;
     align-items: center;
@@ -166,7 +166,7 @@ body {
     width: 90%;   
     font-size: 24px;
     line-height: 28px; 
-    color: #0F0A0A;
+    color: var(--text);
     padding: 0;
     margin: 0;
     margin-left: 12px;
@@ -200,7 +200,7 @@ body {
 .rank-weekly h6{
     font-size: 14px;
     line-height: 28px;
-    color: #0F0A0A;
+    color: var(--text);
 }
 .rank-weekly h5, .rank-weekly h6{
     padding: 0;
@@ -226,7 +226,7 @@ body {
     width: 90%;   
     font-size: 18px;
     line-height: 28px; 
-    color: #0F0A0A;
+    color: var(--text);
     padding: 0;
     margin: 0;
     margin-left: 24px;
@@ -249,13 +249,13 @@ body {
 .students-data h1{  
     font-size: 96px; 
     text-align: center;
-    color: #0F0A0A; 
+    color: var(--text); 
 }
 
 .students-data h6{  
     font-size: 25px; 
     text-align: center;
-    color: #0F0A0A; 
+    color: var(--text); 
 
 }
 
@@ -263,8 +263,8 @@ body {
 
 .wrapper {
     padding: 2em 4em;
-    background: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 16px; 
     width: 90%;
     margin: 1.5em auto;
@@ -280,9 +280,9 @@ body {
     width: 40%;
     display: flex;
     align-items: center; 
-    background: #F1F1EE;
+    background-color: var(--background);
     border-radius: 8px;
-    border: 2px solid #C1BFBF;
+    border: 2px solid var(--outline);
     padding: 0.5em 0;
     margin: 1em 0;
 }
@@ -292,6 +292,7 @@ body {
 }
 
 .search-container input{
+    background-color: var(--background);
     width: 100%;
     font-size: 1rem;
     font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
@@ -363,7 +364,7 @@ body {
     flex: 1; 
     font-size: 14px;
     line-height: 24px;
-    color: #0F0A0A; 
+    color: var(--text); 
 
 }
 
@@ -375,7 +376,7 @@ body {
     margin-left: 1.5em;
     font-size: 16px;
     line-height: 24px;
-    color: #0F0A0A;
+    color: var(--text);
     
 }
 
@@ -404,18 +405,18 @@ body {
     font-size: 16px;
     line-height: 23px;
     text-align: center; 
-    color: #FDFDFD; 
+    color: var(--background);
 }
 
 .buttons-container button:nth-child(1){ 
-    background: #002157;  
+    background: var(--primary);  
 }
 
 .buttons-container button:nth-child(2){ 
-    background: #D9A90E;
+    background: var(--gold);
 }
 
 .buttons-container button:nth-child(3){ 
-    background: #C80A0A;
+    background: var(--red);
 }
 

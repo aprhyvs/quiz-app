@@ -1,4 +1,5 @@
 .navbar {
+    background-color: var(--background);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,14 +19,14 @@
 
 .left h1 {
     font-family: "Raleway";
-    color: #0F0A0A;
+    color: var(--text);
     font-size: 2rem;
     font-size: clamp(2rem, 1.8rem + 1vw, 3rem);
     font-weight: 800;
 }
 
 .left span {
-    color: #002157;
+    color: var(--primary);
 }
 
 .right {
@@ -45,13 +46,13 @@
 }
 
 .login {
-    color: #002157;
-    background-color: white;
-    border: 2px solid #002157;
+    color: var(--primary);
+    background-color: var(--background);
+    border: 2px solid var(--primary);
 }
 
 .signup {
-    color: white;
-    background-color: #002157;
-    border: 2px solid #002157;
+    color: var(--background);
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
 }

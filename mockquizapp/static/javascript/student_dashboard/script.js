@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const statusParent = document.querySelector(".quiz-status-parent")
             const testOptionsButton = document.getElementById("view-quiz-button");
 
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status">${statusText}</p><p>Do a quiz?</p>`;
             statusElement.innerText = statusText;
-            statusParent.style.color = "black";
+            statusParent.style.color = "var(--text)";
             testOptionsButton.innerText = "Play";
 
             testOptionsButton.addEventListener("click", function (event) {

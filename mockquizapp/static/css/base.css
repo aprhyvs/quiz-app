@@ -1,76 +1,101 @@
+/* color theme */
+:root[data-theme="light"] {
+  --text: #0F0A0A;        /* fonts */
+  --background: #FCFCFC;  /* used for background, wrappers, fonts*/
+  --primary: #002157;     /* main color */
+  --secondary: #EFEFF0;   /* background in dashboard */
+  --outline: #C1BFBF;     /* outline for wrappers */
+  --green: #43ACAC;       /* positive */
+  --red: #E55977;         /* negative */
+  --dark-red: #B3261E;
+  --cta-blue: #558EEA;
+  --gold: #D9A90E;
+  --footer: #2B3341;
+}
+:root[data-theme="dark"]{
+  --text: #f5f0f0;
+  --background: #030303;
+  --primary: #a8caff;
+  --secondary: #0f0f10;
+  --outline: #413e3e;
+  --green: #52bcbc;
+  --red: #a81a39;
+  --dark-red: #e1544c;
+  --cta-blue: #154da8;
+  --gold: #f1c227;
+  --footer: #bfc7d4;
+}
 
+/* fonts */
 .raleway-regular {
-    font-family: "Raleway", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
 
-  .raleway-bold {
-    font-family: "Raleway", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-  }
+.raleway-bold {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
 
-  .roboto-light{
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-light{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
 
-  .roboto-regular{
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-regular{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
 
-  .roboto-semibold{
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-semibold{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
   
-  .roboto-bold {
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
 
-  .roboto-extrabold {
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 800;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-extrabold {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
   
-  .roboto-black {
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 900;
-    font-style: normal;
-    font-variation-settings:
-      "wdth" 100;
-  }
+.roboto-black {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
   
-
-
-
-  
+/* modals */
 .pop-up{
   display: flex;
   justify-content: center;
@@ -84,16 +109,13 @@
   z-index: 9999;
 }
 
-
-
 .pop-up-content{  
+  background: var(--background);
+  border: 2px solid var(--outline);/*rgba(15, 10, 10, 0.25);*/
   box-sizing: border-box; 
   width: 500px;
   height: fit-content;
-  padding-top: 34px;
-  padding-bottom: 34px;
-  background: #FCFCFC;
-  border: 2px solid rgba(15, 10, 10, 0.25);
+  padding: 2em 0;
   border-radius: 16px;
   display: flex;
   justify-content: center;
@@ -101,27 +123,25 @@
   flex-direction: column;
 }
 
-
 .pop-up-content h1{
+  color: var(--text);
   padding: 0;
   margin: 20px 0; 
   text-align: center;  
   font-size: 35px;
   line-height: 56px;
   text-align: center; 
-  color: #0F0A0A; 
 }
 
 .pop-up-content h6{
+  color: var(--text);
   padding: 0 20px;
   margin: 20px 0; 
   text-align: center;   
   line-height: 35px;
   text-align: center; 
-  color: #0F0A0A;   
   font-size: 25px;   
 }
-
 
 .pop-up-but{
   display: flex;
@@ -133,17 +153,18 @@
 }
 
 .pop-up-but button{  
+  background-color: var(--background);
+  color: var(--text);
   width: 178px;
   height: 34px;  
   border-radius: 4px;   
   font-size: 16px; 
   text-align: center;
-  color: #0F0A0A;
   border: none;
   cursor: pointer;
 }
 
 #logout-but {  
-  background: #C80A0A;
-  color: #FDFDFD;
+  background: var(--dark-red);
+  color: var(--background);
 }

@@ -1,15 +1,13 @@
 /* body */
-
 body {
-    background-color: #EFEFF0;
+    background-color: var(--secondary);
 }
 
 /* registers */
-
 .wrapper {
     margin: 0 auto;
-    background-color: #FCFCFC;
-    border: 2px solid #C1BFBF;
+    background-color: var(--background);
+    border: 2px solid var(--outline);
     border-radius: 8px;
     padding: 2em;
     max-width: 1200px;
@@ -17,6 +15,7 @@ body {
 }
 
 .wrapper h1 {
+    color: var(--text);
     text-align: center;
     margin-bottom: 1em;
     font-size: 1.5rem;
@@ -24,7 +23,7 @@ body {
 }
 
 .wrapper form {
-    font-family: "Roboto";
+    color: var(--text);
 }
 
 .wrapper label {
@@ -53,20 +52,19 @@ body {
 }
 
 /* school - password */
-
 .detail-field {
     display: flex;
-    flex-wrap: wrap; /* Allows inputs to wrap into rows */
-    justify-content: space-between; /* Spreads them evenly */
+    flex-wrap: wrap; 
+    justify-content: space-between; 
     width: 100%;
 }
 
 .detail-group {
     display: flex;
-    flex-direction: column; /* Keeps input fields stacked properly */
+    flex-direction: column; 
     flex: 1 1 calc(50% - 20px); /* Each input takes half the row */
-    max-width: 550px; /* Prevents inputs from getting too big */
-    min-width: 300px; /* Prevents inputs from shrinking too much */
+    max-width: 550px; 
+    min-width: 300px;
 }
 
 .detail-group input {
@@ -76,14 +74,20 @@ body {
 
 /* input */
 .wrapper input {
+    color: var(--text);
+    background-color: var(--background);
     font-family: "Roboto";
     font-size: 1rem;
     font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
     font-weight: 300;
     border-radius: 8px;
-    border: 2px solid #C1BFBF;
+    border: 2px solid var(--outline);
     margin-bottom: 1em;
     padding: 0.5em;
+}
+
+.wrapper label {
+    color: var(--text);   
 }
 
 .wrapper input:focus::placeholder {
@@ -107,31 +111,35 @@ body {
 
 .register{
     display: flex;
-    color: white;
+    color: var(--background);
     font-weight: 400;
-    background-color: #002157;
-    border: 2px solid #002157;
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+/* modals */
+.pop-up {
+    color: var(--text);
 }
 
 #save-but{
-    background: #002157;
-    color: #FDFDFD;
+    background: var(--primary);
+    color: var(--background);
     cursor: pointer; 
 }
 
 #success-but{
-    background: #05b310;
-    color: #FDFDFD;
+    background: var(--green);
+    color: var(--background);
     cursor: pointer; 
 }
 
 #error-but{
     cursor: pointer; 
-    background-color: #002157; 
-    color: #FDFDFD;
+    background-color: var(--primary); 
+    color: var(--background);
 }
 
-
 #error-form-pop h1{
-    color: #C80A0A;
+    color: var(--red);
 }
