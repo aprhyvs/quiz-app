@@ -8,6 +8,9 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.middleware.csrf import get_token
 
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from mockquizapp.settings import EMAIL_HOST_USER
 
 from .models import *
 from .views_admin import *
