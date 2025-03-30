@@ -163,3 +163,14 @@ def logout_request(request):
     return JsonResponse({'status': 'success'} , status=200)
 
 #=============================================For Testing ================================
+
+# email
+
+from django.shortcuts import render
+
+def preview_email(request):
+    context = {
+        "user": {"first_name": "Test"},
+        "verification_link": "https://yourdomain.com/verify/123/"
+    }
+    return render(request, "emails/verification_email.html", context)

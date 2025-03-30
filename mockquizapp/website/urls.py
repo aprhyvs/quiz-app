@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .views import *
+from .views import preview_email 
 
 urlpatterns = [
     #=============================== Views Pages ===============================#
@@ -15,6 +16,7 @@ urlpatterns = [
     path('admin_editor/', admin_editor, name='admin-editor'),
     path('student_analytics/', student_analytics, name='student-analytics'),
     path('student_quizzespage/', student_quizzespage, name='student-quizzespage'),
+    path("preview_email/", preview_email, name="preview_email"), #verification_email.html
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
