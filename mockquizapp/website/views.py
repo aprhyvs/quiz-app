@@ -188,7 +188,6 @@ def logout_request(request):
     logout(request)
 
     return JsonResponse({'status': 'success'} , status=200)
-
 #=============================================For Testing ================================
 
 # email

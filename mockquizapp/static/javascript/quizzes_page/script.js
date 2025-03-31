@@ -7,7 +7,7 @@ function displayListOfQuizzes(quizzes){
         const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
         document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
         const passingScore = Math.ceil(totalItems* 0.75);
-        const statusElement = document.getElementById("quiz-status");
+        const statusElement = document.getElementById("recent-quiz-status");
         let statusText = "UNKNOWN";
         const testOptionsButton = document.getElementById("view-quiz-button");
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
@@ -283,12 +283,42 @@ document.addEventListener("DOMContentLoaded", function () {
 // total quizzes taken per month
 
 // upload quiz modal
+async function uploadFile() {
+    console.log("Uploading file...")
+    const fileInput = document.getElementById('file-input');
+    if (fileInput.files.length === 0) {
+      alert('Please select a file first!');
+      return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/student/upload/stage1", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrf_token, // CSRF token for Django
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+      console.log("Upload success:", result);
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  }
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
-    
+    const uploadFileButton = document.getElementById("upload-file-button");
+
     openModalBtn.addEventListener("click", function () {
         modal.style.display = "block";
     });
@@ -297,6 +327,11 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.addEventListener("click", function () {
             modal.style.display = "none";
         });
+    });
+
+    uploadFileButton.addEventListener("click", function(){
+        console.log("Lesgoo!")
+        document.getElementById('file-input').click();
     });
 
     window.addEventListener("click", function (event) {

@@ -60,7 +60,8 @@
 
                         <h2 class="raleway-bold">Drag and Drop file to upload</h2>
                         <p class="roboto-regular">or</p>
-                        <button class="roboto-bold">Upload file</button>
+                        <input type="file" id="file-input" style="display: none;" onchange="uploadFile()">
+                        <button class="roboto-bold" id="upload-file-button">Upload file</button>
                         <p class="roboto-regular" id="grey">Supported files: .pdf, .docx, .txt</p>
                     </div>
                 </div>
