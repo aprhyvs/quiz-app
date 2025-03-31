@@ -53,6 +53,11 @@ def student_quizzespage(request):
         return redirect('home')
     return render(request, "quizzes_page/index.html")
 
+def student_leaderboard(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    return render(request, "student_leaderboard/index.html")
+
 def student_dashboard(request):
     if not request.user.is_authenticated:
         return redirect('home')

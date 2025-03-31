@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to My App!</title>
+</head>
+<body>
+    <h2>Hello {{ user.first_name }},</h2>
+    <p>Thank you for signing up!</p>
+    <p>To complete your registration and start your quiz adventures, you’ll need to verify your email address.</p>
+    <button href="{{ verification_link }}" style="padding:10px 20px; background:#007bff; color:#fff; text-decoration:none; border-radius:8px; border:none;">
+        Verify Email
+    </button>
+    <p>This link will expire in x minutes.<br><br>
+    If you did not sign up for this account, please ignore this email.</p>
+    <br>
+    <p>Best regards,<br>GAMIQ Team</p>
+</body>
+</html>

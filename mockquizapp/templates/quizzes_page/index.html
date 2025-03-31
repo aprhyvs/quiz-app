@@ -27,6 +27,10 @@
         <div class="wrapper-quiz">
             <h1 class="raleway-bold">List of Quizzes</h1>
             <button id="uploadQuizButton" class="roboto-regular">Upload Quiz</button>
+            <button id="viewLeaderboards" class="roboto-regular" 
+                onclick="window.location.href='{% url 'student-leaderboard' %}'">
+                Leaderboards
+            </button>
         </div>
         <div class="wrapper">
             <div class="card-small most-recent-quiz">

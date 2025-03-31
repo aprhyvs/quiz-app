@@ -11,9 +11,9 @@
         <img src="{% static 'css/home/UDD_LOGO.png' %}" alt="Logo">
         <h1 class="raleway-bold">GAM<span>IQ</span></h1>
     </div>
-    {% if request.path != '/student_quizzespage/' %}
+    {% if request.path != '/student_quizzespage/' and request.path != '/student_leaderboard/' %}
         <div class="student-name raleway-bold">
-            <h3>Welcome, </h3>
+            <h3></h3>
         </div>
     {% endif %}
 
