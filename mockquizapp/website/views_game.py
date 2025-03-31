@@ -265,8 +265,9 @@ def upload_file_view_status_2(request):
             if not questionaire_dict_text:
                 return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
         
-        
+        print(questionaire_dict_text)
         converted_dict = text_to_dictionary(questionaire_dict_text)
+        print(converted_dict)
         if not converted_dict:
             return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
         

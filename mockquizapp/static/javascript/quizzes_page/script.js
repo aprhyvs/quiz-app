@@ -283,32 +283,52 @@ document.addEventListener("DOMContentLoaded", function () {
 // total quizzes taken per month
 
 // upload quiz modal
-async function uploadFile() {
+async function uploadFile(file) {
+    let fileInput
+    if (file) {
+        fileInput = file;
+    }else{
+        fileInput = document.getElementById('file-input');
+    }
+
     console.log("Uploading file...")
-    const fileInput = document.getElementById('file-input');
+    if (!fileInput) {
+        console.error("No file specified!");
+        return;
+    }
     if (fileInput.files.length === 0) {
       alert('Please select a file first!');
       return;
     }
 
     const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
+    const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
+        'file': file
+    });
+        console.log(stage1Data);
+        if (!stage1Data) {
+            console.error("Stage 1 failed")
+            return;
+        }
+        processFileStage2(stage1Data);
+    
+    
 
-    try {
-      const response = await fetch("/api/student/upload/stage1", {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": csrf_token, // CSRF token for Django
-        },
-        body: formData,
-      });
+    // try {
+    //   const response = await fetch("/api/student/upload/stage1", {
+    //     method: "POST",
+    //     headers: {
+    //         "X-CSRFToken": csrf_token, // CSRF token for Django
+    //     },
+    //     body: formData,
+    //   });
 
-      const result = await response.json();
-      console.log("Upload success:", result);
-    } catch (error) {
-      console.error("Upload error:", error);
-    }
+    //   const result = await response.json();
+    //   console.log("Upload success:", result);
+    //   processFileStage2(result); // Proceed to Stage 2
+    // } catch (error) {
+    //   console.error("Upload error:", error);
+    // }
   }
 
 async function processFileStage2(data) {
@@ -316,20 +336,38 @@ async function processFileStage2(data) {
         console.error("No quiz data")
         return;
     }
-    const quiz_id = data[0].quiz_id;
-    const upload_stage = data[0].upload_stage;
-    const formData = new FormData();
-    formData.append("quiz_id", quiz_id);
+    const quiz_id = data.quiz_id;
+    const upload_stage = data.upload_stage;
+    const stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
+        'quiz_id': quiz_id,
+        'stage': upload_stage
+    });
+        console.log(stage2Data);
+        if (!stage2Data) {
+            console.error("Stage 2 failed")
+            return;
+        }
+        processFileStage3(stage2Data);
     
-    try {
-        const response = await fetch("/api/student/upload/stage2", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": csrf_token, // CSRF token for Django
-    },
-    body: quiz_id
+}
 
-})
+async function processFileStage3(data) {
+    if (!data) {
+        console.error("No quiz data")
+        return;
+    }
+    const quiz_id = data.quiz_id;
+    const upload_stage = data.upload_stage;
+    const stage3Data = await getDataFromUrlWithParams('/api/student/upload/stage3', {
+        'quiz_id': quiz_id,
+        'stage': upload_stage
+    });
+        console.log(stage3Data);
+        if (!stage3Data) {
+            console.error("Stage 3 failed")
+            return;
+        }
+    print(stage3Data);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
