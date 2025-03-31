@@ -201,7 +201,7 @@ def upload_file_view_status_1(request):
         # TODO: Generate questionaire based on the text of the uploaded file
         
         # generate questionair in g4f
-        questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT_WITH_CONTENT.format(content=file_content))
+        questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT_WITH_CONTENT % file_content)
         if questionairs is None:
             questionairs = generate_response_cohere(file_content, CREATE_QUESTIONS_PROMPT)
             if questionairs is None:
@@ -259,7 +259,7 @@ def upload_file_view_status_2(request):
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         # TODO: Generate a python object from generated questionaire from the uploaded 
-        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS.format(questions=quiz.raw_generated_questions))
+        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS % quiz.raw_generated_questions )
         if not questionaire_dict_text:
             questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT)
             if not questionaire_dict_text:
@@ -314,7 +314,7 @@ def upload_file_view_status_3(request):
         
         #TODO: Create a title for the quiz and save it in the database
         minimize_content = quiz.raw_file_content[:300] if len(quiz.raw_file_content) > 300 else quiz.raw_file_content
-        title = generate_response_g4f(CREATE_TITLE_PROMPT_WITH_CONTENT.format(content=minimize_content))
+        title = generate_response_g4f(CREATE_TITLE_PROMPT_WITH_CONTENT % minimize_content )
         if not title:
             title = generate_response_cohere(minimize_content, CREATE_TITLE_PROMPT)
             if not title:

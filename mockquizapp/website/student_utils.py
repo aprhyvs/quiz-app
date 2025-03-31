@@ -167,7 +167,7 @@ def get_monthly_quizzes_taken_for_student(student):
 
 CREATE_QUESTIONS_PROMPT_WITH_CONTENT = """
 Generate 21 questions with A, B, C, D options based on this content:
-{content}
+%s
 
 - Each option must be no more than 5 words.
 - Clearly identify the correct answer.
@@ -194,7 +194,7 @@ Convert the following questions into Python dictionaries using this format:
 }
 
 Questions:
-{questions}
+%s
 """
 
 CONVERT_QUESTIONS_TO_OBJECT = """
@@ -213,7 +213,7 @@ CREATE_TITLE_PROMPT_WITH_CONTENT = """
 Generate a 5-word quiz title based on the following content in this format:
 {{"title": "<title>"}}
 
-{content}
+%s
 
 """
 
