@@ -16,6 +16,7 @@ class StudentData(models.Model):
     password = models.CharField(max_length=50  , default="")
     created_at = models.DateTimeField( default=timezone.now)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True, default=None)
+    is_verified = models.BooleanField( default=False)
 
     def __str__(self):
         return f"Student: {self.fname} {self.mname} {self.lname}"
@@ -34,6 +35,7 @@ class StudentData(models.Model):
             'id': self.pk,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
             'profile_pic': self.profile_pic.url if self.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
+            'is_verified': self.is_verified
         }
 
 
@@ -41,9 +43,36 @@ class AdminData(models.Model):
     username = models.CharField(max_length=50 , default="")
     password = models.CharField(max_length=50  , default="")
     created_at = models.DateTimeField( default=timezone.now)
+    timer_countdown = models.IntegerField(default=25)
+    leaderboard_reset = models.CharField(
+        max_length=50 , 
+        choices=[
+            ("weekly", "Weekly"), 
+            ("monthly", "Monthly"), 
+            ("yearly", "Yearly")
+            ],
+        default="weekly"
+        )
+    safe_level = models.CharField(
+        max_length=50 , 
+        choices=[
+            ("3, 6, 9, 12, 15", "3, 6, 9, 12, 15"), 
+            ("4, 8, 12, 16", "4, 8, 12, 16"), 
+            ("5, 10, 15", "5, 10, 15")
+            
+        ])
+    
+    
     
     def __str__(self):
         return f"Admin: {self.username}"
+    
+    def get_game_settings(self):
+        return {
+            'timer_countdown': self.timer_countdown,
+            'leaderboard_reset': self.leaderboard_reset,
+            'safe_level': self.safe_level
+        }
 
 
 class QuizData(models.Model):

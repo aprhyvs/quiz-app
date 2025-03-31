@@ -175,6 +175,9 @@ def login_admin(request):
         if user is not None:
             if user.is_staff:
                 login(request, user)
+                if not AdminData.objects.filter(username=request.user.username).exists():
+                    admin = AdminData.objects.create(username=request.user.username)
+                    admin.save()
                 return JsonResponse({'status': 'success', 'url': 'admin_dashboard/'} , status=200)
             else:
                 return JsonResponse({'error': 'User does not have admin status'} , status=403)
