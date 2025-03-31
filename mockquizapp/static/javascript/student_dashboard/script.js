@@ -92,8 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const statusParent = document.querySelector(".quiz-status-parent")
             const testOptionsButton = document.getElementById("view-quiz-button");
 
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status">${statusText}</p><p>Do a quiz?</p>`;
+            statusElement.style.color = "var(--text)";
             statusElement.innerText = statusText;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status">${statusText}</p><p>Do a quiz?</p>`;
+            
             statusParent.style.color = "var(--text)";
             testOptionsButton.innerText = "Play";
 
@@ -124,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
-            statusElement.style.color === "black";
+            statusElement.style.color === "var(--text)";
             testOptionsButton.innerText = "Resume";
             
         } else { // Determine if the student passed (assuming 75% passing rate)

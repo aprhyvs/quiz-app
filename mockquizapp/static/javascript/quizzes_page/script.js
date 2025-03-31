@@ -41,12 +41,13 @@ function displayListOfQuizzes(quizzes){
             console.log("No more quiz yet");
             let statusText = "NONE";
             const statusElement = document.getElementById("recent-quiz-status");
-            const statusParent = document.querySelector(".recent-quiz-status-parent")
+            const statusParent = document.querySelector("#recent-quiz-status-parent")
             const testOptionsButton = document.getElementById("view-recent-quiz-button");
-            
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+
+            statusElement.style.color = "var(--text)";
             statusElement.innerText = statusText;
-            statusParent.style.color = "black";
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.style.color = "var(--text)";
             testOptionsButton.innerText = "Play";
 
             testOptionsButton.addEventListener("click", function (event) {
