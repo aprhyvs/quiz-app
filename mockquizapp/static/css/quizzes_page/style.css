@@ -293,3 +293,11 @@ p.grey {
     background-color: var(--secondary);
     border-radius: 1em;
 }
+
+/* Drag queen */
+
+
+  #upload-box.dragover {
+    background-color: #f0f0f0;
+    border-color: #333;
+  }

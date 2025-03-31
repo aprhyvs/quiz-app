@@ -1,70 +1,8 @@
 
-function displayListOfQuizzes(quizzes){ 
-    function displayMostRecentQuiz(mostRecentQuiz) {
-        document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
-        isAnswered = mostRecentQuiz.is_answered;
-        // Display number of correct answers
-        const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
-        const passingScore = Math.ceil(totalItems* 0.75);
-        const statusElement = document.getElementById("recent-quiz-status");
-        let statusText = "UNKNOWN";
-        const testOptionsButton = document.getElementById("view-quiz-button");
-        if (isAnswered == false){ // Determine if the student has not finished the quiz.
-            statusText = "INCOMPLETE"
-            statusElement.innerText = statusText;
-            statusElement.style.color === "black";
-            testOptionsButton.innerText = "Resume";
-        } else { // Determine if the student passed (assuming 75% passing rate)
-            statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
-            statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
-            testOptionsButton.innerText = "View";
-        }
-        //  Update "View" button with a link to view more quiz info
-        testOptionsButton.addEventListener("click", function (event) {
-        });
-    }
 
-    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
-        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
-            const quiz = quizzes[i];
-
-        }
-    }
-    
-
-    
-    if (quizzes){
-        console.log(quizzes)
-        if (!quizzes[0]) {
-            console.log("No more quiz yet");
-            let statusText = "NONE";
-            const statusElement = document.getElementById("recent-quiz-status");
-            const statusParent = document.querySelector("#recent-quiz-status-parent")
-            const testOptionsButton = document.getElementById("view-recent-quiz-button");
-
-            statusElement.style.color = "var(--text)";
-            statusElement.innerText = statusText;
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
-            statusParent.style.color = "var(--text)";
-            testOptionsButton.innerText = "Play";
-
-            testOptionsButton.addEventListener("click", function (event) {
-            });
-
-        return;
-        }
-
-        displayMostRecentQuiz(quizzes[0]);
-        displayOtherQuizzes(quizzes);
-
-
-    }
-}
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Dashboard Loaded");
+    console.log("Student Quizzes Page Loaded    ");
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
@@ -276,6 +214,73 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+function displayListOfQuizzes(quizzes){ 
+    function displayMostRecentQuiz(mostRecentQuiz) {
+        document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
+        isAnswered = mostRecentQuiz.is_answered;
+        // Display number of correct answers
+        const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
+        const passingScore = Math.ceil(totalItems* 0.75);
+        const statusElement = document.getElementById("recent-quiz-status");
+        let statusText = "UNKNOWN";
+        const testOptionsButton = document.getElementById("view-quiz-button");
+        if (isAnswered == false){ // Determine if the student has not finished the quiz.
+            statusText = "INCOMPLETE"
+            statusElement.innerText = statusText;
+            statusElement.style.color === "black";
+            testOptionsButton.innerText = "Resume";
+        } else { // Determine if the student passed (assuming 75% passing rate)
+            statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+            statusElement.innerText = statusText;
+            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            testOptionsButton.innerText = "View";
+        }
+        //  Update "View" button with a link to view more quiz info
+        testOptionsButton.addEventListener("click", function (event) {
+        });
+    }
+
+    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
+        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
+            const quiz = quizzes[i];
+
+        }
+    }
+    
+
+    
+    if (quizzes){
+        console.log(quizzes)
+        if (!quizzes[0]) {
+            console.log("No more quiz yet");
+            let statusText = "NONE";
+            const statusElement = document.getElementById("recent-quiz-status");
+            const statusParent = document.querySelector("#recent-quiz-status-parent")
+            const testOptionsButton = document.getElementById("view-recent-quiz-button");
+
+            statusElement.style.color = "var(--text)";
+            statusElement.innerText = statusText;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.style.color = "var(--text)";
+            testOptionsButton.innerText = "Play";
+
+            testOptionsButton.addEventListener("click", function (event) {
+            });
+
+        return;
+        }
+
+        displayMostRecentQuiz(quizzes[0]);
+        displayOtherQuizzes(quizzes);
+
+
+    }
+}
+
+
+
 // graph below
 // monthly correct and wrong answers
 
@@ -283,6 +288,12 @@ document.addEventListener("DOMContentLoaded", function () {
 // total quizzes taken per month
 
 // upload quiz modal
+
+function handleDraggedFile(file) {
+    uploadFile(file);
+}
+
+
 async function uploadFile(file) {
     let fileInput
     if (file) {
@@ -300,8 +311,6 @@ async function uploadFile(file) {
       alert('Please select a file first!');
       return;
     }
-
-    const file = fileInput.files[0];
     const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
         'file': file
     });
@@ -370,11 +379,13 @@ async function processFileStage3(data) {
     print(stage3Data);
 }
 
+
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
     const uploadFileButton = document.getElementById("upload-file-button");
+    
 
     openModalBtn.addEventListener("click", function () {
         modal.style.display = "block";
@@ -399,3 +410,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 });
+
