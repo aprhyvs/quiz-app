@@ -219,7 +219,8 @@ def upload_file_view_status_1(request):
                 total_worth = 0,
                 raw_file_content = file_content,
                 file_ext = file_type,
-                upload_stage = 1
+                upload_stage = 1,
+                raw_generated_questions = questionairs
             )
             return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
         except Exception as e:
@@ -258,9 +259,9 @@ def upload_file_view_status_2(request):
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         # TODO: Generate a python object from generated questionaire from the uploaded 
-        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS.format(questions=quiz.raw_file_content))
+        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS.format(questions=quiz.raw_generated_questions))
         if not questionaire_dict_text:
-            questionaire_dict_text = generate_response_cohere(quiz.raw_file_content , CONVERT_QUESTIONS_TO_OBJECT)
+            questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT)
             if not questionaire_dict_text:
                 return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
         
