@@ -213,10 +213,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             'student_id' : selected_student.id
         });
         if (res){
+            const numstudents = document.getElementById('number-of-students').textContent;
             document.getElementById("delete-form-pop").style.display = "none";
             document.getElementById("success-text").textContent =  `You have successfully deleted ${selected_student?.username}`;
             document.getElementById("success-form-pop").style.display = "flex";
             document.getElementById(`${selected_student.id}-card`).remove();
+            document.getElementById('number-of-students').textContent = parseInt(numstudents) - 1;
             selected_student = null;
         }
         document.getElementById("delete-but").disabled = false;

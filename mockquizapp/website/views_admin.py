@@ -103,7 +103,7 @@ def delete_student(request):
         student = StudentData.objects.filter(id=student_id).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
-        
+         
         User.objects.filter(username=student.username).delete()
         student.delete()
         

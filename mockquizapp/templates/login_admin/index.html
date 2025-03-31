@@ -8,8 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/navbar_login.css' %}">
     <script>
-        const adminDashboardUrl = "{% url 'admin-dashboard' %}";
-        document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies
+        const adminDashboardUrl = "{% url 'admin-dashboard' %}"; 
     </script>
     <script defer src="{% static 'javascript/login_admin/script.js' %}"></script>
     
