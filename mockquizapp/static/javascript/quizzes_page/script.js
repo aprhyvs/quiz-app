@@ -1,70 +1,8 @@
 
-function displayListOfQuizzes(quizzes){ 
-    function displayMostRecentQuiz(mostRecentQuiz) {
-        document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
-        isAnswered = mostRecentQuiz.is_answered;
-        // Display number of correct answers
-        const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
-        const passingScore = Math.ceil(totalItems* 0.75);
-        const statusElement = document.getElementById("recent-quiz-status");
-        let statusText = "UNKNOWN";
-        const testOptionsButton = document.getElementById("view-quiz-button");
-        if (isAnswered == false){ // Determine if the student has not finished the quiz.
-            statusText = "INCOMPLETE"
-            statusElement.innerText = statusText;
-            statusElement.style.color === "black";
-            testOptionsButton.innerText = "Resume";
-        } else { // Determine if the student passed (assuming 75% passing rate)
-            statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
-            statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
-            testOptionsButton.innerText = "View";
-        }
-        //  Update "View" button with a link to view more quiz info
-        testOptionsButton.addEventListener("click", function (event) {
-        });
-    }
 
-    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
-        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
-            const quiz = quizzes[i];
-
-        }
-    }
-    
-
-    
-    if (quizzes){
-        console.log(quizzes)
-        if (!quizzes[0]) {
-            console.log("No more quiz yet");
-            let statusText = "NONE";
-            const statusElement = document.getElementById("recent-quiz-status");
-            const statusParent = document.querySelector("#recent-quiz-status-parent")
-            const testOptionsButton = document.getElementById("view-recent-quiz-button");
-
-            statusElement.style.color = "var(--text)";
-            statusElement.innerText = statusText;
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
-            statusParent.style.color = "var(--text)";
-            testOptionsButton.innerText = "Play";
-
-            testOptionsButton.addEventListener("click", function (event) {
-            });
-
-        return;
-        }
-
-        displayMostRecentQuiz(quizzes[0]);
-        displayOtherQuizzes(quizzes);
-
-
-    }
-}
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Dashboard Loaded");
+    console.log("Student Quizzes Page Loaded    ");
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
@@ -276,6 +214,73 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+function displayListOfQuizzes(quizzes){ 
+    function displayMostRecentQuiz(mostRecentQuiz) {
+        document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
+        isAnswered = mostRecentQuiz.is_answered;
+        // Display number of correct answers
+        const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
+        const passingScore = Math.ceil(totalItems* 0.75);
+        const statusElement = document.getElementById("recent-quiz-status");
+        let statusText = "UNKNOWN";
+        const testOptionsButton = document.getElementById("view-quiz-button");
+        if (isAnswered == false){ // Determine if the student has not finished the quiz.
+            statusText = "INCOMPLETE"
+            statusElement.innerText = statusText;
+            statusElement.style.color === "black";
+            testOptionsButton.innerText = "Resume";
+        } else { // Determine if the student passed (assuming 75% passing rate)
+            statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+            statusElement.innerText = statusText;
+            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            testOptionsButton.innerText = "View";
+        }
+        //  Update "View" button with a link to view more quiz info
+        testOptionsButton.addEventListener("click", function (event) {
+        });
+    }
+
+    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
+        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
+            const quiz = quizzes[i];
+
+        }
+    }
+    
+
+    
+    if (quizzes){
+        console.log(quizzes)
+        if (!quizzes[0]) {
+            console.log("No more quiz yet");
+            let statusText = "NONE";
+            const statusElement = document.getElementById("recent-quiz-status");
+            const statusParent = document.querySelector("#recent-quiz-status-parent")
+            const testOptionsButton = document.getElementById("view-recent-quiz-button");
+
+            statusElement.style.color = "var(--text)";
+            statusElement.innerText = statusText;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.style.color = "var(--text)";
+            testOptionsButton.innerText = "Play";
+
+            testOptionsButton.addEventListener("click", function (event) {
+            });
+
+        return;
+        }
+
+        displayMostRecentQuiz(quizzes[0]);
+        displayOtherQuizzes(quizzes);
+
+
+    }
+}
+
+
+
 // graph below
 // monthly correct and wrong answers
 
@@ -283,32 +288,62 @@ document.addEventListener("DOMContentLoaded", function () {
 // total quizzes taken per month
 
 // upload quiz modal
-async function uploadFile() {
+
+function handleDraggedFile(file) {
+    uploadFile(file);
+}
+
+
+async function uploadFile(file) {
+    let fileInput
+    // Insert a file uploading screen
+
+    const modal = document.getElementById("uploadQuizModal");
+    modal.style.display = "none";
+    
+    console.log("File uploaded"); return;  // Remove this line when everything about the upload is done.
+    if (file) {
+        fileInput = file;
+    }else{
+        fileInput = document.getElementById('file-input');
+    }
+
     console.log("Uploading file...")
-    const fileInput = document.getElementById('file-input');
-    if (fileInput.files.length === 0) {
+    if (!fileInput) {
+        console.error("No file specified!");
+        return;
+    }
+    if (fileInput.length === 0) {
       alert('Please select a file first!');
       return;
     }
+    const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
+        'file': file
+    });
+        console.log(stage1Data);
+        if (!stage1Data) {
+            console.error("Stage 1 failed")
+            return;
+        }
+        processFileStage2(stage1Data);
+    
+    
 
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
+    // try {
+    //   const response = await fetch("/api/student/upload/stage1", {
+    //     method: "POST",
+    //     headers: {
+    //         "X-CSRFToken": csrf_token, // CSRF token for Django
+    //     },
+    //     body: formData,
+    //   });
 
-    try {
-      const response = await fetch("/api/student/upload/stage1", {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": csrf_token, // CSRF token for Django
-        },
-        body: formData,
-      });
-
-      const result = await response.json();
-      console.log("Upload success:", result);
-    } catch (error) {
-      console.error("Upload error:", error);
-    }
+    //   const result = await response.json();
+    //   console.log("Upload success:", result);
+    //   processFileStage2(result); // Proceed to Stage 2
+    // } catch (error) {
+    //   console.error("Upload error:", error);
+    // }
   }
 
 async function processFileStage2(data) {
@@ -316,27 +351,78 @@ async function processFileStage2(data) {
         console.error("No quiz data")
         return;
     }
-    const quiz_id = data[0].quiz_id;
-    const upload_stage = data[0].upload_stage;
-    const formData = new FormData();
-    formData.append("quiz_id", quiz_id);
+    const quiz_id = data.quiz_id;
+    const upload_stage = data.upload_stage;
+    const stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
+        'quiz_id': quiz_id,
+        'stage': upload_stage
+    });
+        console.log(stage2Data);
+        if (!stage2Data) {
+            console.error("Stage 2 failed")
+            return;
+        }
+        processFileStage3(stage2Data);
     
-    try {
-        const response = await fetch("/api/student/upload/stage2", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": csrf_token, // CSRF token for Django
-    },
-    body: quiz_id
-
-})
 }
+
+async function processFileStage3(data) {
+    if (!data) {
+        console.error("No quiz data")
+        return;
+    }
+    const quiz_id = data.quiz_id;
+    const upload_stage = data.upload_stage;
+    const stage3Data = await getDataFromUrlWithParams('/api/student/upload/stage3', {
+        'quiz_id': quiz_id,
+        'stage': upload_stage
+    });
+        console.log(stage3Data);
+        if (!stage3Data) {
+            console.error("Stage 3 failed")
+            return;
+        }
+    print(stage3Data);
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");
+    const uploadBox = document.getElementById("upload-box");
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
     const uploadFileButton = document.getElementById("upload-file-button");
+    const dropZone = document.getElementById('upload-content');
+
+
+    // Prevent default behavior for the entire document
+    document.addEventListener("dragover", (event) => event.preventDefault());
+    document.addEventListener("drop", (event) => event.preventDefault());
+    
+
+    // Drag-over effect
+    dropZone.addEventListener('dragover', (event) => {
+        event.preventDefault(); // Prevent browser from opening file
+        event.stopPropagation();
+        uploadBox.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        uploadBox.classList.remove('dragover');
+    });
+
+
+    
+    dropZone.addEventListener('drop', (event) => {
+        event.preventDefault(); // Stop the file from opening
+        event.stopPropagation();
+        uploadBox.classList.remove('dragover');
+        if (event.dataTransfer.files.length > 0) {
+            handleDraggedFile(event.dataTransfer.files[0]);
+            modal.style.display = "none";
+        }
+    });
+
 
     openModalBtn.addEventListener("click", function () {
         modal.style.display = "block";
@@ -351,13 +437,15 @@ document.addEventListener("DOMContentLoaded", function () {
     uploadFileButton.addEventListener("click", function(){
         console.log("Lesgoo!")
         document.getElementById('file-input').click();
+        
     });
 
     window.addEventListener("click", function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
         }
+    
     });
 
-    
 });
+

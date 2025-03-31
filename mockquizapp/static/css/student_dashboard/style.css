@@ -124,32 +124,6 @@ body {
     margin-bottom: 2em; 
 }
 
-.leaderboard {
-    display: flex;
-    justify-content: start;
-}
-
-.leaderboard a {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-}
-
-.wrapper-leaderboard {
-    color: var(--text);
-}
-
-.wrapper-quiz button {
-    border-radius: 4px;
-    font-size: 1rem;
-    padding: 0.5em 2em;
-
-    color: var(--background);
-    background-color: var(--primary);
-    border: none;
-    cursor: pointer;
-}
-
 /* upload-quiz-modal */
 
 .modal {
