@@ -15,6 +15,7 @@ class StudentData(models.Model):
     username = models.CharField(max_length=50 , default="")
     password = models.CharField(max_length=50  , default="")
     created_at = models.DateTimeField( default=timezone.now)
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True, default=None)
 
     def __str__(self):
         return f"Student: {self.fname} {self.mname} {self.lname}"
@@ -32,6 +33,7 @@ class StudentData(models.Model):
             'school': self.school,
             'id': self.pk,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
+            'profile_pic': self.profile_pic.url if self.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         }
 
 

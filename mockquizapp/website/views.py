@@ -20,6 +20,10 @@ from .views_game import *
 import random
 import string
 
+
+# pip install pillow
+
+
 #============================== Views Webpages Pages ===============================
 def home(request): 
     return render(request, "home/index.html")
