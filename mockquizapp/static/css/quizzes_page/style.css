@@ -221,10 +221,74 @@ p.grey {
     width: 32px;
 }
 
+.wrapper-quiz button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+
+    color: var(--background);
+    background-color: var(--primary);
+    border: none;
+    cursor: pointer;
+}
+
 .wrapper-leaderboard {
+    color: var(--text);
     padding: 2em 4em;
     background: var(--background);
     border: 2px solid var(--outline);
-    border-radius: 16px; 
-    margin: 1.5em auto;
+    border-radius: 16px;
+    margin-bottom: 2em; 
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: start;
+    margin-bottom: 2em;
+}
+
+.leaderboard-header svg {
+    color: var(--text)
+}
+
+/* .leaderboard-table */
+
+.leaderboard-table-card {
+    display: flex;
+    padding: 0 3em;
+    margin: 1em 0;   
+}
+
+.leaderboard-table-card svg {
+    color: var(--text);
+}
+
+.leaderboard-table-card > div {
+    display: flex;
+    flex: 1 1 80px;
+    align-items: center;
+}
+
+.leaderboard-table-card > div:first-child {
+    min-width: 240px;
+    padding: 1em;
+    flex-grow: 2;
+    gap: 1em;
+}
+
+.rank {
+    font-size: 1.5rem;
+}
+
+.leaderboard-table-card > div:nth-child(2),
+.leaderboard-table-card > div:nth-child(3),
+.leaderboard-table-card > div:nth-child(4),
+.leaderboard-table-card > div:nth-child(5) {
+    justify-content: center;
+  
+}
+
+.leaderboard-table > div:nth-child(2){
+    background-color: var(--secondary);
+    border-radius: 1em;
 }
