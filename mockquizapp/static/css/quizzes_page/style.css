@@ -251,7 +251,7 @@ p.grey {
     color: var(--text)
 }
 
-/* .leaderboard-table */
+/* leaderboards - .leaderboard-table */
 
 .leaderboard-table-card {
     display: flex;
@@ -260,6 +260,7 @@ p.grey {
 }
 
 .leaderboard-table-card svg {
+    width: 40px;
     color: var(--text);
 }
 
@@ -272,7 +273,7 @@ p.grey {
 .leaderboard-table-card > div:first-child {
     min-width: 240px;
     padding: 1em;
-    flex-grow: 2;
+    flex-grow: 3;
     gap: 1em;
 }
 
@@ -288,7 +289,7 @@ p.grey {
   
 }
 
-.leaderboard-table > div:nth-child(2){
+.leaderboard-table > div:not(:first-child){
     background-color: var(--secondary);
     border-radius: 1em;
 }
