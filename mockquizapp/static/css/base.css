@@ -1,6 +1,7 @@
 /* color theme */
 :root[data-theme="light"] {
   --text: #0F0A0A;        /* fonts */
+  --text-hover: #0F0A0A25; 
   --background: #FCFCFC;  /* used for background, wrappers, fonts*/
   --primary: #002157;     /* main color */
   --secondary: #EFEFF0;   /* background in dashboard */
@@ -14,14 +15,15 @@
 }
 .darkmode{
   --text: #f5f0f0;
-  --background: #030303;
+  --text-hover: #f5f0f025;
+  --background: #37373E; /* #030303; */
   --primary: #a8caff;
-  --secondary: #0f0f10;
-  --outline: #413e3e;
+  --secondary:  #28282D; /* #0f0f10; */
+  --outline: #504d4d; /* #413e3e; */
   --green: #52bcbc;
   --red: #a81a39;
   --dark-red: #e1544c;
-  --cta-blue: #154da8;
+  --cta-blue: #558EEA;
   --gold: #f1c227;
   --footer: #bfc7d4;
 }

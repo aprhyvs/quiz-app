@@ -300,7 +300,7 @@ body {
 
 .user-card:hover{ 
     background: color-mix(in srgb, var(--secondary) 80%, white 20%);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px var(--text-hover);
 }
 
 .user-card h6{
