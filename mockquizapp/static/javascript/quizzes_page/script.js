@@ -296,6 +296,12 @@ function handleDraggedFile(file) {
 
 async function uploadFile(file) {
     let fileInput
+    // Insert a file uploading screen
+
+    const modal = document.getElementById("uploadQuizModal");
+    modal.style.display = "none";
+    
+    console.log("File uploaded"); return;  // Remove this line when everything about the upload is done.
     if (file) {
         fileInput = file;
     }else{
@@ -307,7 +313,7 @@ async function uploadFile(file) {
         console.error("No file specified!");
         return;
     }
-    if (fileInput.files.length === 0) {
+    if (fileInput.length === 0) {
       alert('Please select a file first!');
       return;
     }
@@ -385,7 +391,37 @@ document.addEventListener("DOMContentLoaded", function () {
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
     const uploadFileButton = document.getElementById("upload-file-button");
+    const dropZone = document.getElementById('upload-content');
+
+
+    // Prevent default behavior for the entire document
+    document.addEventListener("dragover", (event) => event.preventDefault());
+    document.addEventListener("drop", (event) => event.preventDefault());
     
+
+    // Drag-over effect
+    dropZone.addEventListener('dragover', (event) => {
+        event.preventDefault(); // Prevent browser from opening file
+        event.stopPropagation();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+
+    
+    dropZone.addEventListener('drop', (event) => {
+        event.preventDefault(); // Stop the file from opening
+        event.stopPropagation();
+        dropZone.classList.remove('dragover');
+        if (event.dataTransfer.files.length > 0) {
+            handleDraggedFile(event.dataTransfer.files[0]);
+            modal.style.display = "none";
+        }
+    });
+
 
     openModalBtn.addEventListener("click", function () {
         modal.style.display = "block";
@@ -400,14 +436,15 @@ document.addEventListener("DOMContentLoaded", function () {
     uploadFileButton.addEventListener("click", function(){
         console.log("Lesgoo!")
         document.getElementById('file-input').click();
+        
     });
 
     window.addEventListener("click", function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
         }
+    
     });
 
-    
 });
 
