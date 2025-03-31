@@ -47,6 +47,9 @@ urlpatterns = [
     path('api/student/upload/stage3', view=upload_file_view_status_3),
 
 
+
+    path('verify/email/<token>', view=verify_email, name="verify-email"),
+
     #=============================== File Upload ===============================#
 
 

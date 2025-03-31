@@ -134,6 +134,37 @@ def get_monthly_quizzes_taken_for_student(student):
 
 
 
+# def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):
+#     subject = subject 
+#     from_email = masbate_locker_email
+#     to_email = user_email
+ 
+#     deped_logo_url = request.build_absolute_uri(static('logo.png'))
+#     # Render the HTML template 
+#     html_content = render_to_string(template, {
+#         'verification_code': verification_code ,
+#         'deped_logo' : deped_logo_url,
+#         'verification_for' : subject
+#     })
+#     text_content = strip_tags(html_content)  # Create a plain text version
+
+#     # Create the email
+#     email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+#     email.attach_alternative(html_content, "text/html")
+#     initial_delay=5
+#     while True:
+#         try:
+#             email.send()
+#             print("Email Sent Successfully")
+#             break
+#         except Exception as e:
+#             time.sleep(1000)
+#             time.sleep(initial_delay)
+#             initial_delay *= 2  # Exponential backoff
+
+
+
+
 CREATE_QUESTIONS_PROMPT_WITH_CONTENT = """
 Generate 21 questions with A, B, C, D options based on this content:
 {content}

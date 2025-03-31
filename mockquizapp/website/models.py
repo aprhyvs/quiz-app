@@ -101,4 +101,12 @@ class QuizData(models.Model):
         }
     
 
- 
+
+class VerificationData(models.Model):
+    student_id = models.IntegerField(blank=True, default=None, null=True)
+    verification_code = models.CharField(max_length=50 , default="")
+    created_at = models.DateTimeField( default=timezone.now)
+
+    def __str__(self):
+        return f"Verification: {self.student_id}"
+

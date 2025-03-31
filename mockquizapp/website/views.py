@@ -17,6 +17,8 @@ from .views_admin import *
 from .views_student import *
 from .views_game import *
 
+import random
+import string
 
 #============================== Views Webpages Pages ===============================
 def home(request): 
@@ -103,7 +105,8 @@ def register_student(request):
         if input_data.get('password', None):
             student_data['password'] = input_data.get('password')
         # Save student data to database
-        StudentData.objects.create(**student_data)
+        
+        student_data = StudentData.objects.create(**student_data)
         user = User.objects.create(
             username=student_data['username'],
             #password=student_data['password'],  # Store hashed password instead
@@ -111,8 +114,20 @@ def register_student(request):
             last_name=student_data.get('lname', ''),
             email=student_data['gmail']
         )
+        
+        verification = VerificationData.objects.create()
+        verification.verification_code = str(verification.pk) + "".join(random.choices(string.ascii_letters, k=30))
+        verification.student_id = student_data.pk
+        verification.save()
         user.set_password(student_data['password'])  # Hashes the password
         user.save()
+        # Threading na matapok san email sa register email
+        # verification_code , template , masbate_locker_email , subject
+        # Thread(target=my_utils.send_verification_email, args=(
+        #     email_address, verification , 'email-template.html', settings.EMAIL_HOST_USER, 'School Registration' , request
+        # )).start()
+        
+        
         return JsonResponse({'status': 'success'} , status=200)
     
     return JsonResponse({'csrfToken': get_token(request)})
@@ -177,8 +192,15 @@ def logout_request(request):
 from django.shortcuts import render
 
 def preview_email(request):
+    
     context = {
         "user": {"first_name": "Test"},
-        "verification_link": "https://yourdomain.com/verify/123/"
+        "verification_link": "https://yourdomain.com/verify/email/<token>"
     }
     return render(request, "emails/verification_email.html", context)
+
+
+
+@csrf_exempt
+def verify_email(request, token):
+    pass
