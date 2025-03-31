@@ -206,10 +206,39 @@ body {
     width: 90%;
     margin: 1.5em auto;
 }
+.wrapper-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 0; 
+    margin-bottom: 1em;
+}
 
-.wrapper h1 {
+.wrapper-title h1{
+    flex:6;
     color: var(--text);
     margin-bottom: 1em;
+}
+
+.settings-wrapper { 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 1em;
+    cursor: pointer;
+}
+
+.settings-wrapper h3{
+    color: var(--text);
+    padding: 0;
+    margin: 0;
+}
+.settings-wrapper svg{
+    padding: 0;
+    margin: 0;
+    width: 34px;
+    height: 34px;
 }
 
 /* search bar */
