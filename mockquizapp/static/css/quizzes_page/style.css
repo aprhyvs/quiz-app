@@ -297,7 +297,7 @@ p.grey {
 /* Drag queen */
 
 
-  #upload-box.dragover {
-    background-color: #f0f0f0;
-    border-color: #333;
-  }
+.upload-box.dragover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px dashed var(--primary);
+}

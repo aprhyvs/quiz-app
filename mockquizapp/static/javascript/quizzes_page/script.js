@@ -388,6 +388,7 @@ async function processFileStage3(data) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");
+    const uploadBox = document.getElementById("upload-box");
     const openModalBtn = document.getElementById("uploadQuizButton");
     const closeModalBtns = document.querySelectorAll(".close");
     const uploadFileButton = document.getElementById("upload-file-button");
@@ -403,11 +404,11 @@ document.addEventListener("DOMContentLoaded", function () {
     dropZone.addEventListener('dragover', (event) => {
         event.preventDefault(); // Prevent browser from opening file
         event.stopPropagation();
-        dropZone.classList.add('dragover');
+        uploadBox.classList.add('dragover');
     });
 
     dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
+        uploadBox.classList.remove('dragover');
     });
 
 
@@ -415,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
     dropZone.addEventListener('drop', (event) => {
         event.preventDefault(); // Stop the file from opening
         event.stopPropagation();
-        dropZone.classList.remove('dragover');
+        uploadBox.classList.remove('dragover');
         if (event.dataTransfer.files.length > 0) {
             handleDraggedFile(event.dataTransfer.files[0]);
             modal.style.display = "none";
