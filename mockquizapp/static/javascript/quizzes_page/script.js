@@ -311,7 +311,26 @@ async function uploadFile() {
     }
   }
 
+async function processFileStage2(data) {
+    if (!data) {
+        console.error("No quiz data")
+        return;
+    }
+    const quiz_id = data[0].quiz_id;
+    const upload_stage = data[0].upload_stage;
+    const formData = new FormData();
+    formData.append("quiz_id", quiz_id);
+    
+    try {
+        const response = await fetch("/api/student/upload/stage2", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf_token, // CSRF token for Django
+    },
+    body: quiz_id
 
+})
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("uploadQuizModal");

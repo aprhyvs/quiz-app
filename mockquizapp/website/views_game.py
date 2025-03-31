@@ -62,6 +62,7 @@ def generate_response_cohere(command : str , system : str):
             ]
         )
         data = response.dict()
+        print(data)
         
         for k in data:
             if k == "message":
@@ -217,7 +218,7 @@ def upload_file_view_status_1(request):
                 number_of_answered_questions = 0,
                 total_worth = 0,
                 raw_file_content = file_content,
-                file_type = file_type,
+                file_ext = file_type,
                 upload_stage = 1
             )
             return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
