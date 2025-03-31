@@ -234,6 +234,7 @@ body {
 }
 
 .search-container input{
+    color: var(--text);
     width: 100%;
     font-size: 1rem;
     font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
@@ -325,6 +326,7 @@ body {
 }
 
 .user-card svg{
+    color: var(--text); 
     width: 40px;
     height: 40px;
     margin-left: 4em; 

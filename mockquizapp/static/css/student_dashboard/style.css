@@ -123,6 +123,21 @@ body {
     margin-bottom: 2em; 
 }
 
+.leaderboard {
+    display: flex;
+    justify-content: start;
+}
+
+.leaderboard a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.wrapper-leaderboard {
+    color: var(--text);
+}
+
 .wrapper-quiz button {
     border-radius: 4px;
     font-size: 1rem;
