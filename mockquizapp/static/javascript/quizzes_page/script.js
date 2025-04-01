@@ -301,11 +301,11 @@ async function uploadFile(file) {
     const modal = document.getElementById("uploadQuizModal");
     modal.style.display = "none";
     
-    console.log("File uploaded"); return;  // Remove this line when everything about the upload is done.
+    //console.log("File uploaded"); return;  // Remove this line when everything about the upload is done.
     if (file) {
         fileInput = file;
     }else{
-        fileInput = document.getElementById('file-input');
+        fileInput = document.getElementById('file-input').files[0];
     }
 
     console.log("Uploading file...")
@@ -317,8 +317,9 @@ async function uploadFile(file) {
       alert('Please select a file first!');
       return;
     }
+    console.log("Legit uploading the file to stage 1")
     const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
-        'file': file
+        'file': fileInput
     });
         console.log(stage1Data);
         if (!stage1Data) {
