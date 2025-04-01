@@ -19,6 +19,7 @@ urlpatterns = [
     path("student_leaderboard/", student_leaderboard, name="student-leaderboard"),
     path('verify/email/<verification_code>', view=verify_email),
     path("verify_success/", verify_success, name="verify-success"),
+    path("game_quiz/", game_quiz, name="game-quiz"),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
