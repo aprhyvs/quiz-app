@@ -137,6 +137,28 @@ def text_to_dictionary(response: str):
 
 
 
+def extract_title(response: str):
+    try:
+        # Attempt to parse as JSON
+        parsed_json = json.loads(response)
+        # If JSON is valid, return the "title" if it exists
+        if "title" in parsed_json:
+            return parsed_json["title"]
+    except json.JSONDecodeError:
+        # Handle JSON parsing error
+        print("JSON parsing failed. Attempting to extract title manually...")
+
+        # Use regex to extract the title field
+        match = re.search(r'"title"\s*:\s*"([^"]+)"', response)
+        if match:
+            return match.group(1)
+
+    # If no title is found, return None or a default message
+    return "No valid title found"
+
+
+
+
 
 def upload_file_view_status_1(request):
     
@@ -339,9 +361,12 @@ def upload_file_view_status_3(request):
             
         converted_title = text_to_dictionary(title)
         if not converted_title:
-            return JsonResponse({'error': 'Failed to convert title to dictionary.'}, status=500)
+            converted_title = extract_title(title)
+            if not converted_title:
+                return JsonResponse({'error': 'Failed to convert title to dictionary.'}, status=500)
+            converted_title = {'title': converted_title}
         
-        real_title = converted_title.get('title' , None)
+        real_title = converted_title.get('title' , None) 
         if not real_title:
             return JsonResponse({'error': 'Failed to extract title from generated text.'}, status=500)
         

@@ -206,7 +206,7 @@ Convert these questions into Python dictionaries:
 
 CREATE_TITLE_PROMPT_WITH_CONTENT = """
 Generate a 5-word quiz title based on the following content in this format:
-{{"title": "<title>"}}
+{"title": "<title>"}
 
 %s
 
@@ -217,7 +217,7 @@ Generate a 5-word quiz title based on the following content in this format:
 
 CREATE_TITLE_PROMPT = """
 Generate a 5-word quiz title based on the following content in this format:
-{{"title": "<title>"}}
+{"title": "<title>"}
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
 - Remove any trailing commas from objects.
