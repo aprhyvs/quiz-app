@@ -96,27 +96,44 @@ def generate_response_g4f( command : str ):
 
 
 def text_to_dictionary(response: str):
+        # Check if the input is a string
     if not isinstance(response, str):
-        print("Response must be a string")
+        print("Error: Response must be a string")
         return None
 
     try:
-        # Use a regex pattern to extract the full JSON content
-        match = re.search(r'\{[\s\S]*\}', response)
+        # Use regex to extract the dictionary-like content
+        match = re.search(r'\{[\s\S]*\}', response, re.DOTALL)
         if match:
-            # Extract the matched JSON-like text
-            json_text = match.group(0)
+            python_dict_text = match.group(0)
 
-            # Parse the JSON
-            return json.loads(json_text)
+            # Preprocess to make it JSON-compatible
+            # 1. Replace single quotes with double quotes
+            json_text = re.sub(r"'", '"', python_dict_text)
+            
+            # 2. Convert integer keys to JSON string keys (e.g., `1:` -> `"1":`)
+            json_text = re.sub(r"(\b\d+\b):", r'"\1":', json_text)
+            
+            # 3. Remove trailing commas inside objects and arrays
+            json_text = re.sub(r",\s*([}\]])", r'\1', json_text)
+            
+            # 4. Remove any extra Python-specific syntax (e.g., wrapping in ```python)
+            json_text = json_text.strip("```python").strip()
+
+            # Attempt to parse the JSON content
+            try:
+                parsed_json = json.loads(json_text)
+                return parsed_json
+            except json.JSONDecodeError as e:
+                print(f"JSON parsing error: {e}")
+                print("Ensure proper formatting in the dictionary.")
+                return None
         else:
-            print("No JSON-like content found in the response")
+            print("No dictionary-like content found in the response")
             return None
-    except json.JSONDecodeError as e:
-        print(f"JSON parsing error: {e}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
-    return None
+        print(f"Unexpected error occurred: {e}")
+        return None
 
 
 
