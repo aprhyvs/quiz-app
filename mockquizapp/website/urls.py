@@ -18,6 +18,7 @@ urlpatterns = [
     path('student_quizzespage/', student_quizzespage, name='student-quizzespage'),
     path("student_leaderboard/", student_leaderboard, name="student-leaderboard"),
     path('verify/email/<verification_code>', view=verify_email),
+    path("verify_success/", verify_success, name="verify-success"),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),

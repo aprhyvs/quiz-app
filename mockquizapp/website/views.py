@@ -39,6 +39,9 @@ def register_page(request):
 def admin_login_page(request):
     return render(request, "login_admin/index.html")
 
+def verify_success(request):
+    return render(request, "verify_success/index.html")
+
 def admin_dashboard(request):
     if not request.user.is_authenticated:
         if not AdminData.objects.filter(username=request.user.username).exists():

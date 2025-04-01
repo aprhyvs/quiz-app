@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block head_block %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/verify_success/style.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_login.css' %}">
+ 
+    
+{% endblock head_block %}
+    
+
+
+
+{% block body_block %}
+
+    {% include 'components/navbar_login.html' %}
+    
+    <div class="wrapper">
+        <h1 class="raleway-bold">Verification Complete!</h1>
+        <p class="roboto-light">Your email has been successfully verified. 
+        You can now get started in your quizzes with <strong>GAMIQ<strong>.</p>
+        <button onclick="window.location.href='{% url 'login-page' %}'" class="continue roboto-regular">Continue</button>
+    </div>
+
+{% endblock body_block %}
+    
