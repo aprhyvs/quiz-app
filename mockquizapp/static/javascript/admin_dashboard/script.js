@@ -168,10 +168,123 @@ function debounce(func, delay) {
     };
 }
 
+async function getGameSettings(){
+    const gameSettings = await getDataFromUrl('/api/admin/get/gamesettings');
+        
+        if (!gameSettings) {
+            console.error("Game Settings not loaded")
+            return;
+        }
+    return gameSettings
+}
+
+function refreshGameSettingsForm(settings) {
+    document.querySelectorAll('input[name="timer"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim() === `${settings.timer_countdown}s`) {
+            input.checked = true;
+        }
+    });
+
+    document.querySelectorAll('input[name="leaderboard"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim().toLowerCase() === settings.leaderboards_reset.toLowerCase()) {
+            input.checked = true;
+        }
+    });
+
+    document.querySelectorAll('input[name="safe-level"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim() === settings.safe_level) {
+            input.checked = true;
+        }
+    });
+}
+
+function collectFormData() {
+    const formData = {};
+
+    // Get selected Timer Countdown
+    const timerSelected = document.querySelector('input[name="timer"]:checked');
+    if (timerSelected) {
+        formData.timer_countdown = parseInt(timerSelected.nextElementSibling.textContent.trim());
+    }
+
+    // Get selected Leaderboards Reset
+    const leaderboardSelected = document.querySelector('input[name="leaderboard"]:checked');
+    if (leaderboardSelected) {
+        formData.leaderboard_reset = leaderboardSelected.nextElementSibling.textContent.trim().toLowerCase();
+    }
+
+    // Get selected Safe Level
+    const safeLevelSelected = document.querySelector('input[name="safe-level"]:checked');
+    if (safeLevelSelected) {
+        formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
+    }
+
+    return formData;
+}
+
+
+async function setGameSettings(){
+    formData = collectFormData();
+    console.log(formData);
+    const res = await getDataFromUrlWithParams('/api/admin/update/gamesettings', formData);
+    if (res){   
+        console.log("Game settings updated successfully");
+    }
+}
+
+
+function displayConfirmSettings(){
+    const confirmSettingsGUI = document.getElementById("game-sets-confirmations")
+    confirmSettingsGUI.style.display = "flex";
+    const formData = collectFormData();
+    const timerCountDown = document.getElementById("timer-countdown-number");
+    const leaderboardsType = document.getElementById("leaderboards-type");
+    const safeLevels = document.getElementById("safe-levels");
+
+    timerCountDown.innerText = formData.timer_countdown;
+    leaderboardsType.innerText = formData.leaderboard_reset;
+    safeLevels.innerText = formData.safe_level;
+
+}
+
+async function displaySettings(){
+    const settingsGUI = document.getElementById("game-settings-form")
+    settingsGUI.style.display = "flex";
+    const gameSettings = await getGameSettings();
+    console.log(gameSettings);
+    refreshGameSettingsForm(gameSettings);
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     const monthlyChart = document.getElementById("monthly-chart");
+    const settingsGUI = document.getElementById("game-settings-form")
+    const confirmSettingsGUI = document.getElementById("game-sets-confirmations")
+    
     setupAdminChartBar(monthlyChart);
     
+    document.getElementById("settings-button").addEventListener("click", function (event) { 
+        displaySettings();
+    });
+
+    window.addEventListener("click", function (event) {
+        if (event.target === settingsGUI) {
+            settingsGUI.style.display = "none";
+        }
+        if (event.target === confirmSettingsGUI) {
+            confirmSettingsGUI.style.display = "none";
+        }
+    });
+
+    document.getElementById("settings-save-button").addEventListener("click", function (event) { 
+        settingsGUI.style.display = "none";
+        displayConfirmSettings();
+    });
+
+    document.getElementById("confirm-save-button").addEventListener("click", function (event) { 
+        confirmSettingsGUI.style.display = "none";
+        setGameSettings();
+    });
+
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "flex"; 
@@ -197,8 +310,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         displayRankings(rankings);
     })
-
-
 
     document.getElementById("cancel-delete-but").addEventListener('click', function(){
         document.getElementById("delete-form-pop").style.display = "none";
@@ -274,6 +385,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                         document.getElementById("delete-text").textContent = "Are you sure you want to delete " + student.username + "?";
                         document.getElementById("delete-form-pop").style.display = "flex";
                     });
+
+                    
+
                 }
             }
 

@@ -239,5 +239,5 @@ def verify_email(request, verification_code):
         print("Student " + student.username + " Verified!")
         verification.delete()
         
-    return redirect('home')
+    return redirect('verify-success')
 #=============================================For Testing ================================
