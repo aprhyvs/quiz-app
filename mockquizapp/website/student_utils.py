@@ -184,14 +184,7 @@ Generate 21 questions with A, B, C, D options based on the provided content.
 
 CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS = """
 Convert the following questions into Python dictionaries using this format:
-{
-    "<index>": {
-        "question": "<question>",
-        "options": ["<A>", "<B>", "<C>", "<D>"],
-        "correct_answer": "<correct_answer>",
-    },
-    ...
-}
+{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
 
 Questions:
 %s
@@ -203,14 +196,8 @@ Questions:
 
 CONVERT_QUESTIONS_TO_OBJECT = """
 Convert these questions into Python dictionaries:
-{
-    "<index>": {
-        "question": "<question>",
-        "options": ["<A>", "<B>", "<C>", "<D>"],
-        "correct_answer": "<correct_answer>"
-    },
-    ...
-}
+{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
+
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
 - Remove any trailing commas from objects.
 - Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
