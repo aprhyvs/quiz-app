@@ -311,11 +311,14 @@ def upload_file_view_status_2(request):
             quiz.save()
         else:
             questionaire_dict_text = quiz.raw_generated_questions
-        # print(questionaire_dict_text)
+        # print(questionaire_dict_text) 
+        print("What converted to : {}".format(questionaire_dict_text))
         converted_dict = text_to_dictionary(questionaire_dict_text)
+        print("Converted dict: {}".format(converted_dict))
         # print(converted_dict)
         if not converted_dict:
             converted_dict = {}
+            print("Using for loop to convert to dictionary")
             for index in range(21):
                 selected_question_text = generate_response_cohere(
                     SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, index),
