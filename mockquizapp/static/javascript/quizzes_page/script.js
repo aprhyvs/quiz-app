@@ -262,7 +262,7 @@ function displayListOfQuizzes(quizzes){
 
             statusElement.style.color = "var(--text)";
             statusElement.innerText = statusText;
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: var(--text);">${statusText}</p><p>Do a quiz?</p>`;
             statusParent.style.color = "var(--text)";
             testOptionsButton.innerText = "Play";
 
