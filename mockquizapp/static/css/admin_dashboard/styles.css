@@ -235,6 +235,7 @@ body {
     margin: 0;
 }
 .settings-wrapper svg{
+    color: var(--text);
     padding: 0;
     margin: 0;
     width: 34px;
