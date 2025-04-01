@@ -238,24 +238,3 @@ def verify_email(request, verification_code):
         
     return redirect('home')
 #=============================================For Testing ================================
-
-# email
-
-from django.shortcuts import render
-
-def preview_email(request):
-    
-    context = {
-        "user": {"first_name": "Test"},
-        "verification_link": "https://yourdomain.com/verify/email/<token>"
-    }
-    return render(request, "emails/verification_email.html", context)
-
-
-"""
-@csrf_exempt
-def verify_email(request, token)
-
-    pass
-
-"""
