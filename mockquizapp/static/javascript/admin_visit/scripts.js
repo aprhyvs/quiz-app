@@ -97,9 +97,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             const statusParent = document.querySelector(".quiz-status-parent")
             const testOptionsButton = document.getElementById("view-quiz-button");
 
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: black;">${statusText}</p>`;
+            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: var(--text);">${statusText}</p>`;
             statusElement.innerText = statusText;
-            statusParent.style.color = "black";
+            statusParent.style.color = "var(--text)";
             testOptionsButton.style.display = "none";
             testOptionsButton.addEventListener("click", function (event) {
                 
@@ -128,13 +128,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
-            statusElement.style.color === "black";
+            statusElement.style.color === "var(--text)";
             testOptionsButton.innerText = "Resume";
             
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            statusElement.style.color = statusText === "PASSED" ? "var(--green)" : "var(--red)";
             testOptionsButton.innerText = "View";
         }
 

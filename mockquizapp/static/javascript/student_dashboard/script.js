@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            statusElement.style.color = statusText === "PASSED" ? "var(--green)" : "var(--red)";
             testOptionsButton.innerText = "View";
         }
 

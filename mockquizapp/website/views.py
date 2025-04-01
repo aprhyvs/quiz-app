@@ -74,6 +74,11 @@ def student_dashboard(request):
         return redirect('home')
     return render(request, "student_dashboard/index.html")
 
+def game_quiz(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    return render(request, "game_quiz/index.html")
+
 def admin_editor(request):
     if not request.user.is_authenticated:
         if not AdminData.objects.filter(username=request.user.username).exists():
