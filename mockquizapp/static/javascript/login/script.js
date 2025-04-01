@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     errorIcon2.style.display = "inline";
                     passwordField.classList.add("error");
                 }
+                if (data.error === "Not verified") {
+                    errorText1.textContent = "Please verify your account."; 
+                    errorIcon1.style.display = "inline";
+                    usernameField.classList.add("error");
+                }
             }
         } catch (error) {
             errorText1.textContent = "An error occurred. Please try again.";

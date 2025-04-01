@@ -205,3 +205,10 @@ def update_student_data(request):
         
         return JsonResponse({"success": "Student data updated successfully."}, status=200)
         
+def get_verified_status(user):
+    if not user:
+        return
+    student = StudentData.objects.filter(username = user.username).first()
+    if student:
+        return student.is_verified
+    

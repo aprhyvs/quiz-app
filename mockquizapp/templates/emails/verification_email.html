@@ -30,7 +30,8 @@
                             <table cellspacing="0" cellpadding="0" style="margin: auto;">
                                 <tr>
                                     <td align="center" style="background-color: #002157; padding: 10px 20px; border-radius: 5px;">
-                                        <a href="https://www.yourwebsite.com" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold;">Verify Account</a>
+                                                <!-- Change this link when using a server -->
+                                        <a href="{{ protocol }}://127.0.0.1:8000/verify/email/{{ verification_code }}" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold;"> Verify Account </a>
                                     </td>
                                 </tr>
                             </table>

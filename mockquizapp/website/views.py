@@ -11,6 +11,8 @@ from django.middleware.csrf import get_token
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from mockquizapp.settings import EMAIL_HOST_USER
+from django.template.loader import render_to_string
+import threading
 
 from .models import *
 from .views_admin import *
@@ -110,7 +112,7 @@ def register_student(request):
             student_data['password'] = input_data.get('password')
         # Save student data to database
         
-        student_data = StudentData.objects.create(**student_data)
+        studentDataObject = StudentData.objects.create(**student_data)
         user = User.objects.create(
             username=student_data['username'],
             #password=student_data['password'],  # Store hashed password instead
@@ -121,22 +123,43 @@ def register_student(request):
         
         verification = VerificationData.objects.create()
         verification.verification_code = str(verification.pk) + "".join(random.choices(string.ascii_letters, k=30))
-        verification.student_id = student_data.pk
+        verification.student_id = studentDataObject.pk
         verification.save()
         user.set_password(student_data['password'])  # Hashes the password
         user.save()
+
         # Threading na matapok san email sa register email
         # verification_code , template , masbate_locker_email , subject
         # Thread(target=my_utils.send_verification_email, args=(
         #     email_address, verification , 'email-template.html', settings.EMAIL_HOST_USER, 'School Registration' , request
         # )).start()
-        
+
+        email_thread = threading.Thread(target=send_email, args=(request, studentDataObject, student_data['gmail']) )
+        email_thread.start()
         
         return JsonResponse({'status': 'success'} , status=200)
     
     return JsonResponse({'csrfToken': get_token(request)})
 
+def send_email(request, student, to_email):
+    mail_subject = "Activate your GameIQ account"
+    verificationData = VerificationData.objects.filter(student_id=student.pk).first()
+    message = render_to_string('emails/verification_email.html', {
+        'student': student,
+        'verification_code': verificationData.verification_code,
+        'protocol': 'https' if request.is_secure() else 'http'
+
+    })
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    email.content_subtype = 'html'  # This tells Django the email content is HTML
+    
+    if email.send():
+        print("Email sent successfully!")
+    else:
+        print("Error sending email!")
+
 def login_student(request):
+    print("Fired Login")
     if request.method == 'POST':
         input_data = request.POST
         username = input_data.get('username')
@@ -153,9 +176,12 @@ def login_student(request):
 
             if user.is_staff:
                 return JsonResponse({"error": "Invalid Username"}, status=403)
-
-
-            login(request, user)
+            verified = get_verified_status(user)
+            if verified == True:
+                login(request, user)
+            else:
+                print("Not verified")
+                return JsonResponse({"error": "Not verified"}, status=403)
             return JsonResponse({'status': 'success', 'url': '/student_dashboard/'}, status=200)
         else:
             studentName = StudentData.objects.filter(username = input_data.get('username')).first()
@@ -191,6 +217,26 @@ def logout_request(request):
     logout(request)
 
     return JsonResponse({'status': 'success'} , status=200)
+
+def verify_email(request, verification_code):
+    if request.method == 'GET':
+        if not verification_code:
+            return JsonResponse({"error": "No verification code provided"}, status=400)
+        verification = VerificationData.objects.filter(verification_code=verification_code).first()
+        if not verification:
+            return JsonResponse({"error": "Invalid verification code"}, status=400)
+        student = StudentData.objects.filter(pk=verification.student_id).first()
+        if not student:
+            return JsonResponse({"error": "Student not found"}, status=404)
+        user = User.objects.filter(username=student.username).first()
+        if not user:
+            return JsonResponse({"error": "User not found"}, status=404)
+        student.is_verified = True
+        student.save()
+        print("Student " + student.username + " Verified!")
+        verification.delete()
+        
+    return redirect('home')
 #=============================================For Testing ================================
 
 # email
@@ -206,7 +252,10 @@ def preview_email(request):
     return render(request, "emails/verification_email.html", context)
 
 
-
+"""
 @csrf_exempt
-def verify_email(request, token):
+def verify_email(request, token)
+
     pass
+
+"""

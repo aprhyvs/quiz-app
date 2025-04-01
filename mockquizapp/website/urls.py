@@ -18,13 +18,14 @@ urlpatterns = [
     path('student_quizzespage/', student_quizzespage, name='student-quizzespage'),
     path("student_leaderboard/", student_leaderboard, name="student-leaderboard"),
     path("preview_email/", preview_email, name="preview-email"), #verification_email.html
-    
+    path('verify/email/<verification_code>', view=verify_email),
 
     #=============================== API Endpoints ===============================#
     path('api/login/student', view=login_student),
     path('api/login/admin', view=login_admin),
     path('api/logout', view=logout_request),    
     path('api/register/student', view=register_student),
+    
     
     path('api/admin/students', view=get_list_of_students),
     path('api/admin/search/students', view=search_users),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('api/student/alldata', view=get_all_student_data),
     path('api/student/data', view=get_student_data),
     path('api/student/quizzes', view=get_all_student_quizzes),
+    path('api/student/verify_email', view=verify_email),
     
     path('api/student/upload/stage1', view=upload_file_view_status_1),
     path('api/student/upload/stage2', view=upload_file_view_status_2),
@@ -48,7 +50,7 @@ urlpatterns = [
 
 
 
-    path('verify/email/<token>', view=verify_email, name="verify-email"),
+
 
     #=============================== File Upload ===============================#
 
