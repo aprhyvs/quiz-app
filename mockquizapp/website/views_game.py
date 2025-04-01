@@ -10,12 +10,12 @@ cohere_client = None
 try:
     # Error: unsupported operand type(s) for |: 'type' and 'type'
     # Don't panic it is working fine
-    from g4f.client import Client
-    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt
-    import g4f.debug
+    import pathlib
+    from typing import Union
+    PathLike = Union[str, pathlib.Path]
 
-    g4f.debug.logging = True
-    g4f.debug.version_check = False
+    from g4f.client import Client
+    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt 
     g4f_client = Client(
         provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
     )
@@ -54,13 +54,21 @@ def generate_response_cohere(command : str , system : str):
         print("Cohere client not initialized")
         return None
     try: 
-        response = cohere_client.chat(
-            model="command-r", 
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": command}
-            ]
-        )
+        if system :
+            response = cohere_client.chat(
+                model="command-r", 
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": command}
+                ]
+            )
+        else:
+            response = cohere_client.chat(
+                model="command-r", 
+                messages=[
+                    {"role": "user", "content": command}
+                ]
+            )
         data = response.dict()
         print(data)
         
@@ -103,22 +111,15 @@ def text_to_dictionary(response: str):
 
     try:
         # Use regex to extract the dictionary-like content
-        match = re.search(r'\{[\s\S]*\}', response, re.DOTALL)
+        match = re.search(r'{[\s\S]*}', response, re.DOTALL)
         if match:
             python_dict_text = match.group(0)
 
             # Preprocess to make it JSON-compatible
-            # 1. Replace single quotes with double quotes
-            json_text = re.sub(r"'", '"', python_dict_text)
+            json_text = re.sub(r'\\"', '"', json_text) 
             
             # 2. Convert integer keys to JSON string keys (e.g., `1:` -> `"1":`)
-            json_text = re.sub(r"(\b\d+\b):", r'"\1":', json_text)
-            
-            # 3. Remove trailing commas inside objects and arrays
-            json_text = re.sub(r",\s*([}\]])", r'\1', json_text)
-            
-            # 4. Remove any extra Python-specific syntax (e.g., wrapping in ```python)
-            json_text = json_text.strip("```python").strip()
+            json_text = re.sub(r'"\\?"(\w+)\\?"":', r'"\1":', json_text)  # Normalize keys (handles words and numbers)
 
             # Attempt to parse the JSON content
             try:
@@ -298,16 +299,33 @@ def upload_file_view_status_2(request):
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         # TODO: Generate a python object from generated questionaire from the uploaded 
-        questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS % quiz.raw_generated_questions )
-        if not questionaire_dict_text:
-            questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT)
+        print("Generating Questionaire using G4F")
+        if len(quiz.raw_generated_questions) == 0:
+            questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS % quiz.raw_generated_questions )
             if not questionaire_dict_text:
-                return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
-        
-        print(questionaire_dict_text)
+                questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT)
+                if not questionaire_dict_text:
+                    return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
+            
+            quiz.raw_generated_json_questions = questionaire_dict_text
+            quiz.save()
+        else:
+            questionaire_dict_text = quiz.raw_generated_questions
+        # print(questionaire_dict_text)
         converted_dict = text_to_dictionary(questionaire_dict_text)
-        print(converted_dict)
+        # print(converted_dict)
         if not converted_dict:
+            converted_dict = {}
+            for index in range(21):
+                selected_question_text = generate_response_cohere(
+                    SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, index),
+                    None
+                    )
+                selected_question_dict = text_to_dictionary(selected_question_text)
+                if not selected_question_dict:
+                    return JsonResponse({'error': 'Failed to generate selected question dictionary.'}, status=500)
+                converted_dict[index] = selected_question_dict
+    
             return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
         
         # TODO: Save the questionaire in the database

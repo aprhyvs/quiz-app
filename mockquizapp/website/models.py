@@ -90,6 +90,7 @@ class QuizData(models.Model):
     upload_stage = models.IntegerField(default=0)
     raw_file_content = models.TextField(default="" )
     raw_generated_questions = models.TextField(default="" )
+    raw_generated_json_questions = models.TextField(default="" )
     file_ext = models.CharField(max_length=50 , default="")
 
     """

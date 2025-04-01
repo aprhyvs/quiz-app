@@ -201,6 +201,7 @@ Convert these questions into Python dictionaries:
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
 - Remove any trailing commas from objects.
 - Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
+- Do not use newlines in the output.
 """
 
 
@@ -224,3 +225,19 @@ Generate a 5-word quiz title based on the following content in this format:
 - Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
 
+SEPARATOR_OF_DICTIONARY_TEXT = """
+Here is an unformatted Python dictionary:
+%s
+
+I need you to:
+1. Auto-format the dictionary to fix any unstructured elements.
+   - Correct improperly escaped characters (e.g., \\").
+   - Remove any irrelevant or extraneous text around the dictionary.
+   - Ensure the result is a valid Python dictionary, fully JSON-compatible.
+2. Treat the cleaned and formatted result as a Python dictionary.
+3. Extract the value corresponding to the key: %s.
+4. Return the value associated with this key as a JSON-formatted dictionary object.
+
+If the key does not exist, respond with: "Key '%s' not found."
+
+"""
