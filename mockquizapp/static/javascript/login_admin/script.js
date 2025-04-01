@@ -20,16 +20,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 // responseMessage.textContent = "Login successful!";
-                // responseMessage.style.color = "green";
+                // responseMessage.style.color = "var(--green)";
                 window.location.href = adminDashboardUrl;
                 form.reset();
             } else {
                 // responseMessage.textContent = data.error || "Login failed!";
-                // responseMessage.style.color = "red";
+                // responseMessage.style.color = "var(--red)";
             }
         } catch (error) {
             // responseMessage.textContent = "An error occurred. Please try again.";
-            // responseMessage.style.color = "red";
+            // responseMessage.style.color = "var(--red)";
         }
     });
 
