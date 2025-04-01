@@ -195,6 +195,10 @@ Convert the following questions into Python dictionaries using this format:
 
 Questions:
 %s
+
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+- Remove any trailing commas from objects.
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
 
 CONVERT_QUESTIONS_TO_OBJECT = """
@@ -203,11 +207,15 @@ Convert these questions into Python dictionaries:
     "<index>": {
         "question": "<question>",
         "options": ["<A>", "<B>", "<C>", "<D>"],
-        "correct_answer": "<correct_answer>",
+        "correct_answer": "<correct_answer>"
     },
     ...
 }
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+- Remove any trailing commas from objects.
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
+
 
 CREATE_TITLE_PROMPT_WITH_CONTENT = """
 Generate a 5-word quiz title based on the following content in this format:
@@ -215,10 +223,17 @@ Generate a 5-word quiz title based on the following content in this format:
 
 %s
 
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+- Remove any trailing commas from objects.
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
 
 CREATE_TITLE_PROMPT = """
 Generate a 5-word quiz title based on the following content in this format:
 {{"title": "<title>"}}
+
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+- Remove any trailing commas from objects.
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
 

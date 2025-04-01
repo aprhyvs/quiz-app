@@ -52,3 +52,6 @@ mockquizapp/website/migrations/
 #pycache
 __pycache__/
 mockquizapp/website/__pycache__
+
+
+test.py
