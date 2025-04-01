@@ -48,7 +48,7 @@ async function displayListOfStudents(){
 
 
 async function displayRankings(rankingsData) {
-    console.log(rankingsData)
+
 
     function displayWeeklyRankings(weeklyRankings){
         if (!weeklyRankings || weeklyRankings.length === 0) {
@@ -179,6 +179,7 @@ async function getGameSettings(){
 }
 
 function refreshGameSettingsForm(settings) {
+
     document.querySelectorAll('input[name="timer"]').forEach(input => {
         if (input.nextElementSibling.textContent.trim() === `${settings.timer_countdown}s`) {
             input.checked = true;
@@ -197,6 +198,27 @@ function refreshGameSettingsForm(settings) {
         }
     });
 }
+
+function resetGameSettingsForm(){
+    document.querySelectorAll('input[name="timer"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim() === `25s`) {
+            input.checked = true;
+        }
+    });
+
+    document.querySelectorAll('input[name="leaderboard"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim().toLowerCase() === "weekly") {
+            input.checked = true;
+        }
+    });
+
+    document.querySelectorAll('input[name="safe-level"]').forEach(input => {
+        if (input.nextElementSibling.textContent.trim() === "3, 6, 9, 12, 15") {
+            input.checked = true;
+        }
+    });
+}
+
 
 function collectFormData() {
     const formData = {};
@@ -225,7 +247,6 @@ function collectFormData() {
 
 async function setGameSettings(){
     formData = collectFormData();
-    console.log(formData);
     const res = await getDataFromUrlWithParams('/api/admin/update/gamesettings', formData);
     if (res){   
         console.log("Game settings updated successfully");
@@ -240,9 +261,12 @@ function displayConfirmSettings(){
     const timerCountDown = document.getElementById("timer-countdown-number");
     const leaderboardsType = document.getElementById("leaderboards-type");
     const safeLevels = document.getElementById("safe-levels");
-
+    if (formData.leaderboard_reset == "weekly") {
+        leaderboardsType.innerText = "Weekly";
+    } else {
+        leaderboardsType.innerText = "Monthly";
+    }
     timerCountDown.innerText = formData.timer_countdown;
-    leaderboardsType.innerText = formData.leaderboard_reset;
     safeLevels.innerText = formData.safe_level;
 
 }
@@ -251,7 +275,6 @@ async function displaySettings(){
     const settingsGUI = document.getElementById("game-settings-form")
     settingsGUI.style.display = "flex";
     const gameSettings = await getGameSettings();
-    console.log(gameSettings);
     refreshGameSettingsForm(gameSettings);
 }
 
@@ -259,7 +282,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const monthlyChart = document.getElementById("monthly-chart");
     const settingsGUI = document.getElementById("game-settings-form")
     const confirmSettingsGUI = document.getElementById("game-sets-confirmations")
-    
+
     setupAdminChartBar(monthlyChart);
     
     document.getElementById("settings-button").addEventListener("click", function (event) { 
@@ -283,6 +306,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("confirm-save-button").addEventListener("click", function (event) { 
         confirmSettingsGUI.style.display = "none";
         setGameSettings();
+    });
+
+    document.getElementById("settings-cancel-button").addEventListener("click", function (event) {
+        settingsGUI.style.display = "none";
+    });
+    
+    document.getElementById("settings-reset-button").addEventListener("click", function (event) {
+        resetGameSettingsForm();
+    });
+
+    document.getElementById("confirm-cancel-button").addEventListener("click", function (event) { 
+        confirmSettingsGUI.style.display = "none";
     });
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
@@ -314,6 +349,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("cancel-delete-but").addEventListener('click', function(){
         document.getElementById("delete-form-pop").style.display = "none";
     })
+
 
     document.getElementById("delete-but").addEventListener('click', async function(){
         if (!selected_student){
