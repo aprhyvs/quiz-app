@@ -1,21 +1,11 @@
 const modal = document.getElementById("modal");
 const levelInfo = document.querySelector(".level-info");
 
-if (modal && levelInfo) {
-    // Show modal when clicking level-info
-    levelInfo.addEventListener("click", function () {
-        modal.style.display = "block";
-    });
+levelInfo.addEventListener("click", function () {
+    modal.style.display = "flex"; 
+});
 
-    // Close modal when clicking outside modal-content
-    modal.addEventListener("click", function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-}
-
-//modal content
+//level-points-pop content
 const listContainer = document.getElementById("list");
 
 const points = [
@@ -44,3 +34,62 @@ for (let i = 0; i < points.length; i++) {
     levelPointDiv.appendChild(pointP);
     listContainer.appendChild(levelPointDiv);
 }
+
+//50-50
+document.getElementById("50-50").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("50-form-pop").style.display = "flex"; 
+});
+
+document.getElementById("cancel-50-but").addEventListener('click', function() {
+    document.getElementById("50-form-pop").style.display = "none";
+});
+
+document.getElementById("confirm-50-but").addEventListener('click', function() {
+    document.getElementById("50-form-pop").style.display = "none";
+});
+
+//AI
+document.getElementById("ask-ai").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("ai-form-pop").style.display = "flex"; 
+});
+
+document.getElementById("cancel-ai-but").addEventListener('click', function() {
+    document.getElementById("ai-form-pop").style.display = "none";
+});
+
+document.getElementById("confirm-ai-but").addEventListener('click', function() {
+    document.getElementById("ai-form-pop").style.display = "none";
+});
+
+
+//x2
+document.getElementById("x2").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("x2-form-pop").style.display = "flex"; 
+});
+
+document.getElementById("cancel-x2-but").addEventListener('click', function() {
+    document.getElementById("x2-form-pop").style.display = "none";
+});
+
+document.getElementById("confirm-x2-but").addEventListener('click', function() {
+    document.getElementById("x2-form-pop").style.display = "none";
+});
+
+//pass
+document.getElementById("pass").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("pass-form-pop").style.display = "flex"; 
+});
+
+document.getElementById("cancel-pass-but").addEventListener('click', function() {
+    document.getElementById("pass-form-pop").style.display = "none";
+});
+
+document.getElementById("confirm-pass-but").addEventListener('click', function() {
+    document.getElementById("pass-form-pop").style.display = "none";
+});
+
+

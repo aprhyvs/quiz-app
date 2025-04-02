@@ -111,7 +111,7 @@
                 <button id="50-50">
                     50:50
                 </button>
-                <button id="ask-AI">
+                <button id="ask-ai">
                     AI
                 </button>
                 <button id="x2">
@@ -121,7 +121,7 @@
                     PASS
                 </button>
             </div>
-            <div class="level-info"><!--right-stats-->
+            <div class="level-info"><!--right-stats button-->
                 <div class="q-level roboto-bold">
                     Q 01
                 </div>
@@ -133,9 +133,55 @@
 
     </div> <!--background-wrapper-->
 
-    <div id="modal" class="modal">
+<!-- modals -->
+    <div id="modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="list" id="list"></div>
+            <p class="roboto-bold">TOTAL:</p>
+        </div>
+    </div>
+
+    <div class="pop-up" id="50-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">50 : 50</h1>
+            <h6 class="roboto-regular">Removes <strong>two incorrect answers</strong> from the choices by random.</h6>
+            <div class="pop-up-but">
+                <button id="cancel-50-but">Cancel</button>
+                <button id="confirm-50-but" >Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop-up" id="ai-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Ask the AI</h1>
+            <h6 class="roboto-regular">Use <strong>AI</strong> for assistance in finding the answer</h6>
+            <div class="pop-up-but">
+                <button id="cancel-ai-but">Cancel</button>
+                <button id="confirm-ai-but" >Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop-up" id="x2-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Double Dip</h1>
+            <h6 class="roboto-regular">Gives you <strong>two chances</strong> to answer the question.</h6>
+            <div class="pop-up-but">
+                <button id="cancel-x2-but">Cancel</button>
+                <button id="confirm-x2-but" >Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop-up" id="pass-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Pass</h1>
+            <h6 class="roboto-regular"><strong>Changes</strong> the current question.</h6>
+            <div class="pop-up-but">
+                <button id="cancel-pass-but">Cancel</button>
+                <button id="confirm-pass-but" >Confirm</button>
+            </div>
         </div>
     </div>
 {% endblock body_block %}
