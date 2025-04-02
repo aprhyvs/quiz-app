@@ -94,6 +94,9 @@ def register_student(request):
         print(input_data)
         student_data = {}   # create empty student table
         # --check input data one by one. check if input data contains information.
+        if request.FILES.get('image' , None):
+            print("Image gotten!")
+            student_data['profile_pic'] = request.FILES.get('image')
         if input_data.get('fname', None):
             student_data['fname'] = input_data.get('fname')
         if input_data.get('mname', None):
