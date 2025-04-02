@@ -37,6 +37,9 @@ body {
     width: 15%;
     max-width: 160px;
     min-height: 160px;  
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .add-image button {

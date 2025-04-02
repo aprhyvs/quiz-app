@@ -27,9 +27,18 @@ function updateImageIcon(image){
     if (checkFileType(fileInput) == false) {
         console.error('Invalid file type: ' + fileInput.name);
     }
-    const imageIcon = document.getElementById("image-icon");
-    imageIcon.src = URL.createObjectURL(fileInput);
-    imageIcon.style.display = "flex";
+    const addImageDiv = document.querySelector(".add-image");
+    const imageURL = URL.createObjectURL(fileInput);
+    
+    addImageDiv.style.backgroundImage = `url(${imageURL})`;
+    document.getElementById("upload-image-button").style.display = "flex";
+
+     // hide plus
+     const plusText = document.querySelector(".plus");
+     if (plusText) {
+         plusText.style.display = "none"; 
+     }
+
 }
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
