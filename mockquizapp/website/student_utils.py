@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
+from django.utils.timezone import now, timedelta
 
 from .models import *
 
@@ -131,7 +132,71 @@ def get_monthly_quizzes_taken_for_student(student):
     return monthly_quiz_counts
 
 
+def get_weekly_rankings_student() -> list:
+    # Get the current date and calculate the start of the week (Monday)
+    today = now().date()
+    start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
 
+    # Filter QuizData for the current week
+    weekly_data = QuizData.objects.filter(
+        is_answered = True,
+        created_at__date__gte=start_of_week,
+        created_at__date__lte=end_of_week
+    ).values('student_id').annotate(
+        total_score=Sum('total_worth')  # Sum up the correct answers
+    ).order_by('-total_score')[:5]  # Limit to top 5 students
+
+    # Add student details to the rankings
+    rankings = []
+    for rank, data in enumerate(weekly_data, start=1):
+        student = StudentData.objects.filter(id=data['student_id']).first()
+        rankings.append({
+            'rank': rank,
+            'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
+            'total_score': data['total_score'],
+            'total_quizzes': get_total_quizzes_for_student(student),
+            'total_correct_answers': get_sum_of_correct_answers(student),
+            'total_wrong_answers': get_total_wrong_answers_for_student(student)
+        })
+
+    return rankings
+
+def get_monthly_rankings_student() -> list: 
+    current_month = now().month
+    
+    # Filter QuizData for the current month
+    monthly_data = QuizData.objects.filter(
+        is_answered = True,
+        created_at__month=current_month
+    ).values('student_id').annotate(
+        total_score=Sum('total_worth')
+    ).order_by('-total_score')[:5]  # Order by highest score
+    # Add student details to the rankings
+    rankings = []
+    for data in monthly_data:
+        student = StudentData.objects.filter(id=data['student_id']).first()
+        rankings.append({
+            'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
+            'total_score': data['total_score'],
+            'total_quizzes': get_total_quizzes_for_student(student),
+            'total_correct_answers': get_sum_of_correct_answers(student),
+            'total_wrong_answers': get_total_wrong_answers_for_student(student)
+        })
+    return rankings
+ 
+
+def get_student_leaderboards_util():
+    # Get leaderboards type from admin data, use the right function to get correct leaderboards
+    data = {}
+    leaderboard_type = AdminData.objects.first().leaderboard_reset
+    if leaderboard_type == "weekly":
+        data['type'] = "weekly"
+        data['rankings'] = get_weekly_rankings_student()
+    elif leaderboard_type == "monthly":
+        data['type'] = "monthly"
+        data['rankings'] = get_monthly_rankings_student()
+    return data
 
 
 # def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):

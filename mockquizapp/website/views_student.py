@@ -88,6 +88,12 @@ def get_all_student_data(request): ## Returns all student data and stats
         data = get_all_student_data_util(student)
         return JsonResponse({"studentData": data}, status=200)
 
+def get_student_leaderboards(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    if request.method == 'GET':
+        leaderboard = get_student_leaderboards_util()
+        return JsonResponse({"leaderboard": leaderboard}, status=200)
 
 def get_student_statistic(request):
     if not request.user.is_authenticated:
