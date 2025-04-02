@@ -2,6 +2,35 @@ const edit_form_pop = document.getElementById("edit-form-pop");
 const error_pop_up = document.getElementById("error-form-pop");
 const error_pop_up_text = document.getElementById("error-text");
 const success_pop_up = document.getElementById("success-form-pop");
+
+function checkFileType(file){
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    console.log(fileExtension, allowedExtensions)
+    if (!allowedExtensions.includes(fileExtension)) {
+        console.error("Invalid file type. Only JPG, JPEG, PNG, WEBP, GIF files are allowed.");
+        return false;
+    }
+    console.log(fileExtension + ' is allowed')
+    return true;
+}
+
+function updateImageIcon(image){
+    let fileInput
+    if (image) {
+        fileInput = image
+    } else {
+        console.log("No file dragged, using the traditional upload")
+        fileInput = document.getElementById('file-input').files[0];
+    }
+
+    if (checkFileType(fileInput) == false) {
+        console.error('Invalid file type: ' + fileInput.name);
+    }
+    const imageIcon = document.getElementById("image-icon");
+    imageIcon.src = URL.createObjectURL(fileInput);
+    imageIcon.style.display = "flex";
+}
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
 
@@ -98,4 +127,9 @@ document.getElementById("save-but").addEventListener("click", async function (){
 document.getElementById("success-but").addEventListener('click', function(){
     document.getElementById("success-form-pop").style.display = "none";
     window.location.href = "../login";
+});
+
+document.getElementById("upload-image-button").addEventListener('click', function(){
+    console.log("Upload Image Clicked.")
+    document.getElementById("file-input").click();
 });

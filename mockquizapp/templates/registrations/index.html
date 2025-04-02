@@ -55,8 +55,10 @@
     <h1 class="raleway-bold">Create an account</h1>
     <form class="roboto-light" id="registerForm">
         <label for="upload-img" class="roboto-light" style="text-align: center; display: block;">Upload Image</label>
+        <input type="file" id="file-input" style="display: none;" onchange="updateImageIcon()">
             <div class="add-image">
-                <button><p class="roboto-light">+</p></button>
+                <img src="" class="" id="image-icon" display="none"/>
+                <button id="upload-image-button"><p class="roboto-light">+</p></button>
             </div>
             
         <div class="name-field">
