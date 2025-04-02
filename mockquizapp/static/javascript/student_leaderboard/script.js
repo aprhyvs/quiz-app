@@ -2,10 +2,10 @@ async function initiateRankings(leaderboard){
     const leaderboardTypeElement = document.getElementById('leaderboards-type');
     if (leaderboard.type === 'weekly'){
         leaderboardTypeElement.innerText = "Leaderboards (Weekly)";
-        displayWeeklyRankings(leaderboard.rankings);
+        displayRankings(leaderboard.rankings);
     } else {
         leaderboardTypeElement.innerText = "Leaderboards (Monthly)";
-        displayMonthlyRankings(leaderboard.rankings);
+        displayRankings(leaderboard.rankings);
     }
 }
 
@@ -14,7 +14,7 @@ function get_percentage(score, totalItems){
     return Math.round((score / totalItems) * 100);
 }
 
-function displayWeeklyRankings(weeklyRankings){
+function displayRankings(weeklyRankings){
     console.log(weeklyRankings);
     
     if (weeklyRankings){
@@ -53,35 +53,7 @@ function displayWeeklyRankings(weeklyRankings){
     console.log("No Rankings found.")
 }
 
-function displayMonthlyRankings(monthlyRankings){
-    if (!monthlyRankings || monthlyRankings.length === 0) {
-        console.error("No monthly rankings available!");
-        return;
-    }
-    // Select the ranking elements from the HTML
-    const firstRank = document.querySelector(".rank-monthly-first-name");
-    const secondRank = document.querySelector(".rank-monthly-second-name");
-    const thirdRank = document.querySelector(".rank-monthly-third-name");
-    const fourthRank = document.querySelector(".rank-monthly-fourth-name");
-    const fifthRank = document.querySelector(".rank-monthly-fifth-name");
 
-    // Ensure elements exist before modifying them
-    if (firstRank) {
-        firstRank.textContent = monthlyRankings[0]?.student_name || "Currently Not Available";
-    }
-    if (secondRank) {
-        secondRank.textContent = monthlyRankings[1]?.student_name || "Currently Not Available";
-    }
-    if (thirdRank) {
-        thirdRank.textContent = monthlyRankings[2]?.student_name || "Currently Not Available";
-    }
-    if (fourthRank) {
-        fourthRank.textContent = monthlyRankings[3]?.student_name || "Currently Not Available";
-    }
-    if (fifthRank) {
-        fifthRank.textContent = monthlyRankings[4]?.student_name || "Currently Not Available";
-    }
-}
 
 
 
