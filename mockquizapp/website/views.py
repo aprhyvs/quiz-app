@@ -248,4 +248,10 @@ def verify_email(request, verification_code):
         verification.delete()
         
     return redirect('verify-success')
+
+
+
+
+
+
 #=============================================For Testing ================================
