@@ -9,6 +9,7 @@ from .admin_utils import *
 from .student_utils import *
 
 
+
 # pip install python-docx
 # pip install PyPDF2
 
@@ -51,7 +52,7 @@ def get_student_data(request):
         studentData['created_at'] = student.created_at
 
         return JsonResponse({"studentData": studentData}, status=200)
-    
+
 def get_all_student_stats(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)

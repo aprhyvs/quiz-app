@@ -42,6 +42,9 @@ function updateImageIcon(image){
 
 }
 
+function getAbsoluteMediaURL(relativePath) {
+    return new URL(relativePath, window.location.origin).href;
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -65,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             'student_id': studentID
         });
         if (res) {
+            console.log(res);  
             fname.value = res.fname;
             mname.value = res.mname;
             lname.value = res.lname;
@@ -74,7 +78,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             phone.value = res.phone;
             username.value = res.username;
             password.value = "";
-            profile_pic.style.backgroundImage = res.profile_pic;
+            const fullURL = getAbsoluteMediaURL(res.profile_pic);
+            console.log(fullURL);
+            profile_pic.style.backgroundImage = `url("${fullURL}")`;
         }
     }
 

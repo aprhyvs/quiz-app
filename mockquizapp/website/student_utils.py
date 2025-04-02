@@ -6,6 +6,7 @@ from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 from django.utils.timezone import now, timedelta
 
+
 from .models import *
 
 import os
@@ -197,7 +198,6 @@ def get_student_leaderboards_util():
         data['type'] = "monthly"
         data['rankings'] = get_monthly_rankings_student()
     return data
-
 
 # def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):
 #     subject = subject 

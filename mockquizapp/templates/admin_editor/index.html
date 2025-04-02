@@ -68,8 +68,9 @@
     <h1 class="raleway-bold">Edit Account Details</h1>
     <form id="registerForm" >
         <label for="upload-img" class="roboto-light" style="text-align: center; display: block;">Upload Image</label>
-            <div class="add-image">
-                <button><p class="roboto-light">+</p></button>
+        <input type="file" id="file-input" style="display: none;" onchange="updateImageIcon()">
+            <div class="add-image" id="upload-image-button">
+                <p class="roboto-light">+</p>
             </div>
         
         <div class="name-field roboto-light">
