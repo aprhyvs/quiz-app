@@ -57,7 +57,7 @@ def update_student_data(request):
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
         
-        profile_pic = request.FILES.get('image')
+        profile_pic = request.FILES.get('profile_pic')
         if profile_pic:
             student.profile_pic = profile_pic
 
