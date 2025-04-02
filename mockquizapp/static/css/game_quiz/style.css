@@ -123,13 +123,13 @@ html, body {
     cursor: pointer;
 }
 
-.level,
+.q-level,
 .points {
     font-size: 1.5rem;
     font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
 }
 
-.level {
+.q-level {
     min-width: 160px;
     color: #D9A90E;
 }
@@ -138,6 +138,47 @@ html, body {
     min-width: 160px;
     text-align: right;
     color: #FCFCFC;
+}
+
+/* modal */
+.modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Make sure it's on top */
+}
+
+.modal-content {
+    background-color: #0F0A0A;
+    padding: 2em;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.list {
+    color: #FCFCFC;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+}
+
+.level-point {
+    /* background-color: #002157; for past levels */
+    border-radius: 1em;
+    padding: 16px;
+    margin: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.level,
+.points {
+    flex: 1;
+    text-align: center;
 }
 
 

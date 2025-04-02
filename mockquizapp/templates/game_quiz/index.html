@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/game_quiz/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_gamequiz.css' %}">
+ 
+    <script defer src="{% static 'javascript/game_quiz/script.js' %}"></script>
 
 {% endblock head_block %}
 
@@ -120,7 +122,7 @@
                 </button>
             </div>
             <div class="level-info"><!--right-stats-->
-                <div class="level roboto-bold">
+                <div class="q-level roboto-bold">
                     Q 01
                 </div>
                 <div class="points roboto-light">
@@ -131,5 +133,10 @@
 
     </div> <!--background-wrapper-->
 
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="list" id="list"></div>
+        </div>
+    </div>
 {% endblock body_block %}
     
