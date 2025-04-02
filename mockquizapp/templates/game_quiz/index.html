@@ -17,8 +17,7 @@
 {% block body_block %}
 
     <div class="background-wrapper">
-
-    {% include 'components/navbar_gamequiz.html' %}
+        {% include 'components/navbar_gamequiz.html' %}
 
         <video autoplay loop muted plays-inline class="background-webm">
         <source src="{% static 'css/game_quiz/wwtbam_01.webm' %}" type="video/webm">
@@ -129,12 +128,10 @@
                     ₱10
                 </div>
             </div>
-        </div>
-
+        </div><!--stats-panel-->
     </div> <!--background-wrapper-->
 
 <!-- modals -->
-
     <div class="ingame-settings-wrapper" id="ingame-settings" style="display: none;">
         <div class="ingame-settings-content">
                 <h1 class="raleway-bold">Game Settings</h1>
@@ -186,7 +183,7 @@
             </div>
         </div>
     </div>
-
+    
     <div id="modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="list" id="list"></div>

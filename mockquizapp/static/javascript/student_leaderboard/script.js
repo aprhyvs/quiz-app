@@ -24,7 +24,7 @@ function displayRankings(weeklyRankings){
             const totalItems = student.total_wrong_answers + student.total_correct_answers
             const rankNumber = (Number(rank) + 1).toString();
             console.log(student);
-                lis_of_user_tag.insertAdjacentHTML("afterbegin",
+                lis_of_user_tag.insertAdjacentHTML("beforeend",
                     `
                     <div class="leaderboard-table-card">
                         <div>
@@ -41,10 +41,10 @@ function displayRankings(weeklyRankings){
                             <p>${student.total_quizzes}</p>
                         </div>
                         <div>
-                            <p>${get_percentage(student.total_correct_answers, totalItems)}</p>
+                            <p>${get_percentage(student.total_correct_answers, totalItems) + `%`}</p>
                         </div>
                         <div>
-                            <p>${get_percentage(student.total_wrong_answers, totalItems)}</p>
+                            <p>${get_percentage(student.total_wrong_answers, totalItems) + `%`}</p>
                         </div>
                     </div>
                     `

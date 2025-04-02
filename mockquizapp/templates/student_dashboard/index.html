@@ -23,7 +23,6 @@
     {% include 'components/navbar_student.html' %}
 
     <main>
-    
         <section class="dashboard">
             <div class="wrapper">
                 <div class="card-small total-quizzes-taken">
@@ -67,7 +66,8 @@
                     <p class="roboto-light quiz-status-parent">Status: <span id="quiz-status"></span></p>
                     <button onclick="window.location.href={% url 'student-quizzespage' %}" class="roboto-bold view-quiz-button" id="view-quiz-button">View</button>
                 </div>
-            </div>
+            </div><!--wrapper-->
+
             <div class="wrapper">
                 <div class="card-large">
                     <h3 class="raleway-bold">Monthly correct and wrong answers</h3>
@@ -77,19 +77,18 @@
                     <h3 class="raleway-bold">Total Quizzes Taken per Month</h3>
                     <canvas id="quizzesChart"></canvas>
                 </div>
-            </div>
+            </div><!--wrapper-->
 
             <div class="pop-up" id="logout-form-pop" style="display: none;">
-        <div class="pop-up-content">
-            <h1 class="raleway-bold">Logout</h1>
-            <h6 class="raleway-regular">Are you sure you want to logout?</h6>
-            <div class="pop-up-but">
-                <button id="cancel-logout-but">Cancel</button>
-                <button id="logout-but" >Logout</button>
+                <div class="pop-up-content">
+                    <h1 class="raleway-bold">Logout</h1>
+                    <h6 class="raleway-regular">Are you sure you want to logout?</h6>
+                    <div class="pop-up-but">
+                        <button id="cancel-logout-but">Cancel</button>
+                        <button id="logout-but" >Logout</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    
         </section>
     </main>
 

@@ -253,16 +253,9 @@ p.grey {
 
 /* leaderboards - .leaderboard-table */
 
-.leaderboard-table-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-}
-
 .leaderboard-table-card {
     display: flex;
     padding: 0 3em;
-    margin: 1em 0; 
 }
 
 .leaderboard-table-card svg {
@@ -295,21 +288,25 @@ p.grey {
   
 }
 
-.leaderboard-table-content {
+.leaderboard-table-card {
     background-color: var(--secondary);
     border-radius: 1em;
 }
 
-/* Drag queen */
-
-
-.upload-box.dragover {
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 2px dashed var(--primary);
-}
 
 .leaderboard-table-content{
     display: flex;
     flex-direction: column;
     gap: 1em;
+}
+
+.card-top {
+    background: none;
+}
+
+
+/* Drag queen */
+.upload-box.dragover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px dashed var(--primary);
 }
