@@ -26,6 +26,7 @@ function updateImageIcon(image){
 
     if (checkFileType(fileInput) == false) {
         console.error('Invalid file type: ' + fileInput.name);
+        return;
     }
     const addImageDiv = document.querySelector(".add-image");
     const imageURL = URL.createObjectURL(fileInput);
@@ -48,6 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Create FormData object from form fields
         const formData = new FormData(form);
+
+        if (document.getElementById('file-input').files[0] ) {
+            console.log("Image Uploaded")
+            formData.append('image', document.getElementById('file-input').files[0]);
+        }
+        console.log(formData);
 
         try {
             const response = await fetch("/api/register/student", {  // Adjust endpoint if needed
