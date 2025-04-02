@@ -35,6 +35,21 @@ for (let i = 0; i < points.length; i++) {
     listContainer.appendChild(levelPointDiv);
 }
 
+
+//50-50
+document.getElementById("ingame-settings-button").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("ingame-settings").style.display = "flex"; 
+});
+
+document.getElementById("cancel-ingame-but").addEventListener('click', function() {
+    document.getElementById("ingame-settings").style.display = "none";
+});
+
+document.getElementById("confirm-ingame-but").addEventListener('click', function() {
+    document.getElementById("ingame-settings").style.display = "none";
+});
+
 //50-50
 document.getElementById("50-50").addEventListener("click", async function (event) { 
     event.preventDefault(); 
