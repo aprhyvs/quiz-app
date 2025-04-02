@@ -60,7 +60,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     const profile_pic = document.getElementById('upload-image-button')
     const edit_form_pop = document.getElementById("edit-form-pop");
 
-
+    // hide plus
+    const plusText = document.querySelector(".plus");
+    if (plusText) {
+        plusText.style.display = "none"; 
+    }
+    
     const studentID = sessionStorage.getItem('studentID');
     
     if (studentID) {
