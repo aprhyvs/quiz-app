@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById("save-but").disabled = false;
             return;
         }
-
+        const profile_picture = document.getElementById('file-input').files[0]
         const res2 = await getDataFromUrlWithParams(`/api/admin/update/student`,{
             'student_id': studentID,
             'fname': fname.value,
@@ -134,10 +134,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             'phone': phone.value,
             'username': username.value,
             'password': password.value,
-            'profile_pic': document.getElementById('file-input').files[0]
+            'profile_pic': profile_picture
         })
 
         if (res2){
+            console.log(document.getElementById('file-input').files[0])
             document.getElementById("edit-form-pop").style.display = "none";
             document.getElementById("success-text").textContent = "Changes applied successfully";
             document.getElementById("success-form-pop").style.display = "flex";

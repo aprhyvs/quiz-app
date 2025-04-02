@@ -79,6 +79,10 @@ def get_all_student_quizzes_util(student): ## Grabs all the student's quizzes fo
     quizzesDict = [quiz.get_data() for quiz in quizzes]
     return quizzesDict
 
+def deleteOldProfilePic(student):
+    if student.profile_pic:
+        os.remove(student.profile_pic.path)
+
 def get_total_quizzes_for_student(student):
     # Filter QuizData based on the student's ID
     total_quizzes = QuizData.objects.filter(student_id=student.id).count()

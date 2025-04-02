@@ -166,7 +166,6 @@ def update_student_data(request):
         if not user:
             return JsonResponse({"error": "User not found"}, status=404)
         
-        
         fname = request.POST.get('fname' , None)
         mname = request.POST.get('mname', None)
         lname = request.POST.get('lname', None)
@@ -176,7 +175,7 @@ def update_student_data(request):
         phone = request.POST.get('phone', None)
         username = request.POST.get('username', None) 
         password = request.POST.get('password', None) 
-        
+        profile_pic = request.FILES.get('profile_pic')
         
         
         if fname:
@@ -204,7 +203,11 @@ def update_student_data(request):
                 user.username = username
         if password:
             print(password)
-            user.set_password(password)    
+            user.set_password(password)
+        if profile_pic:
+            print("Got Profile Pic!!!")
+            deleteOldProfilePic(student)
+            student.profile_pic = profile_pic 
         
         student.save()
         user.save()

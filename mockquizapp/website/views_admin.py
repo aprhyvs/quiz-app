@@ -42,7 +42,8 @@ def update_rankings(request):
     print(rankings)
     return JsonResponse({"rankings": rankings}, status=200)
 
-def update_student_data(request):
+def update_student_data_admin(request):
+    print("Fired Admin's Update Student Data")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     
@@ -56,11 +57,10 @@ def update_student_data(request):
         student = StudentData.objects.filter(id=student_id).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
-        
         profile_pic = request.FILES.get('profile_pic')
         if profile_pic:
+            print("Got Profile Pic!!!")
             student.profile_pic = profile_pic
-
         fname = request.POST.get('fname', None)
         if fname:
             student.fname = fname
