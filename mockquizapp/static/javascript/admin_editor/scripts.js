@@ -3,6 +3,46 @@
 
 var res;
 
+function checkFileType(file){
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    console.log(fileExtension, allowedExtensions)
+    if (!allowedExtensions.includes(fileExtension)) {
+        console.error("Invalid file type. Only JPG, JPEG, PNG, WEBP, GIF files are allowed.");
+        return false;
+    }
+    console.log(fileExtension + ' is allowed')
+    return true;
+}
+
+function updateImageIcon(image){
+    let fileInput
+    if (image) {
+        fileInput = image
+    } else {
+        console.log("No file dragged, using the traditional upload")
+        fileInput = document.getElementById('file-input').files[0];
+    }
+
+    if (checkFileType(fileInput) == false) {
+        console.error('Invalid file type: ' + fileInput.name);
+        return;
+    }
+    const addImageDiv = document.querySelector(".add-image");
+    const imageURL = URL.createObjectURL(fileInput);
+    
+    addImageDiv.style.backgroundImage = `url(${imageURL})`;
+    document.getElementById("upload-image-button").style.display = "flex";
+
+     // hide plus
+     const plusText = document.querySelector(".plus");
+     if (plusText) {
+         plusText.style.display = "none"; 
+     }
+
+}
+
+
 document.addEventListener("DOMContentLoaded", async function () {
 
     const fname = document.getElementById("fname");
@@ -14,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const phone = document.getElementById("phone");
     const username = document.getElementById("username");
     const password = document.getElementById("password"); 
-
+    const profile_pic = document.getElementById('upload-image-button')
     const edit_form_pop = document.getElementById("edit-form-pop");
 
 
@@ -34,6 +74,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             phone.value = res.phone;
             username.value = res.username;
             password.value = "";
+            profile_pic.style.backgroundImage = res.profile_pic;
         }
     }
 
@@ -86,7 +127,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             'address': address.value,
             'phone': phone.value,
             'username': username.value,
-            'password': password.value
+            'password': password.value,
+            'profile_pic': document.getElementById('file-input').files[0]
         })
 
         if (res2){
@@ -120,6 +162,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
         event.preventDefault();
         document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+    document.getElementById("upload-image-button").addEventListener('click', function(){
+        console.log("Upload Image Clicked.")
+        document.getElementById("file-input").click();
     });
 
     
