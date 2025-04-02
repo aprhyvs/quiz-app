@@ -253,6 +253,12 @@ p.grey {
 
 /* leaderboards - .leaderboard-table */
 
+.leaderboard-table-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
 .leaderboard-table-card {
     display: flex;
     padding: 0 3em;
@@ -289,7 +295,7 @@ p.grey {
   
 }
 
-.leaderboard-table > div:not(:first-child){
+.leaderboard-table-content {
     background-color: var(--secondary);
     border-radius: 1em;
 }
