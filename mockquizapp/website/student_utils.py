@@ -287,36 +287,65 @@ Following this format:
 
 CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS = """
 Convert the following questions into Python dictionaries using this format:
-{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
+{
+    "<index>": {
+        "question": "<question>",
+        "options": [
+            "<A>", 
+            "<B>", 
+            "<C>", 
+            "<D>"
+        ],
+        "correct_answer": "<index_of_correct_answer>"
+    },
+    ...
+}
 
 Questions:
 %s
 
-- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
-- Remove any trailing commas from objects.
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible. 
 - Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 """
 
 CONVERT_QUESTIONS_TO_OBJECT = """
 Convert below questions into Python dictionaries and importantly must following these format:
-{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<letter>"},...}
-
-- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
-- Remove any trailing commas from objects.
-- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
-- Do not use newlines in the output.
+{
+    "<index>": {
+        "question": "<question>",
+        "options": [
+            "<A>", 
+            "<B>", 
+            "<C>", 
+            "<D>"
+        ],
+        "correct_answer": "<index_of_correct_answer>"
+    },
+    ...
+}
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible. 
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors. 
 
 Question:
 %s
 """
 CONVERT_QUESTIONS_TO_OBJECT_COMMAND = """
 Convert below questions into Python dictionaries and importantly must following these format:
-{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<letter>"},...}
-
-- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
-- Remove any trailing commas from objects.
-- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
-- Do not use newlines in the output.
+{
+    "<index>": {
+        "question": "<question>",
+        "options": [
+            "<A>", 
+            "<B>", 
+            "<C>", 
+            "<D>"
+        ],
+        "correct_answer": "<index_of_correct_answer>"
+    },
+    ...
+}
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible. 
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors. 
 """
 
 
