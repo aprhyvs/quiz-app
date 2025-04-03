@@ -352,18 +352,24 @@ async function processFileStage2(data) {
         console.error("No quiz data")
         return;
     }
+    const strike = 3;
     const quiz_id = data.quiz_id;
     const upload_stage = data.upload_stage;
-    const stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
-        'quiz_id': quiz_id,
-        'stage': upload_stage
-    });
+    for ( var i = 0; i < strike; i++) {
+        const stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
+            'quiz_id': quiz_id,
+            'stage': upload_stage
+        });
         console.log(stage2Data);
-        if (!stage2Data) {
-            console.error("Stage 2 failed")
-            return;
-        }
-        processFileStage3(stage2Data);
+        if (stage2Data) {
+            break;
+        } 
+    }
+    if (!stage2Data) {
+        console.error("Stage 2 failed")
+        return;
+    }
+    processFileStage3(stage2Data);
     
 }
 
