@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block head_block %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static `css/quiz_complete/style.css%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
+    
+    <script defer src="{% static 'javascript/quiz_complete/script.js' %}"></script> 
+
+{% endblock head_block %}
+    
+
+
+
+{% block body_block %}
+
+
+    {% include 'components/navbar_student.html' %}
+
+    <div class="wrapper">
+        <h1 id="quiz_status" class="raleway-bold"></h1>
+        <h2 id="quiz_title" class="raleway-bold"></h2>
+        <p id="score"></p>
+        <p id="status"></p>
+        <p id="total_points"></p>
+        <button id="continue" onclick="window.location.href='{% url 'student-dashboard' %}'"></button>
+        <button id="try_quiz"></button>
+    </div>
+
+{% endblock body_block %}
+    
