@@ -79,6 +79,11 @@ def game_quiz(request):
     #    return redirect('home')
     return render(request, "game_quiz/index.html")
 
+def quiz_complete(request):
+    #if not request.user.is_authenticated:
+    #    return redirect('home')
+    return render(request, "quiz_complete/index.html")
+
 def admin_editor(request):
     if not request.user.is_authenticated:
         if not AdminData.objects.filter(username=request.user.username).exists():
