@@ -310,7 +310,7 @@ def upload_file_view_status_2(request):
             quiz.raw_generated_json_questions = questionaire_dict_text
             quiz.save()
         else:
-            questionaire_dict_text = generate_response_cohere( CONVERT_QUESTIONS_TO_OBJECT_CLEANING % quiz.raw_generated_questions)
+            questionaire_dict_text = generate_response_cohere( CONVERT_QUESTIONS_TO_OBJECT_CLEANING % quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_CLEANING_COMMAND)
             
         # print(questionaire_dict_text) 
         print("What converted to : {}".format(questionaire_dict_text))
@@ -323,7 +323,7 @@ def upload_file_view_status_2(request):
             for index in range(21):
                 selected_question_text = generate_response_cohere(
                     SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, str(index), str(index) ),
-                    None
+                    SEPARATOR_OF_DICTIONARY_TEXT_COMMAND % (str(index), str(index))
                     )
                 selected_question_dict = text_to_dictionary(selected_question_text)
                 if not selected_question_dict:

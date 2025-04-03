@@ -315,11 +315,29 @@ If the key does not exist, respond with: "Key '%s' not found."
 
 """
 
+SEPARATOR_OF_DICTIONARY_TEXT_COMMAND = """
+I need you to:
+1. Auto-format the dictionary to fix any unstructured elements.
+   - Correct improperly escaped characters (e.g., \\").
+   - Remove any irrelevant or extraneous text around the dictionary.
+   - Ensure the result is a valid Python dictionary, fully JSON-compatible.
+2. Treat the cleaned and formatted result as a Python dictionary.
+3. Extract the value corresponding to the key: %s.
+4. Return the value associated with this key as a JSON-formatted dictionary object.
+If the key does not exist, respond with: "Key '%s' not found."
+
+"""
+
 
 CONVERT_QUESTIONS_TO_OBJECT_CLEANING = """
 Clean and format the provided questions in this structure:
 %s
 
+- Ensure all keys and values are enclosed in double quotes for JSON compatibility.
+- Remove any trailing commas or unstructured elements from objects.
+- Output the cleaned and formatted dictionary as a single line without newlines or unnecessary spaces.
+"""
+CONVERT_QUESTIONS_TO_OBJECT_CLEANING_COMMAND = """
 - Ensure all keys and values are enclosed in double quotes for JSON compatibility.
 - Remove any trailing commas or unstructured elements from objects.
 - Output the cleaned and formatted dictionary as a single line without newlines or unnecessary spaces.
