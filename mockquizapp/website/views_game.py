@@ -116,7 +116,7 @@ def text_to_dictionary(response: str):
             python_dict_text = match.group(0)
 
             # Preprocess to make it JSON-compatible
-            json_text = re.sub(r'\\"', '"', json_text) 
+            json_text = re.sub(r'\\"', '"', python_dict_text) 
             
             # 2. Convert integer keys to JSON string keys (e.g., `1:` -> `"1":`)
             json_text = re.sub(r'"\\?"(\w+)\\?"":', r'"\1":', json_text)  # Normalize keys (handles words and numbers)
@@ -310,7 +310,8 @@ def upload_file_view_status_2(request):
             quiz.raw_generated_json_questions = questionaire_dict_text
             quiz.save()
         else:
-            questionaire_dict_text = quiz.raw_generated_questions
+            questionaire_dict_text = generate_response_cohere( CONVERT_QUESTIONS_TO_OBJECT_CLEANING % quiz.raw_generated_questions)
+            
         # print(questionaire_dict_text) 
         print("What converted to : {}".format(questionaire_dict_text))
         converted_dict = text_to_dictionary(questionaire_dict_text)
@@ -321,7 +322,7 @@ def upload_file_view_status_2(request):
             print("Using for loop to convert to dictionary")
             for index in range(21):
                 selected_question_text = generate_response_cohere(
-                    SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, index),
+                    SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, str(index), str(index) ),
                     None
                     )
                 selected_question_dict = text_to_dictionary(selected_question_text)

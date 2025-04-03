@@ -314,3 +314,19 @@ I need you to:
 If the key does not exist, respond with: "Key '%s' not found."
 
 """
+
+
+CONVERT_QUESTIONS_TO_OBJECT_CLEANING = """
+Clean and format the provided questions in this structure:
+%s
+
+- Ensure all keys and values are enclosed in double quotes for JSON compatibility.
+- Remove any trailing commas or unstructured elements from objects.
+- Output the cleaned and formatted dictionary as a single line without newlines or unnecessary spaces.
+"""
+
+
+
+
+
+
