@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
         
+        displayStudentProfileData(studentData)
         displayStudentData(studentData);
         displayStudentStats(studentStats);
     })
@@ -48,6 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
         showQuizzesTakenGraph(quizData.quizzes);
     })
     .catch(error => console.error("Error fetching student data:", error));
+
+// Display student profile data in profile-card
+function displayStudentProfileData(studentData) {
+    const fullName = `${studentData.fname} ${studentData.mname} ${studentData.lname}`;
+    document.getElementById('profile-name').textContent = fullName; 
+    document.getElementById('profile-department').textContent = studentData.school;
+    document.getElementById('profile-address').textContent = studentData.address;
+}
 
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {

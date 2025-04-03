@@ -28,6 +28,9 @@ body {
     background-color: var(--primary);
     min-width: 160px;
     border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .profile-text {
@@ -46,11 +49,37 @@ body {
 .ranking-card {
     border: 2px solid green;
     flex: 1;
-    max-width: 160px;
+    max-width: 240px;
+    border: 2px solid var(--outline);
+    border-radius: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.progress-bar {
-    border: 2px solid purple;
+.correct-wrong-bar {
+    display: flex;
+    border-radius: 1em;
+    border: 2px solid var(--outline);
+}
+
+.correct-bar,
+.wrong-bar {
+    padding: 1em;
+    flex: 1;
+    color: var(--background);
+}
+
+.correct-bar {
+    background-color: var(--green);
+    border-top-left-radius: 0.9em;
+    border-bottom-left-radius: 0.9em;
+}
+
+.wrong-bar {
+    background-color: var(--red);
+    border-top-right-radius: 0.9em;
+    border-bottom-right-radius: 0.9em;
 }
 
 /* dashboard */
