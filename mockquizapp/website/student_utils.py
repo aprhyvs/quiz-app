@@ -246,13 +246,43 @@ Generate 21 questions with A, B, C, D options based on this content:
 - Clearly identify the correct answer.
 """
 
- 
 CREATE_QUESTIONS_PROMPT = """
-Generate 21 questions with A, B, C, D options based on the provided content.
+Generate 21 questions with A, B, C, D options based on the provided content. 
+Following this format:
 
+<index> : <question>
+ A : <choice>
+ B : <choice>
+ C : <choice>
+ D : <choice>
+ Correct Answer : <letter>
+ 
+ 
 - Each option must be no more than 5 words.
 - Clearly identify the correct answer.
+
+Here is the content;
+%s
+
 """
+ 
+CREATE_QUESTIONS_PROMPT_COMMAND = """
+Generate 21 questions with A, B, C, D options based on the provided content. 
+Following this format:
+
+<index> : <question>
+ A : <choice>
+ B : <choice>
+ C : <choice>
+ D : <choice>
+ Correct Answer : <letter>
+ 
+ 
+- Each option must be no more than 5 words.
+- Clearly identify the correct answer.
+
+"""
+
 
 
 CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS = """
@@ -268,8 +298,8 @@ Questions:
 """
 
 CONVERT_QUESTIONS_TO_OBJECT = """
-Convert below questions into Python dictionaries and following these format:
-{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
+Convert below questions into Python dictionaries and importantly must following these format:
+{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<letter>"},...}
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
 - Remove any trailing commas from objects.
@@ -280,8 +310,8 @@ Question:
 %s
 """
 CONVERT_QUESTIONS_TO_OBJECT_COMMAND = """
-Convert below questions into Python dictionaries and following these format:
-{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
+Convert below questions into Python dictionaries and importantly must following these format:
+{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<letter>"},...}
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
 - Remove any trailing commas from objects.
@@ -292,9 +322,10 @@ Convert below questions into Python dictionaries and following these format:
 
 
 CREATE_TITLE_PROMPT_WITH_CONTENT = """
-Generate a 5-word quiz title based on the following content in this format:
+Generate a 5-word quiz title based on the following content and importantly must following these format:
 {"title": "<title>"}
 
+Content:
 %s
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
@@ -303,7 +334,7 @@ Generate a 5-word quiz title based on the following content in this format:
 """
 
 CREATE_TITLE_PROMPT = """
-Generate a 5-word quiz title based on the following content in this format:
+Generate a 5-word quiz title based on the following content and importantly must following these format:
 {"title": "<title>"}
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.

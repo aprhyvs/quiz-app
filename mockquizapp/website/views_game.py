@@ -241,9 +241,9 @@ def upload_file_view_status_1(request):
         # TODO: Generate questionaire based on the text of the uploaded file
         
         # generate questionair in g4f
-        questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT_WITH_CONTENT % file_content)
+        questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT % file_content)
         if questionairs is None:
-            questionairs = generate_response_cohere(file_content, CREATE_QUESTIONS_PROMPT)
+            questionairs = generate_response_cohere(CREATE_QUESTIONS_PROMPT % file_content, CREATE_QUESTIONS_PROMPT_COMMAND)
             if questionairs is None:
                 return JsonResponse({'error': 'Failed to generate questionaire.'}, status=500)
         
