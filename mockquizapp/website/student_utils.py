@@ -189,7 +189,8 @@ def get_monthly_rankings_student() -> list:
             'total_score': data['total_score'],
             'total_quizzes': get_total_quizzes_for_student(student),
             'total_correct_answers': get_sum_of_correct_answers(student),
-            'total_wrong_answers': get_total_wrong_answers_for_student(student)
+            'total_wrong_answers': get_total_wrong_answers_for_student(student),
+            'student_pic' : student.profile_pic.path if student.profile_pic else None
         })
     return rankings
  
