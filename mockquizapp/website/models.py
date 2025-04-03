@@ -115,7 +115,7 @@ class QuizData(models.Model):
     
     
     def __str__(self):
-        return f"Score: {self.number_of_correct} - Student ID: {self.student_id}"
+        return f"Score: {self.number_of_correct} - Student ID: {self.student_id} - Quiz ID: {self.pk}"
      
     
     def get_data(self) -> dict:

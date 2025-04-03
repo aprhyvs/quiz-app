@@ -268,7 +268,19 @@ Questions:
 """
 
 CONVERT_QUESTIONS_TO_OBJECT = """
-Convert these questions into Python dictionaries:
+Convert below questions into Python dictionaries and following these format:
+{"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
+
+- Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+- Remove any trailing commas from objects.
+- Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
+- Do not use newlines in the output.
+
+Question:
+%s
+"""
+CONVERT_QUESTIONS_TO_OBJECT_COMMAND = """
+Convert below questions into Python dictionaries and following these format:
 {"<index>":{"question": "<question>","options": ["<A>", "<B>", "<C>", "<D>"],"correct_answer": "<index_of_correct_answer>"},...}
 
 - Make sure the keys are enclosed in double quotes to make them JSON-compatible.
@@ -276,6 +288,7 @@ Convert these questions into Python dictionaries:
 - Ensure that the resulting Python dictionary can be converted to valid JSON without errors.
 - Do not use newlines in the output.
 """
+
 
 
 CREATE_TITLE_PROMPT_WITH_CONTENT = """

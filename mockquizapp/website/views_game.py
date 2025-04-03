@@ -301,11 +301,9 @@ def upload_file_view_status_2(request):
         # TODO: Generate a python object from generated questionaire from the uploaded 
         print("Generating Questionaire using G4F")
         if len(quiz.raw_generated_questions) == 0:
-            questionaire_dict_text = generate_response_g4f(CONVERT_QUESTIONS_TO_OBJECT_WITH_QUESTIONS % quiz.raw_generated_questions )
+            questionaire_dict_text = generate_response_cohere(CONVERT_QUESTIONS_TO_OBJECT % quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT_COMMAND)
             if not questionaire_dict_text:
-                questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT)
-                if not questionaire_dict_text:
-                    return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
+                return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
             
             quiz.raw_generated_json_questions = questionaire_dict_text
             quiz.save()
@@ -318,6 +316,8 @@ def upload_file_view_status_2(request):
         print("Converted dict: {}".format(converted_dict))
         # print(converted_dict)
         if not converted_dict:
+            quiz.raw_generated_json_questions = questionaire_dict_text
+            quiz.save()
             converted_dict = {}
             print("Using for loop to convert to dictionary")
             for index in range(21):
@@ -375,18 +375,22 @@ def upload_file_view_status_3(request):
         
         #TODO: Create a title for the quiz and save it in the database
         minimize_content = quiz.raw_file_content[:300] if len(quiz.raw_file_content) > 300 else quiz.raw_file_content
-        title = generate_response_g4f(CREATE_TITLE_PROMPT_WITH_CONTENT % minimize_content )
-        if not title:
-            title = generate_response_cohere(minimize_content, CREATE_TITLE_PROMPT)
-            if not title:
-                return JsonResponse({'error': 'Failed to generate title.'}, status=500)
+        strike_counter = 0
+        strike = 3
+        title = None
+        while strike > strike_counter:
+            title = generate_response_cohere(CREATE_TITLE_PROMPT_WITH_CONTENT % minimize_content , CREATE_TITLE_PROMPT )
+            converted_title = text_to_dictionary(title)
+            if converted_title:
+                break
+            strike_counter += 1
             
         converted_title = text_to_dictionary(title)
         if not converted_title:
-            converted_title = extract_title(title)
-            if not converted_title:
+            parse_title = extract_title(title)
+            if not parse_title:
                 return JsonResponse({'error': 'Failed to convert title to dictionary.'}, status=500)
-            converted_title = {'title': converted_title}
+            converted_title = {'title': parse_title}
         
         real_title = converted_title.get('title' , None) 
         if not real_title:

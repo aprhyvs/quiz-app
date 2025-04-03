@@ -355,8 +355,9 @@ async function processFileStage2(data) {
     const strike = 3;
     const quiz_id = data.quiz_id;
     const upload_stage = data.upload_stage;
+    let stage2Data;
     for ( var i = 0; i < strike; i++) {
-        const stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
+        stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
             'quiz_id': quiz_id,
             'stage': upload_stage
         });
