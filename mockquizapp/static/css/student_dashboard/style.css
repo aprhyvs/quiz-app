@@ -4,6 +4,55 @@ body {
     background-color: var(--secondary)
 }
 
+/* profile-card */
+
+.profile-card {
+    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-card-wrapper {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.profile-card-content {
+    display: flex;
+    gap: 1em;
+}
+
+.profile-pic {
+    background-color: var(--primary);
+    min-width: 160px;
+    border-radius: 50%;
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 1;
+}
+
+.profile-text > h3 {
+    padding: 0.5em;
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+}
+
+.ranking-card {
+    border: 2px solid green;
+    flex: 1;
+    max-width: 160px;
+}
+
+.progress-bar {
+    border: 2px solid purple;
+}
+
 /* dashboard */
 
 .dashboard {
@@ -28,7 +77,8 @@ body {
 }
 
 .card-small,
-.card-large {
+.card-large,
+.profile-card {
     color: var(--text);
     background-color: var(--background);
     padding: 2em;
