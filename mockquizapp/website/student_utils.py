@@ -156,13 +156,16 @@ def get_weekly_rankings_student() -> list:
     rankings = []
     for rank, data in enumerate(weekly_data, start=1):
         student = StudentData.objects.filter(id=data['student_id']).first()
+        if student is None:
+            continue
         rankings.append({
             'rank': rank,
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
             'total_quizzes': get_total_quizzes_for_student(student),
             'total_correct_answers': get_sum_of_correct_answers(student),
-            'total_wrong_answers': get_total_wrong_answers_for_student(student)
+            'total_wrong_answers': get_total_wrong_answers_for_student(student),
+            'student_pic' : student.profile_pic.path if student.profile_pic else None
         })
 
     return rankings
