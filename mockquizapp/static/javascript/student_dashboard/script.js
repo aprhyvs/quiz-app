@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
         
-        displayStudentProfileData(studentData)
+        displayStudentProfileData(studentData, studentStats);
         displayStudentData(studentData);
         displayStudentStats(studentStats);
     })
@@ -50,14 +50,32 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(error => console.error("Error fetching student data:", error));
 
-// Display student profile data in profile-card
-function displayStudentProfileData(studentData) {
-    const fullName = `${studentData.fname} ${studentData.mname} ${studentData.lname}`;
-    document.getElementById('profile-name').textContent = fullName; 
-    document.getElementById('profile-department').textContent = studentData.school;
-    document.getElementById('profile-address').textContent = studentData.address;
-}
-
+    async function displayStudentProfileData(studentData, studentStats) {
+        const fullName = `${studentData.fname} ${studentData.mname} ${studentData.lname}`;
+        document.getElementById('profile-name').textContent = fullName; 
+        document.getElementById('profile-department').textContent = studentData.school;
+        document.getElementById('profile-address').textContent = studentData.address;
+    
+        // Calculate percentages
+        function getPercentage(score, totalItems) {
+            return totalItems > 0 ? Math.round((score / totalItems) * 100) : 0;
+        }
+    
+        const totalItems = studentStats.total_correct_answers + studentStats.total_wrong_answers;
+        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
+        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
+    
+        // Update the correct-wrong bar
+        const correctBar = document.querySelector(".correct-bar");
+        const wrongBar = document.querySelector(".wrong-bar");
+    
+        correctBar.style.width = `${correctAnswerPercentage}%`;
+        correctBar.textContent = `${correctAnswerPercentage}%`;
+    
+        wrongBar.style.width = `${wrongAnswerPercentage}%`;
+        wrongBar.textContent = `${wrongAnswerPercentage}%`;
+    }
+    
     // Display Student Data in Dashboard
     function displayStudentData(studentData) {
         const studentNameDiv = document.querySelector(".student-name");

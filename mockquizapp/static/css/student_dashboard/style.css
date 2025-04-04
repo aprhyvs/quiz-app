@@ -61,13 +61,18 @@ body {
     display: flex;
     border-radius: 1em;
     border: 2px solid var(--outline);
+    overflow: hidden; /* Ensures smooth rounding */
+    width: 100%; /* Ensures full-width scaling */
+
 }
 
 .correct-bar,
 .wrong-bar {
     padding: 1em;
-    flex: 1;
     color: var(--background);
+    text-align: center;
+    transition: width 0.5s ease-in-out; /* Smooth animation */
+    white-space: nowrap; /* Prevents text wrapping */
 }
 
 .correct-bar {
