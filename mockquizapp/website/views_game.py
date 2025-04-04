@@ -804,4 +804,74 @@ def on_game_data_answer(request):
         return JsonResponse({'status': 'success'}, status=200)
         
 
+def on_game_get_quiz_data(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+         
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
 
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        
+        return JsonResponse({'data': quiz.game_data() }, status=200)
+        
+
+def on_game_data_update(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    
+    if request.method == 'POST': 
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        
+        update_type = request.POST.get('update_type', None)
+        if not update_type:
+            return JsonResponse({'error': 'No update type provided.'}, status=400) 
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        if update_type == '5050':
+            quiz.game_5050_hint = True
+            quiz.save()
+            return JsonResponse({'status': 'Hint given.'}, status=200)
+        elif update_type == 'hint':
+            quiz.game_has_ai_hint = True
+            quiz.save()
+            return JsonResponse({'status': 'Hint given.'}, status=200)
+        elif update_type == "x2":
+            quiz.game_has_times2 = True
+            quiz.save()
+            return JsonResponse({'status': 'Double points given.'}, status=200)
+        elif update_type == "pass":
+            quiz.game_has_pass = True
+            quiz.save()
+            return JsonResponse({'status': 'Quiz passed.'}, status=200)
+        
+        return JsonResponse({'error': 'Invalid update type.'}, status=400)
+        

@@ -55,6 +55,9 @@ urlpatterns = [
     
     path('api/game/generate/questions', view=on_game_data_generation),
     path('api/game/generate/hints', view=on_game_data_ask_ai),
+    path('api/game/generate/answer', view=on_game_data_get_answer),
+    path('api/game/get/quiz', view=on_game_get_quiz_data),
+    path('api/game/update/actions', view=on_game_data_update),
 
 
     #=============================== File Upload ===============================#
