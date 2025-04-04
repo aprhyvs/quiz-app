@@ -252,6 +252,9 @@ def is_index_correct_format(data : dict , index : str) -> bool:
             return False
         if not isinstance(selected_data["correct_answer"], str):
             return False
+        for i in ["a", "b", "c", "d"]:
+            if i not in selected_data["correct_answer"].lower():
+                return False
         if not isinstance(selected_data["question"], str):
             return 
         
@@ -270,6 +273,9 @@ def is_index_correct_format(data : dict , index : str) -> bool:
         return False
     if not isinstance(selected_data["correct_answer"], str):
         return False
+    for i in ["a", "b", "c", "d"]:
+        if i not in selected_data["correct_answer"].lower():
+            return False
     if not isinstance(selected_data["question"], str):
         return False
     return True
@@ -598,6 +604,24 @@ def on_game_data_generation(request):
         selected_data = converted_questions.get(question, None)
         if selected_data is None:
             selected_data = converted_questions
+            
+        """
+        questions = {
+                "1": {
+                    "question": "What is the capital of France?",
+                    "options": ["London", "Paris", "Berlin", "Madrid"],
+                    "correct_answer": "Paris",
+                    "answered": False,
+                    "answer": None,
+                    "worth" : 100
+                },
+                ...
+            }
+        
+        """
+        selected_data["answered"] = False
+        selected_data["answer"] = None
+        selected_data["worth"] = 0
         old_generated_questions[question] = selected_data
         quiz.questions = old_generated_questions
         quiz.save()
@@ -705,5 +729,79 @@ def on_game_data_ask_ai(request):
         quiz.game_has_ai_hint = True
         quiz.save()
         return JsonResponse(response_dict, status=200)
+
+
+def on_game_data_answer(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        
+        user_answer : str = request.POST.get('user_answer', None)
+        if not user_answer:
+            return JsonResponse({'error': 'No user answer provided.'}, status=400)
+        
+        if user_answer not in ['A', 'B', 'C', 'D']:
+            return JsonResponse({'error': 'Invalid user answer.'}, status=400)
+        
+        
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        answer = request.POST.get('answer', None)
+        if not answer:
+            return JsonResponse({'error': 'No answer provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        old_generated_questions : dict = quiz.questions if quiz.questions else {}
+        selected_questions : dict = old_generated_questions.get(question , None)
+        if not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+        """
+        questions = {
+                "1": {
+                    "question": "What is the capital of France?",
+                    "options": ["London", "Paris", "Berlin", "Madrid"],
+                    "correct_answer": "Paris",
+                    "answered": False,
+                    "answer": None,
+                    "worth" : 100
+                },
+                ...
+            }
+        
+        """
+        is_answer = selected_questions.get("answered" , False)
+        if is_answer:
+            return JsonResponse({'error': 'Question has already been answered.'}, status=400)
+        
+        selected_questions["answered"] = True
+        selected_questions["answer"] = user_answer
+        real_answer = selected_questions["correct_answer"]
+        
+        
+        if user_answer.lower() in real_answer.lower():
+            quiz.number_of_correct += 1
+        else:
+            quiz.number_of_wrong += 1
+        quiz.save()
+        
+        return JsonResponse({'status': 'success'}, status=200)
+        
 
 
