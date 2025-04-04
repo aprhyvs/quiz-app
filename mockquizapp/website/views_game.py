@@ -47,6 +47,8 @@ from .admin_utils import *
 from .student_utils import *
 
 
+TEXTLENGTH_REQUIRED = 300
+
 
 def generate_response_cohere(command : str , system : str):
     global cohere_client
@@ -137,6 +139,51 @@ def text_to_dictionary(response: str):
         return None
 
 
+def is_correct_format_stage_2(result : dict) -> tuple[bool , dict]:
+    if not isinstance(result, dict):
+        return (False , None)
+    
+    """
+    {
+        "<index>": {
+            "question": "<question>",
+            "options": ["A. <answer>","B. <answer>","C. <answer>","D. <answer>"],
+            "correct_answer": "<letter_of_correct_answer>"
+        },
+        ...
+    }
+    """
+    fix_result = {}
+    for k in range(1,22):
+        selected_data = result.get(str(k), None)
+        if selected_data is None:
+            continue
+        if not "question" in selected_data:
+            continue 
+        if not "options" in selected_data:
+            continue
+        if not "correct_answer" in selected_data:
+            continue
+        if not isinstance(selected_data["options"], list):
+            continue
+        if len(selected_data["options"]) != 4:
+            continue
+        if not isinstance(selected_data["correct_answer"], str):
+            continue
+        if not isinstance(selected_data["question"], str):
+            continue
+        fix_result[str(k)] = selected_data
+        
+    
+    for k in fix_result:
+        if k not in [ str(i) for i in range(1,22) ]:
+            return (False , fix_result)
+        
+    if len(fix_result) != 21:
+        return (False , fix_result)
+    
+    return (True , fix_result)
+
 
 def extract_title(response: str):
     try:
@@ -158,6 +205,31 @@ def extract_title(response: str):
     return "No valid title found"
 
 
+def get_index_content(index: str, questions: str):
+    system_prompt = """
+    Extract the content of the specific index from the provided questions and return it as a valid JSON object.
+
+    Instructions:
+    1. Find and extract the data for the given key: "<index>".
+    2. Ensure the output follows this structure:
+    {
+        "<index>": {
+            "question": "<question>",
+            "options": ["A. <answer>","B. <answer>","C. <answer>","D. <answer>"],
+            "correct_answer": "<letter_of_correct_answer>"
+        }
+    }
+    3. Make sure the keys are enclosed in double quotes to make them JSON-compatible.
+    4. Ensure that the resulting JSON object is properly formatted and can be parsed without errors.
+
+    If the given key does not exist, respond with: {"error": "Key '<index>' not found."}
+    """
+    # Replace <index> in system prompt with actual value
+    system_prompt = system_prompt.replace("<index>", index)
+
+    # Call generate_response_cohere
+    response = generate_response_cohere(command=questions, system=system_prompt)
+    return response
 
 
 
@@ -238,7 +310,12 @@ def upload_file_view_status_1(request):
         else:
             return JsonResponse({'error': 'Failed to extract text from the uploaded file.'}, status=500)
         
-        # TODO: Generate questionaire based on the text of the uploaded file
+        # TODO: Generate questionaire based on the text of the uploaded 
+        
+        if len(file_content) == 0:
+            return JsonResponse({'error': 'No content found in the file.'}, status=400)
+        if len(file_content) < TEXTLENGTH_REQUIRED:
+            return JsonResponse({'error': 'The content in the file is too short.'}, status=400)
         
         # generate questionair in g4f
         questionairs = generate_response_g4f(CREATE_QUESTIONS_PROMPT % file_content)
@@ -301,14 +378,14 @@ def upload_file_view_status_2(request):
         # TODO: Generate a python object from generated questionaire from the uploaded 
         print("Generating Questionaire using G4F")
         if len(quiz.raw_generated_questions) == 0:
-            questionaire_dict_text = generate_response_cohere(CONVERT_QUESTIONS_TO_OBJECT % quiz.raw_generated_questions , CONVERT_QUESTIONS_TO_OBJECT_COMMAND)
+            questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_COMMAND)
             if not questionaire_dict_text:
                 return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
             
             quiz.raw_generated_json_questions = questionaire_dict_text
             quiz.save()
         else:
-            questionaire_dict_text = generate_response_cohere( CONVERT_QUESTIONS_TO_OBJECT_CLEANING % quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_CLEANING_COMMAND)
+            questionaire_dict_text = generate_response_cohere( quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_CLEANING_COMMAND)
             
         # print(questionaire_dict_text) 
         print("What converted to : {}".format(questionaire_dict_text))
@@ -321,17 +398,39 @@ def upload_file_view_status_2(request):
             converted_dict = {}
             print("Using for loop to convert to dictionary")
             for index in range(21):
-                selected_question_text = generate_response_cohere(
-                    SEPARATOR_OF_DICTIONARY_TEXT % ( questionaire_dict_text, str(index), str(index) ),
-                    SEPARATOR_OF_DICTIONARY_TEXT_COMMAND % (str(index), str(index))
-                    )
-                selected_question_dict = text_to_dictionary(selected_question_text)
-                if not selected_question_dict:
-                    return JsonResponse({'error': 'Failed to generate selected question dictionary.'}, status=500)
-                converted_dict[index] = selected_question_dict
+                selected_question_dict = None
+                for strike in range(3):
+                    selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
+                    selected_question_dict = text_to_dictionary(selected_question_text)
+                    if selected_question_dict is not None:
+                        _, cleaned_dict = is_correct_format_stage_2(selected_question_dict)
+                        if isinstance(cleaned_dict, dict):
+                            if str(index) in cleaned_dict:
+                                break
+                
+                if isinstance(selected_question_dict, dict):
+                    if str(index) in selected_question_dict:
+                        selected_question_dict = selected_question_dict[str(index)]
+                    converted_dict[index] = selected_question_dict
     
-            return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
+            # return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
         
+        # TODO: Validate and sanitize the questionaire data
+        is_valid, converted_dict = is_correct_format_stage_2(converted_dict)
+        if not is_valid:
+            for index in range(1,22):
+                if str(index) not in converted_dict:
+                    for strike in range(3):
+                        selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
+                        selected_question_dict = text_to_dictionary(selected_question_text)
+                        if selected_question_dict is not None:
+                            if is_correct_format_stage_2(selected_question_dict):
+                                break
+                    converted_dict[index] = selected_question_dict
+        
+        is_valid , converted_dict = is_correct_format_stage_2(converted_dict)
+        if not is_valid:
+            return JsonResponse({'error': 'Invalid questionaire data.'}, status=400)
         # TODO: Save the questionaire in the database
         try:
             quiz.upload_stage = 2

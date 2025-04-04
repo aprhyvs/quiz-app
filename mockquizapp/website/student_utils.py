@@ -290,17 +290,11 @@ Convert the following questions into Python dictionaries using this format:
 {
     "<index>": {
         "question": "<question>",
-        "options": [
-            "<A>", 
-            "<B>", 
-            "<C>", 
-            "<D>"
-        ],
-        "correct_answer": "<index_of_correct_answer>"
+        "options": ["A. <answer>","B. <answer>","C. <answer>","D. <answer>"],
+        "correct_answer": "<letter_of_correct_answer>"
     },
     ...
 }
-
 Questions:
 %s
 
@@ -313,13 +307,8 @@ Convert below questions into Python dictionaries and importantly must following 
 {
     "<index>": {
         "question": "<question>",
-        "options": [
-            "<A>", 
-            "<B>", 
-            "<C>", 
-            "<D>"
-        ],
-        "correct_answer": "<index_of_correct_answer>"
+        "options": ["A. <answer>","B. <answer>","C. <answer>","D. <answer>"],
+        "correct_answer": "<letter_of_correct_answer>"
     },
     ...
 }
@@ -334,13 +323,8 @@ Convert below questions into Python dictionaries and importantly must following 
 {
     "<index>": {
         "question": "<question>",
-        "options": [
-            "<A>", 
-            "<B>", 
-            "<C>", 
-            "<D>"
-        ],
-        "correct_answer": "<index_of_correct_answer>"
+        "options": ["A. <answer>","B. <answer>","C. <answer>","D. <answer>"],
+        "correct_answer": "<letter_of_correct_answer>"
     },
     ...
 }
