@@ -394,7 +394,17 @@ async function processFileStage3(data) {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+
+
+    const res = await getDataFromUrlWithParams('/api/game/generate/questions', {
+        'question' : '1',
+        'quiz_id' : '11',
+    })
+
+
+
+
     const modal = document.getElementById("uploadQuizModal");
     const uploadBox = document.getElementById("upload-box");
     const openModalBtn = document.getElementById("uploadQuizButton");
@@ -454,6 +464,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
     });
+
+
 
 });
 

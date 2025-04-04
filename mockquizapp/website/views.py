@@ -137,6 +137,9 @@ def register_student(request):
             email=student_data['gmail']
         )
         
+        studentDataObject.account_id = user.pk # Connection to its USER account
+        studentDataObject.save()
+        
         verification = VerificationData.objects.create()
         verification.verification_code = str(verification.pk) + "".join(random.choices(string.ascii_letters, k=30))
         verification.student_id = studentDataObject.pk

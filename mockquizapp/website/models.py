@@ -17,9 +17,10 @@ class StudentData(models.Model):
     created_at = models.DateTimeField( default=timezone.now)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True, default=None)
     is_verified = models.BooleanField( default=False)
+    account_id = models.IntegerField( blank=True, default=None, null=True)
 
     def __str__(self):
-        return f"Student: {self.fname} {self.mname} {self.lname}"
+        return f" {self.pk}. Student: {self.fname} {self.mname} {self.lname}"
     
     def get_data(self) -> dict:
         return {
@@ -92,6 +93,11 @@ class QuizData(models.Model):
     raw_generated_questions = models.TextField(default="" )
     raw_generated_json_questions = models.TextField(default="" )
     file_ext = models.CharField(max_length=50 , default="")
+    
+    game_has_5050 = models.BooleanField(default=False)
+    game_has_ai_hint = models.BooleanField(default=False)
+    game_has_times2 = models.BooleanField(default=False)
+    game_has_pass = models.BooleanField(default=False)
 
     """
         questions = {

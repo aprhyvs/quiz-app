@@ -36,6 +36,7 @@ import re
 import random
 from docx import Document
 from PyPDF2 import PdfReader
+import time
 
 import json
 from django.http import HttpResponse, JsonResponse
@@ -207,10 +208,10 @@ def extract_title(response: str):
 
 def get_index_content(index: str, questions: str):
     system_prompt = """
-    Extract the content of the specific index from the provided questions and return it as a valid JSON object.
+    Extract the content of the specific number of the question from the provided questions and return it as a valid JSON object.
 
     Instructions:
-    1. Find and extract the data for the given key: "<index>".
+    1. Find and extract the content of the question with the number "<index>" from the provided questions.
     2. Ensure the output follows this structure:
     {
         "<index>": {
@@ -222,7 +223,7 @@ def get_index_content(index: str, questions: str):
     3. Make sure the keys are enclosed in double quotes to make them JSON-compatible.
     4. Ensure that the resulting JSON object is properly formatted and can be parsed without errors.
 
-    If the given key does not exist, respond with: {"error": "Key '<index>' not found."}
+    If the given number of question which is <index> does not exist, respond with: {"error": "Key '<index>' not found."}
     """
     # Replace <index> in system prompt with actual value
     system_prompt = system_prompt.replace("<index>", index)
@@ -231,6 +232,47 @@ def get_index_content(index: str, questions: str):
     response = generate_response_cohere(command=questions, system=system_prompt)
     return response
 
+
+def is_index_correct_format(data : dict , index : str) -> bool:
+    if not isinstance(data, dict):
+        return False
+        
+    selected_data = data.get(index, None)
+    if selected_data is None:
+        selected_data = data
+        if not "question" in selected_data:
+            return False 
+        if not "options" in selected_data:
+            return False
+        if not "correct_answer" in selected_data:
+            return False
+        if not isinstance(selected_data["options"], list):
+            return False
+        if len(selected_data["options"]) != 4:
+            return False
+        if not isinstance(selected_data["correct_answer"], str):
+            return False
+        if not isinstance(selected_data["question"], str):
+            return 
+        
+        return True
+    
+    
+    if not "question" in selected_data:
+        return False 
+    if not "options" in selected_data:
+        return False
+    if not "correct_answer" in selected_data:
+        return False
+    if not isinstance(selected_data["options"], list):
+        return False
+    if len(selected_data["options"]) != 4:
+        return False
+    if not isinstance(selected_data["correct_answer"], str):
+        return False
+    if not isinstance(selected_data["question"], str):
+        return False
+    return True
 
 
 def upload_file_view_status_1(request):
@@ -384,57 +426,54 @@ def upload_file_view_status_2(request):
             
             quiz.raw_generated_json_questions = questionaire_dict_text
             quiz.save()
-        else:
-            questionaire_dict_text = generate_response_cohere( quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_CLEANING_COMMAND)
             
         # print(questionaire_dict_text) 
-        print("What converted to : {}".format(questionaire_dict_text))
-        converted_dict = text_to_dictionary(questionaire_dict_text)
-        print("Converted dict: {}".format(converted_dict))
-        # print(converted_dict)
-        if not converted_dict:
-            quiz.raw_generated_json_questions = questionaire_dict_text
-            quiz.save()
-            converted_dict = {}
-            print("Using for loop to convert to dictionary")
-            for index in range(21):
-                selected_question_dict = None
-                for strike in range(3):
-                    selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
-                    selected_question_dict = text_to_dictionary(selected_question_text)
-                    if selected_question_dict is not None:
-                        _, cleaned_dict = is_correct_format_stage_2(selected_question_dict)
-                        if isinstance(cleaned_dict, dict):
-                            if str(index) in cleaned_dict:
-                                break
+        # print("What converted to : {}".format(questionaire_dict_text))
+        # converted_dict = text_to_dictionary(questionaire_dict_text)
+        # print("Converted dict: {}".format(converted_dict))
+        # # print(converted_dict)
+        # if not converted_dict:
+        #     quiz.raw_generated_json_questions = questionaire_dict_text
+        #     quiz.save()
+        #     converted_dict = {}
+        #     print("Using for loop to convert to dictionary")
+        #     for index in range(21):
+        #         selected_question_dict = None
+        #         for strike in range(3):
+        #             selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
+        #             selected_question_dict = text_to_dictionary(selected_question_text)
+        #             if selected_question_dict is not None:
+        #                 _, cleaned_dict = is_correct_format_stage_2(selected_question_dict)
+        #                 if isinstance(cleaned_dict, dict):
+        #                     if str(index) in cleaned_dict:
+        #                         break
                 
-                if isinstance(selected_question_dict, dict):
-                    if str(index) in selected_question_dict:
-                        selected_question_dict = selected_question_dict[str(index)]
-                    converted_dict[index] = selected_question_dict
+        #         if isinstance(selected_question_dict, dict):
+        #             if str(index) in selected_question_dict:
+        #                 selected_question_dict = selected_question_dict[str(index)]
+        #             converted_dict[index] = selected_question_dict
     
-            # return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
+        #     # return JsonResponse({'error': 'Failed to convert text to dictionary.'}, status=500)
         
-        # TODO: Validate and sanitize the questionaire data
-        is_valid, converted_dict = is_correct_format_stage_2(converted_dict)
-        if not is_valid:
-            for index in range(1,22):
-                if str(index) not in converted_dict:
-                    for strike in range(3):
-                        selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
-                        selected_question_dict = text_to_dictionary(selected_question_text)
-                        if selected_question_dict is not None:
-                            if is_correct_format_stage_2(selected_question_dict):
-                                break
-                    converted_dict[index] = selected_question_dict
+        # # TODO: Validate and sanitize the questionaire data
+        # is_valid, converted_dict = is_correct_format_stage_2(converted_dict)
+        # if not is_valid:
+        #     for index in range(1,22):
+        #         if str(index) not in converted_dict:
+        #             for strike in range(3):
+        #                 selected_question_text = get_index_content(index=str(index), questions=quiz.raw_generated_questions)
+        #                 selected_question_dict = text_to_dictionary(selected_question_text)
+        #                 if selected_question_dict is not None:
+        #                     if is_correct_format_stage_2(selected_question_dict):
+        #                         break
+        #             converted_dict[index] = selected_question_dict
         
-        is_valid , converted_dict = is_correct_format_stage_2(converted_dict)
-        if not is_valid:
-            return JsonResponse({'error': 'Invalid questionaire data.'}, status=400)
+        # is_valid , converted_dict = is_correct_format_stage_2(converted_dict)
+        # if not is_valid:
+        #     return JsonResponse({'error': 'Invalid questionaire data.'}, status=400)
         # TODO: Save the questionaire in the database
         try:
-            quiz.upload_stage = 2
-            quiz.questions = converted_dict
+            quiz.upload_stage = 2   
             quiz.save()
             return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
         except Exception as e:
@@ -444,8 +483,6 @@ def upload_file_view_status_2(request):
         
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
                 
-
-
 def upload_file_view_status_3(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -501,4 +538,172 @@ def upload_file_view_status_3(request):
         return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
     
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
+def on_game_data_generation(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+      
+        
+        old_generated_questions = quiz.questions if quiz.questions else {}
+        selected_questions = old_generated_questions.get(question , None)
+        
+        # If has selected questions then verify it if it correct format then send it
+        if selected_questions:
+            is_valid = is_index_correct_format(selected_questions , question)
+            if is_valid:       
+                selected_data['correct_answer'] = None
+                return JsonResponse({'question': selected_questions}, status=200)
+        
+        print("generated questions")
+        # If has not selected questions then generate it
+        converted_questions = None
+        if not selected_questions:
+            converted_questions = None
+            for _ in range(3):
+                selected_questions = get_index_content(index=question , questions=quiz.raw_generated_questions)
+                if selected_questions:
+                    converted_questions = text_to_dictionary(selected_questions)
+                    if converted_questions:
+                        break
+                time.sleep(1)
+            if not converted_questions:
+                return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
+            
+            is_valid = is_index_correct_format(converted_questions , question)
+            if not is_valid:
+                return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
+        
+        selected_data = converted_questions.get(question, None)
+        if selected_data is None:
+            selected_data = converted_questions
+        old_generated_questions[question] = selected_data
+        quiz.questions = old_generated_questions
+        quiz.save()
+        selected_data['correct_answer'] = None
+        return JsonResponse({'question': selected_data}, status=200)
+            
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
+
+def on_game_data_get_answer(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        old_generated_questions = quiz.questions if quiz.questions else {}
+        selected_questions = old_generated_questions.get(question , None)
+        if not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+         
+        return JsonResponse({'question': selected_questions}, status=200)
+
+
+def on_game_data_ask_ai(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401) 
+    
+    if request.method == 'POST':
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        if quiz.game_has_ai_hint:
+            return JsonResponse({'hint': 'You have already asked the AI for a hint.'}, status=200)
+        
+        old_generated_questions = quiz.questions if quiz.questions else {}
+        selected_questions = old_generated_questions.get(question , None)
+        if not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+        
+        # TODO: Ask AI to tell the answer but not really telling the answer just giving a hint
+        # Structure the prompt
+        prompt = f"""
+        You are given a question, its options, and the correct answer. Provide a hint based on the correct answer, but do not give the answer directly. The hint should help the user think critically about the question.
+
+        Requirements:
+        - Keep the hint subtle and helpful.
+        - The hint must not exceed 50 words.
+        - Return the result as a dictionary in this format: {{"hint": "<message>"}}.
+
+        Input:
+        {selected_questions}
+
+        Output:
+        """
+        
+        # Use the Cohere AI model to generate the 
+        response_dict = None
+        for _ in range(3):
+            response = generate_response_cohere(command=prompt, system=None)
+            response_dict = text_to_dictionary(response)
+            if response_dict:
+                hint = response_dict.get('hint' , None)
+                if hint:
+                    break
+            time.sleep(1)
+        if not response_dict:
+            return JsonResponse({'error': 'Failed to generate hint.'}, status=500)
+        
+        quiz.game_has_ai_hint = True
+        quiz.save()
+        return JsonResponse(response_dict, status=200)
+
 
