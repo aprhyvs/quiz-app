@@ -19,17 +19,13 @@ function getAbsoluteMediaURL(relativePath) {
     return new URL(relativePath, window.location.origin).href;
 }
 
-function displayRankings(weeklyRankings){
-    console.log(weeklyRankings);
-    
-    if (weeklyRankings){
+function displayRankings(rankings){
+    if (rankings){
         const lis_of_user_tag = document.getElementById("leaderboard-table");
-        for (const rank in weeklyRankings) {
-            const student = weeklyRankings[rank];
-            console.log(student.student_pic);
+        for (const rank in rankings) {
+            const student = rankings[rank];
             const totalItems = student.total_wrong_answers + student.total_correct_answers
             const rankNumber = (Number(rank) + 1).toString();   
-            console.log(student);
                 lis_of_user_tag.insertAdjacentHTML("beforeend",
                     `
                     <div class="leaderboard-table-card">
