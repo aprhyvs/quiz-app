@@ -49,6 +49,8 @@ def get_all_student_data_util(student): ## Returns all student data and stats
             return JsonResponse({"error": "Student not found"}, status=404)
         data = {}
         studentData = {}
+
+        
         studentData['fname'] = student.fname
         studentData['mname'] = student.mname
         studentData['lname'] = student.lname
@@ -59,6 +61,7 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         studentData['admin_id'] = student.admin_id
         studentData['username'] = student.username
         studentData['created_at'] = student.created_at
+        studentData['profile_pic'] = student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
     
         stats = {}
         stats['total_quizzes'] = get_total_quizzes_for_student(student)

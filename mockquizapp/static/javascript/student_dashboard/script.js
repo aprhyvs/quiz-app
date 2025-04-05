@@ -1,3 +1,13 @@
+
+function getAbsoluteMediaURL(relativePath) {
+    return new URL(relativePath, window.location.origin).href;
+}
+function updateImageIcon(image){
+    const profilePicDiv = document.querySelector(".profile-pic");
+    const imageURL = getAbsoluteMediaURL(image);
+    profilePicDiv.style.backgroundImage = `url(${imageURL})`;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Student Dashboard Loaded");
 
@@ -28,13 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Invalid data structure:", data);
             return;
         }
+        console.log(data);
         const studentDatas = data.studentData;
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
-        
+        const profile_pic = getAbsoluteMediaURL(studentData.profile_pic);
+        console.log(profile_pic);
         displayStudentProfileData(studentData, studentStats);
         displayStudentData(studentData);
         displayStudentStats(studentStats);
+        updateImageIcon(profile_pic);
     })
 
     getDataFromUrl("/api/student/quizzes") // Gets all quizzes
