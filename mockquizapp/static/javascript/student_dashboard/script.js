@@ -9,7 +9,6 @@ function updateImageIcon(image){
 }
 
 function displayRank(stats){ //Backend already takes care of rank type (weekly/monthly). Don't worry about this.
-    console.log(stats);
     rankText = document.querySelector(".rank-text");
     rankText.innerText = `Rank ${stats.rank}`;
      
