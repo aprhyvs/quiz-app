@@ -225,7 +225,7 @@ function displayListOfQuizzes(quizzes){
         const passingScore = Math.ceil(totalItems* 0.75);
         const statusElement = document.getElementById("recent-quiz-status");
         let statusText = "UNKNOWN";
-        const testOptionsButton = document.getElementById("view-quiz-button");
+        const testOptionsButton = document.getElementById("view-recent-quiz-button");
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
@@ -239,6 +239,12 @@ function displayListOfQuizzes(quizzes){
         }
         //  Update "View" button with a link to view more quiz info
         testOptionsButton.addEventListener("click", function (event) {
+
+            if (isAnswered == false) {
+                sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
+                window.location.href = `/game_quiz/`
+            }
+            
         });
     }
 

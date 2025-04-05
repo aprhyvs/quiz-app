@@ -38,25 +38,42 @@ for (let i = 0; i < points.length; i++) {
     listContainer.appendChild(levelPointDiv);
 }
 
-function processChoice(choiceString){
+function playAudio(audio){
+    const audioElement = document.createElement('audio');
+    audioElement.src = audio;
+    audioElement.play();
+}
+
+
+async function processChoice(choiceString){
     console.log(choiceString);
 
     async function evaluateChoice(choice) {
+        const current_question = global_current_question;
         const quiz_id = sessionStorage.getItem('quiz_id');
         if (quiz_id) {
-            res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
-                'quiz_id': quiz_id
+            res = await getDataFromUrlWithParams(`/api/game/answer`,{
+                'quiz_id': quiz_id,
+                'question' : current_question,
+                'user_answer' : choice
             });
                 if (res) {
-                    const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
-                    const question = await questionFetch(current_question);
-                    if (question) {
-                    displayQuestion(question);
-                global_current_question = current_question;
+                    console.log(res);
+                    return res;
                 }
             }
         }
+
+    const result = await evaluateChoice(choiceString);
+    if (result){
+        showAnswerEffects(result);
     }
+}
+
+function showAnswerEffects(result){
+        //TODO: Show the visual effects and play audio here.
+
+        
 }
 
 function showConfirmationPrompt(choice){
