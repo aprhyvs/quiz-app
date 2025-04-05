@@ -385,7 +385,29 @@ def upload_file_view_status_1(request):
                 raw_file_content = file_content,
                 file_ext = file_type,
                 upload_stage = 1,
-                raw_generated_questions = questionairs
+                raw_generated_questions = questionairs,
+                worth_sequence = {
+                    "1" : 10,
+                    "2" : 20,
+                    "3" : 30,
+                    "4" : 50,
+                    "5" : 100,
+                    "6" : 200,
+                    "7" : 400,
+                    "8" : 800,
+                    "9" : 1500,
+                    "10" : 3000,
+                    "11" : 6000,
+                    "12" : 12000,
+                    "13" : 25000,
+                    "14" : 50000,
+                    "15" : 100000,
+                    "16" : 250000,
+                    "17" : 500000,
+                    "18" : 750000,
+                    "19" : 900000,
+                    "20" : 1000000,  
+                }
             )
             return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
         except Exception as e:

@@ -118,18 +118,43 @@ class QuizData(models.Model):
         2 = Questions are converted to python objects dictionary and Ready to create quiz title
         3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
+    worth_sequence = models.JSONField(default=dict)
     
     
     def __str__(self):
         return f"Score: {self.number_of_correct} - Student ID: {self.student_id} - Quiz ID: {self.pk}"
     
     def game_data(self):
-        return {
+        data = {
             'game_has_5050': self.game_has_5050,
             'game_has_ai_hint': self.game_has_ai_hint,
             'game_has_times2': self.game_has_times2,
-            'game_has_pass': self.game_has_pass
+            'game_has_pass': self.game_has_pass,
+            'total_worth' : self.total_worth,
+            'currently_answered_question' : self.number_of_correct + self.number_of_wrong,
         }
+        
+        admin_game = AdminData.objects.all().first()
+        if admin_game:
+            data["timer_countdown"] = admin_game.timer_countdown
+            data["safe_level"] = admin_game.safe_level
+        
+        data["questions"] = []
+        for k in self.questions:
+            data["questions"].append({
+                "question": self.questions[k]["question"],
+                "options": self.questions[k]["options"],
+                "correct_answer": None,
+                "answered": self.questions[k]["answered"],
+                "answer": self.questions[k]["answer"],
+                "worth" : self.questions[k]["worth"]
+            })
+        
+        data["worth_sequence"] = self.worth_sequence
+        
+        return data
+        
+        
     
     def get_data(self) -> dict:
         return {
