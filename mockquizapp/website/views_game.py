@@ -917,3 +917,47 @@ def on_game_data_update(request):
 
 
 
+def on_game_data_5050(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        if len(quiz.game_data_5050) > 0:
+            return JsonResponse({'5050': quiz.game_data_5050}, status=200)
+        
+        old_generated_questions = quiz.questions if quiz.questions else {}
+        selected_questions = old_generated_questions.get(question , None)
+        if not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+        
+        decoy_5050 = []
+        correct_answer = selected_questions["correct_answer"]
+        decoy_5050.append(correct_answer)
+        for decoy in ["A", "B", "C", "D"]:
+            if decoy != correct_answer:
+                decoy_5050.append(decoy)
+        
+        random.shuffle(decoy_5050)
+        quiz.game_data_5050 = decoy_5050
+        quiz.save()
+        
+        return JsonResponse({'5050': quiz.game_data_5050}, status=200)

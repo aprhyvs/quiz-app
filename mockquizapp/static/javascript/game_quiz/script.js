@@ -38,22 +38,25 @@ for (let i = 0; i < points.length; i++) {
 }
 
 
-function displayTitle(quizData){
-    titleDiv = document.getElementById("quiz-title");
-    titleDiv.innerText = quizData["quiz_title"];
+function displayQuestion(questionData){
+    const questionElement = document.querySelector(".question-text");
+    const options = questionData.options.map(opt => opt.replace(/^[A-D]\.\s*/, ""));
+    questionElement.innerText = questionData.question;
 }
 
-async function gameStart(current_question){
+async function questionFetch(current_question){
     const quiz_id = sessionStorage.getItem('quiz_id');
     if (quiz_id) {
         res = await getDataFromUrlWithParams(`/api/game/generate/questions`,{
-            'quiz_id': quiz_id,
-            'question': current_question
+            'quiz_id' : quiz_id,
+            'question': current_question,
         });
         if (res) {
             console.log(res);
+            return res.question;
         }
     }
+    return null;
 }
 
 
@@ -64,9 +67,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
-            console.log(res);
             const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
-            gameStart(current_question);
+            const question = await questionFetch(current_question);
+            if (question) {
+                displayQuestion(question);
+            }
         }
     }
 });
