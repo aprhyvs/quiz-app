@@ -166,7 +166,8 @@ def send_email(request, student, to_email):
     message = render_to_string('emails/verification_email.html', {
         'student': student,
         'verification_code': verificationData.verification_code,
-        'protocol': 'https' if request.is_secure() else 'http'
+        'protocol': 'https' if request.is_secure() else 'http',
+        'hostname': request.get_host()
 
     })
     email = EmailMessage(mail_subject, message, to=[to_email])
