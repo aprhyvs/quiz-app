@@ -40,7 +40,7 @@ import time
 
 import json
 from django.http import HttpResponse, JsonResponse
-
+from gtts import gTTS
 
 from .models import *
 
@@ -767,9 +767,6 @@ def on_game_data_answer(request):
         if not question:
             return JsonResponse({'error': 'No question provided.'}, status=400)
         
-        answer = request.POST.get('answer', None)
-        if not answer:
-            return JsonResponse({'error': 'No answer provided.'}, status=400)
         
         student = StudentData.objects.filter(account_id=request.user.pk).first()
         if not student:
@@ -985,12 +982,6 @@ def on_game_data_answer_with_x2(request):
     
     if request.method == 'POST':
         
-        user_answer : str = request.POST.get('user_answer', None)
-        if not user_answer:
-            return JsonResponse({'error': 'No user answer provided.'}, status=400)
-        
-        if user_answer not in ['A', 'B', 'C', 'D']:
-            return JsonResponse({'error': 'Invalid user answer.'}, status=400)
         
         
         question = request.POST.get('question', None)
@@ -1001,9 +992,17 @@ def on_game_data_answer_with_x2(request):
         if not answer_1:
             return JsonResponse({'error': 'No answer provided.'}, status=400)
         
+        
+        if answer_1 not in ['A', 'B', 'C', 'D']:
+            return JsonResponse({'error': 'Invalid user answer.'}, status=400)
+        
+        
         answer_2 = request.POST.get('answer_2', None)
         if not answer_2:
             return JsonResponse({'error': 'No answer provided.'}, status=400)
+        
+        if answer_2 not in ['A', 'B', 'C', 'D']:
+            return JsonResponse({'error': 'Invalid user answer.'}, status=400)
         
         student = StudentData.objects.filter(account_id=request.user.pk).first()
         if not student:
@@ -1169,7 +1168,33 @@ def on_game_data_pass(request):
         return JsonResponse({'question': selected_data}, status=200)
 
 
+def on_game_data_generate_voice(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        mytext = request.POST.get('text', None)
+        if not mytext:
+            return JsonResponse({'error': 'No text provided.'}, status=400)
+        
+        language = 'en'
 
+        # Generate the TTS object
+        tts = gTTS(text=mytext, lang=language, slow=False)
+
+        # Save the generated audio to a temporary file
+        audio_file = 'welcome.mp3'
+        tts.save(audio_file)
+
+        # Serve the audio file as a response
+        with open(audio_file, 'rb') as audio:
+            response = HttpResponse(audio.read(), content_type='audio/mpeg')
+            response['Content-Disposition'] = f'attachment; filename="{audio_file}"'
+
+        # Optionally, delete the temporary file after serving
+        os.remove(audio_file)
+        
+        return response
 
 
 
