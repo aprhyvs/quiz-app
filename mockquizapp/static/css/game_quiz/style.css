@@ -64,6 +64,25 @@ html, body {
     stroke: #5f8cdf; 
 }
 
+/* SEE COLORS BELOW */
+/* .choices svg:hover path
+   fill: var(--green); - CORRECT
+   fill: var(--red); - WRONG
+   fill: var(--gold); - CHOICE
+
+   50 : 50
+.choices svg:hover path {
+   fill: #425b7750;
+   stroke: #5f8cdf50; 
+}
+
+.choices svg:hover .letter,
+.choices svg:hover .answer,
+.choices svg:hover p {
+    color: transparent; 
+}
+*/
+
 .multiple-choice {
     display: flex;
     gap: 0.25em;
