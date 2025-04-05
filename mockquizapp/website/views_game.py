@@ -707,6 +707,14 @@ def on_game_data_ask_ai(request):
         if not selected_questions:
             return JsonResponse({'error': 'Question not found.'}, status=404)
         
+        # Check if the selected question has already been generated
+        if 'hint' in quiz.game_data_ai_hint:
+            return JsonResponse({'hint': quiz.game_data_ai_hint}, status=200)
+        
+        # Check if the student has already been used the ai hint
+        if quiz.game_has_ai_hint:
+            return JsonResponse({'hint': 'You have already asked the AI for a hint.'}, status=200)
+        
         # TODO: Ask AI to tell the answer but not really telling the answer just giving a hint
         # Structure the prompt
         prompt = f"""
@@ -735,7 +743,7 @@ def on_game_data_ask_ai(request):
             time.sleep(1)
         if not response_dict:
             return JsonResponse({'error': 'Failed to generate hint.'}, status=500)
-        
+        quiz.game_data_ai_hint = response_dict
         quiz.game_has_ai_hint = True
         quiz.save()
         return JsonResponse(response_dict, status=200)
