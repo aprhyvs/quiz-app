@@ -1183,7 +1183,7 @@ def on_game_data_generate_voice(request):
         tts = gTTS(text=mytext, lang=language, slow=False)
 
         # Save the generated audio to a temporary file
-        audio_file = 'welcome.mp3'
+        audio_file = 'temp.mp3'
         tts.save(audio_file)
 
         # Serve the audio file as a response
