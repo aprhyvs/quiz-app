@@ -73,11 +73,16 @@ async function processChoice(choiceString){
 function showAnswerEffects(result){
         //TODO: Show the visual effects and play audio here.
 
-        
+
 }
 
-function showConfirmationPrompt(choice){
+function showConfirmationPrompt(choice) {
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+    if (choiceElement) {
+        //TODO: Make the choice flash yellow during confirmation screen.
+        choiceElement.style.fill = "var(--gold)";
+    }
     confirmationPromptElement.style.display = "flex";
     temporary_answer = choice;
 }
