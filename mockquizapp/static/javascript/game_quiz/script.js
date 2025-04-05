@@ -1,7 +1,8 @@
 const modal = document.getElementById("modal");
 const levelInfo = document.querySelector(".level-info");
-
-
+var global_current_question = null;
+var userAnswer = [];
+let temporary_answer = null;
 
 levelInfo.addEventListener("click", function () {
     modal.style.display = "flex"; 
@@ -37,11 +38,52 @@ for (let i = 0; i < points.length; i++) {
     listContainer.appendChild(levelPointDiv);
 }
 
+function processChoice(choiceString){
+    console.log(choiceString);
+
+    async function evaluateChoice(choice) {
+        const quiz_id = sessionStorage.getItem('quiz_id');
+        if (quiz_id) {
+            res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
+                'quiz_id': quiz_id
+            });
+                if (res) {
+                    const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
+                    const question = await questionFetch(current_question);
+                    if (question) {
+                    displayQuestion(question);
+                global_current_question = current_question;
+                }
+            }
+        }
+    }
+}
+
+function showConfirmationPrompt(choice){
+    const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    confirmationPromptElement.style.display = "flex";
+    temporary_answer = choice;
+}
 
 function displayQuestion(questionData){
     const questionElement = document.querySelector(".question-text");
     const options = questionData.options.map(opt => opt.replace(/^[A-D]\.\s*/, ""));
     questionElement.innerText = questionData.question;
+    displayChoices(options);
+}
+
+function displayChoices(options){
+    const choiceAElement = document.getElementById("choice-A");
+    const choiceBElement = document.getElementById("choice-B");
+    const choiceCElement = document.getElementById("choice-C");
+    const choiceDElement = document.getElementById("choice-D");
+
+    choiceAElement.innerText = options[0];
+    choiceBElement.innerText = options[1];
+    choiceCElement.innerText = options[2];
+    choiceDElement.innerText = options[3];
+
+
 }
 
 async function questionFetch(current_question){
@@ -71,6 +113,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const question = await questionFetch(current_question);
             if (question) {
                 displayQuestion(question);
+                global_current_question = current_question;
             }
         }
     }
@@ -148,4 +191,39 @@ document.getElementById("confirm-pass-but").addEventListener('click', function()
     document.getElementById("pass-form-pop").style.display = "none";
 });
 
+//Choice Buttons ---------------------------------------------------
 
+document.querySelector(".choice-A").addEventListener('click', function() {
+    const choice = "A";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-B").addEventListener('click', function() {
+    const choice = "B";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-C").addEventListener('click', function() {
+    const choice = "C";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-D").addEventListener('click', function() {
+    const choice = "D";
+    showConfirmationPrompt(choice);
+});
+
+
+//Confirmation Prompt Buttons ---------------------------------------------------
+
+function closeConfirmationPrompt() {
+    document.getElementById("confirmation-form-pop").style.display = "none";
+}
+
+document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
+    processChoice(temporary_answer);
+    closeConfirmationPrompt();
+});
+document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
+    closeConfirmationPrompt();
+});
