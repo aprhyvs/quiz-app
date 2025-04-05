@@ -60,7 +60,8 @@ urlpatterns = [
     path('api/game/update/actions', view=on_game_data_update),
     path('api/game/answer' , view=on_game_data_answer),
     path('api/game/5050', view=on_game_data_5050),
-    
+    path('api/game/x2', view=on_game_data_answer_with_x2),
+
 
 
     #=============================== File Upload ===============================#

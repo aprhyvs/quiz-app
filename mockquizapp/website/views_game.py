@@ -977,3 +977,194 @@ def on_game_data_5050(request):
         quiz.save()
         
         return JsonResponse({'5050': quiz.game_data_5050}, status=200)
+
+
+def on_game_data_answer_with_x2(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        
+        user_answer : str = request.POST.get('user_answer', None)
+        if not user_answer:
+            return JsonResponse({'error': 'No user answer provided.'}, status=400)
+        
+        if user_answer not in ['A', 'B', 'C', 'D']:
+            return JsonResponse({'error': 'Invalid user answer.'}, status=400)
+        
+        
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        answer_1 = request.POST.get('answer_1', None)
+        if not answer_1:
+            return JsonResponse({'error': 'No answer provided.'}, status=400)
+        
+        answer_2 = request.POST.get('answer_2', None)
+        if not answer_2:
+            return JsonResponse({'error': 'No answer provided.'}, status=400)
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        old_generated_questions : dict = quiz.questions if quiz.questions else {}
+        selected_questions : dict = old_generated_questions.get(question , None)
+        if not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+        """
+        questions = {
+                "1": {
+                    "question": "What is the capital of France?",
+                    "options": ["London", "Paris", "Berlin", "Madrid"],
+                    "correct_answer": "Paris",
+                    "answered": False,
+                    "answer": None,
+                    "worth" : 100
+                },
+                ...
+            }
+        
+        """
+        is_answer = selected_questions.get("answered" , False)
+        if is_answer:
+            return JsonResponse({'error': 'Question has already been answered.'}, status=400)
+        
+        # This part is updating the question data
+        selected_questions["answered"] = True
+        real_answer = selected_questions["correct_answer"]
+        selected_questions["worth"] = quiz.worth_sequence[question]
+        
+        if answer_1.lower() in real_answer.lower() or answer_2.lower() in real_answer.lower():
+            quiz.number_of_correct += 1
+            selected_questions["answer"] = real_answer
+        else:
+            quiz.number_of_wrong += 1
+            selected_questions["answer"] = answer_1
+        
+        quiz.game_data_times2 = { question: [answer_1, answer_2]}
+        quiz.questions[question] = selected_questions
+        quiz.game_has_times2 = True
+        quiz.save()
+        
+        # This part is checking the safe level
+        safe_level = quiz.safe_level.split(',')
+        if question in safe_level:
+            question_to_int = int(question)
+            while True:
+                
+                safe_level_selected_question = quiz.questions.get(str(question_to_int), None)
+                if not safe_level_selected_question:
+                    continue
+                
+                correct_answer = safe_level_selected_question["correct_answer"]
+                user_answer = safe_level_selected_question["answer"]
+                
+                if user_answer.lower() in correct_answer.lower(): 
+                    worth_assign = quiz.worth_sequence.get(question)
+                    quiz.total_worth = quiz.total_worth + worth_assign
+                
+                question_to_int = question_to_int - 1
+                if str(question_to_int) in safe_level:
+                    break
+                
+                if question_to_int == 0:
+                    break
+                
+        quiz.save()
+        
+        return JsonResponse({'status': 'success'}, status=200)
+    
+    
+def on_game_data_pass(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        if quiz.game_has_pass:
+            return JsonResponse({'message': 'You have already passed this quiz.'}, status=400)
+        
+        # This part is updating the question data    
+        old_generated_questions = quiz.questions if quiz.questions else {}
+        selected_questions = old_generated_questions.get(question , None)
+        
+        print("generated questions")
+        # If has not selected questions then generate it
+        converted_questions = None
+        if not selected_questions:
+            converted_questions = None
+            for _ in range(3):
+                selected_questions = get_index_content(index="21" , questions=quiz.raw_generated_questions)
+                if selected_questions:
+                    converted_questions = text_to_dictionary(selected_questions)
+                    if converted_questions:
+                        break
+                time.sleep(1)
+            if not converted_questions:
+                return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
+            
+            print("converted questions : ", converted_questions)
+            is_valid = is_index_correct_format(converted_questions , "21")
+            if not is_valid:
+                return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
+        
+        selected_data = converted_questions.get(21, None)
+        if selected_data is None:
+            selected_data = converted_questions
+            
+        """
+        questions = {
+                "1": {
+                    "question": "What is the capital of France?",
+                    "options": ["London", "Paris", "Berlin", "Madrid"],
+                    "correct_answer": "Paris",
+                    "answered": False,
+                    "answer": None,
+                    "worth" : 100
+                },
+                ...
+            }
+        
+        """
+        selected_data["answered"] = False
+        selected_data["answer"] = None
+        selected_data["worth"] = 0
+        old_generated_questions[question] = selected_data
+        quiz.questions = old_generated_questions
+        quiz.game_has_pass = True
+        quiz.save()
+        selected_data['correct_answer'] = None
+        return JsonResponse({'question': selected_data}, status=200)
+

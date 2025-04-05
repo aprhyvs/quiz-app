@@ -99,6 +99,7 @@ class QuizData(models.Model):
     game_has_ai_hint = models.BooleanField(default=False)
     game_data_ai_hint = models.JSONField(default=dict)
     game_has_times2 = models.BooleanField(default=False)
+    game_data_times2 = models.JSONField(default=dict)
     game_has_pass = models.BooleanField(default=False)
 
     """
