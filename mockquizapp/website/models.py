@@ -133,7 +133,8 @@ class QuizData(models.Model):
             'game_has_pass': self.game_has_pass,
             'total_worth' : self.total_worth,
             'currently_answered_question' : self.number_of_correct + self.number_of_wrong,
-            'safe_level' : self.safe_level
+            'safe_level' : self.safe_level,
+            'quiz_title' : self.quiz_title
         }
         
         admin_game = AdminData.objects.all().first()
