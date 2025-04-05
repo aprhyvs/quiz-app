@@ -1168,3 +1168,8 @@ def on_game_data_pass(request):
         selected_data['correct_answer'] = None
         return JsonResponse({'question': selected_data}, status=200)
 
+
+
+
+
+
