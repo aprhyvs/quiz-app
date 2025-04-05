@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-v^bm_$2py#e2d7%)%epsi@vw5d&6#@_3=$z1en7lk14st8$n4n
 DEBUG = True
 
 ALLOWED_HOSTS = ['mocktestgenerator.pythonanywhere.com', '127.0.0.1']
-SITE_DOMAIN = 'yourusername.pythonanywhere.com'
+SITE_DOMAIN = 'mocktestgenerator.pythonanywhere.com'
 
 # Application definition
 
