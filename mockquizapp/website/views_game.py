@@ -374,7 +374,7 @@ def upload_file_view_status_1(request):
         
         # TODO: Save the questionaire in the database
         try:
-            
+            admin_data = AdminData.objects.all().first() 
             quiz = QuizData.objects.create(
                 student_id = student.pk,
                 is_answered = False,
@@ -386,6 +386,7 @@ def upload_file_view_status_1(request):
                 file_ext = file_type,
                 upload_stage = 1,
                 raw_generated_questions = questionairs,
+                safe_level = admin_data.safe_level,
                 worth_sequence = {
                     "1" : 10,
                     "2" : 20,
@@ -815,7 +816,7 @@ def on_game_data_answer(request):
         selected_questions["answered"] = True
         selected_questions["answer"] = user_answer
         real_answer = selected_questions["correct_answer"]
-        
+        selected_questions["worth"] = quiz.worth_sequence[question]
         
         if user_answer.lower() in real_answer.lower():
             quiz.number_of_correct += 1

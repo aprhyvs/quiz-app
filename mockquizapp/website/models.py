@@ -57,12 +57,12 @@ class AdminData(models.Model):
     safe_level = models.CharField(
         max_length=50 , 
         choices=[
-            ("3, 6, 9, 12, 15", "3, 6, 9, 12, 15"), 
-            ("4, 8, 12, 16", "4, 8, 12, 16"), 
-            ("5, 10, 15", "5, 10, 15")
+            ("3,6,9,12,15","3,6,9,12,15"),
+            ("4,8,12,16","4,8,12,16"), 
+            ("5,10,15","5,10,15")
             
         ], 
-        default="3, 6, 9, 12, 15"
+        default="3,6,9,12,15"
         )
     
     
@@ -119,6 +119,7 @@ class QuizData(models.Model):
         3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
     worth_sequence = models.JSONField(default=dict)
+    safe_level = models.CharField(default="3,6,9,12,15", max_length=50)
     
     
     def __str__(self):
@@ -132,6 +133,7 @@ class QuizData(models.Model):
             'game_has_pass': self.game_has_pass,
             'total_worth' : self.total_worth,
             'currently_answered_question' : self.number_of_correct + self.number_of_wrong,
+            'safe_level' : self.safe_level
         }
         
         admin_game = AdminData.objects.all().first()
