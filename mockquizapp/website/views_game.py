@@ -813,6 +813,7 @@ def on_game_data_answer(request):
         if is_answer:
             return JsonResponse({'error': 'Question has already been answered.'}, status=400)
         
+        # This part is updating the question data
         selected_questions["answered"] = True
         selected_questions["answer"] = user_answer
         real_answer = selected_questions["correct_answer"]
@@ -822,6 +823,34 @@ def on_game_data_answer(request):
             quiz.number_of_correct += 1
         else:
             quiz.number_of_wrong += 1
+            
+        quiz.questions[question] = selected_questions
+        quiz.save()
+        
+        # This part is checking the safe level
+        safe_level = quiz.safe_level.split(',')
+        if question in safe_level:
+            question_to_int = int(question)
+            while True:
+                
+                safe_level_selected_question = quiz.questions.get(str(question_to_int), None)
+                if not safe_level_selected_question:
+                    continue
+                
+                correct_answer = safe_level_selected_question["correct_answer"]
+                user_answer = safe_level_selected_question["answer"]
+                
+                if user_answer.lower() in correct_answer.lower(): 
+                    worth_assign = quiz.worth_sequence.get(question)
+                    quiz.total_worth = quiz.total_worth + worth_assign
+                
+                question_to_int = question_to_int - 1
+                if str(question_to_int) in safe_level:
+                    break
+                
+                if question_to_int == 0:
+                    break
+                
         quiz.save()
         
         return JsonResponse({'status': 'success'}, status=200)
@@ -880,7 +909,7 @@ def on_game_data_update(request):
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
         
         if update_type == '5050':
-            quiz.game_5050_hint = True
+            quiz.game_has_5050 = True
             quiz.save()
             return JsonResponse({'status': 'Hint given.'}, status=200)
         elif update_type == 'hint':
@@ -897,4 +926,7 @@ def on_game_data_update(request):
             return JsonResponse({'status': 'Quiz passed.'}, status=200)
         
         return JsonResponse({'error': 'Invalid update type.'}, status=400)
-        
+
+
+
+

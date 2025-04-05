@@ -144,6 +144,7 @@ class QuizData(models.Model):
         data["questions"] = []
         for k in self.questions:
             data["questions"].append({
+                "number": k,
                 "question": self.questions[k]["question"],
                 "options": self.questions[k]["options"],
                 "correct_answer": None,
