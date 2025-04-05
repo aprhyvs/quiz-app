@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
@@ -167,7 +168,7 @@ def send_email(request, student, to_email):
         'student': student,
         'verification_code': verificationData.verification_code,
         'protocol': 'https' if request.is_secure() else 'http',
-        'hostname': request.get_host()
+        'hostname': request.get_host() or settings.SITE_DOMAIN
 
     })
     email = EmailMessage(mail_subject, message, to=[to_email])
