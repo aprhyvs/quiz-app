@@ -215,6 +215,17 @@ p.grey {
     border-radius: 8px;
 }
 
+.upload-bar {
+    width: 100%;
+    background-color: color-mix(in srgb, var(--primary) 50%, var(--background) 10%);
+    border-radius: 0.5em;
+}
+.upload-bar-content {
+    width: 80%;
+    padding: 0.25em;
+    background-color: var(--primary);
+    border-radius: 0.5em;
+}
 /* leaderboards */
 
 .wrapper-quiz svg {
