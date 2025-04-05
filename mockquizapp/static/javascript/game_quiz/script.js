@@ -4,6 +4,11 @@ var global_current_question = null;
 var userAnswer = [];
 let temporary_answer = null;
 
+
+//TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
+//TODO          - Make the questions progress upon answering, Implement powerups.
+
+
 levelInfo.addEventListener("click", function () {
     modal.style.display = "flex"; 
 });
