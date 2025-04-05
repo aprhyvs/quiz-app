@@ -23,13 +23,11 @@ from .student_utils import *
 def get_list_of_students(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
-    print("Grabbing all students...")
     students = StudentData.objects.all()
     data = { student.pk: student.get_data() for student in students}
     return JsonResponse(data , status=200)
 
 def update_rankings(request):
-    print("Fired Rankings Function")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     if not request.user.is_staff:
@@ -38,12 +36,9 @@ def update_rankings(request):
     rankings = {}
     rankings['weekly'] = get_weekly_rankings()
     rankings['monthly'] = get_monthly_rankings()
-
-    print(rankings)
     return JsonResponse({"rankings": rankings}, status=200)
 
 def update_student_data_admin(request):
-    print("Fired Admin's Update Student Data")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     
@@ -59,7 +54,6 @@ def update_student_data_admin(request):
             return JsonResponse({"error": "Student not found"}, status=404)
         profile_pic = request.FILES.get('profile_pic')
         if profile_pic:
-            print("Got Profile Pic!!!")
             student.profile_pic = profile_pic
         fname = request.POST.get('fname', None)
         if fname:
@@ -240,7 +234,6 @@ def get_game_settings(request):
         game_settings['leaderboards_reset'] = gameSettingsObject.leaderboard_reset
         game_settings['timer_countdown'] = gameSettingsObject.timer_countdown
         game_settings['safe_level'] = gameSettingsObject.safe_level
-        print(game_settings)
         if not game_settings:
             return JsonResponse({"error": "Game settings not found"}, status=404)
         return JsonResponse(game_settings, status=200)
@@ -252,19 +245,15 @@ def set_game_settings(request):
     if not request.user.is_staff:
         return JsonResponse({"error": "User not authorized to set game settings"}, status=403)
     if request.method == 'POST':
-        print(request.POST)
         game_settings = {}
         game_settings['leaderboard_reset'] = request.POST.get('leaderboard_reset')
         if not game_settings['leaderboard_reset']:
-            print("Leaderboards reset must be weekly or monthly")
             return JsonResponse({"error": "Leaderboards reset must be weekly or monthly"}, status=400)
         game_settings['timer_countdown'] = request.POST.get('timer_countdown')
         if not game_settings['timer_countdown']:
-            print("Timer countdown must be a number")
             return JsonResponse({"error": "Timer countdown must be a number"}, status=400)
         game_settings['safe_level'] = request.POST.get('safe_level')
         if not game_settings['safe_level']:
-            print("Safe level must be a number")
             return JsonResponse({"error": "Safe level must be a number"}, status=400)
 
         gameSettingsObject = AdminData.objects.first()
