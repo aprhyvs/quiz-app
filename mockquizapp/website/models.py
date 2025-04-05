@@ -95,7 +95,7 @@ class QuizData(models.Model):
     file_ext = models.CharField(max_length=50 , default="")
     
     game_has_5050 = models.BooleanField(default=False)
-    game_data_5050 = models.JSONField(default=list)
+    game_data_5050 = models.JSONField(default=dict)
     game_has_ai_hint = models.BooleanField(default=False)
     game_data_ai_hint = models.JSONField(default=dict)
     game_has_times2 = models.BooleanField(default=False)
