@@ -60,7 +60,6 @@ def get_all_student_stats(request): ## Returns all student data and stats
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
-        print("Grabbing all student data...")
         stats = {}
         stats['total_quizzes'] = get_total_quizzes_for_student(student)
         stats['total_correct_answers'] = get_sum_of_correct_answers(student)
@@ -82,7 +81,6 @@ def get_all_student_data(request): ## Returns all student data and stats
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     if request:
-        print("Grabbing student...")
         student = StudentData.objects.filter(username = request.user.username).first()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
@@ -202,10 +200,8 @@ def update_student_data(request):
                 student.username = username 
                 user.username = username
         if password:
-            print(password)
             user.set_password(password)
         if profile_pic:
-            print("Got Profile Pic!!!")
             deleteOldProfilePic(student)
             student.profile_pic = profile_pic 
         

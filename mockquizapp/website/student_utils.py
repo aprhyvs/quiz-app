@@ -34,7 +34,6 @@ def getStudentStatisticRequest(request):
     return JsonResponse(stats, status=200)
 
 def getStudentQuizListRequest(request):
-    print("Firing Student Quiz List...")
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
     student = request.user
@@ -73,7 +72,6 @@ def get_all_student_data_util(student): ## Returns all student data and stats
 
         data['studentData'] = studentData
         data['stats'] = stats
-        print(data)
         return data
 
 def get_all_student_quizzes_util(student): ## Grabs all the student's quizzes for use in javascript.
