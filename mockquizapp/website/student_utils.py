@@ -73,7 +73,6 @@ def get_all_student_data_util(student): ## Returns all student data and stats
 
         data['studentData'] = studentData
         data['stats'] = stats
-        print(data)
         return data
 
 def get_all_student_quizzes_util(student): ## Grabs all the student's quizzes for use in javascript.

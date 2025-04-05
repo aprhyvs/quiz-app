@@ -202,10 +202,8 @@ def update_student_data(request):
                 student.username = username 
                 user.username = username
         if password:
-            print(password)
             user.set_password(password)
         if profile_pic:
-            print("Got Profile Pic!!!")
             deleteOldProfilePic(student)
             student.profile_pic = profile_pic 
         

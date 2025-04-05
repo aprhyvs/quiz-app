@@ -1,4 +1,5 @@
 async function initiateRankings(leaderboard){
+    console.log(leaderboard);
     const leaderboardTypeElement = document.getElementById('leaderboards-type');
     if (leaderboard.type === 'weekly'){
         leaderboardTypeElement.innerText = "Leaderboards (Weekly)";
