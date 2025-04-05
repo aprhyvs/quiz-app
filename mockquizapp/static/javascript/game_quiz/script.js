@@ -1,6 +1,8 @@
 const modal = document.getElementById("modal");
 const levelInfo = document.querySelector(".level-info");
 
+
+
 levelInfo.addEventListener("click", function () {
     modal.style.display = "flex"; 
 });
@@ -34,6 +36,40 @@ for (let i = 0; i < points.length; i++) {
     levelPointDiv.appendChild(pointP);
     listContainer.appendChild(levelPointDiv);
 }
+
+
+function displayTitle(quizData){
+    titleDiv = document.getElementById("quiz-title");
+    titleDiv.innerText = quizData["quiz_title"];
+}
+
+async function gameStart(current_question){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    if (quiz_id) {
+        res = await getDataFromUrlWithParams(`/api/game/generate/questions`,{
+            'quiz_id': quiz_id,
+            'question': current_question
+        });
+        if (res) {
+            console.log(res);
+        }
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    if (quiz_id) {
+        res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
+            'quiz_id': quiz_id
+        });
+        if (res) {
+            console.log(res);
+            const current_question = res.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
+            gameStart(current_question);
+        }
+    }
+});
 
 
 //50-50

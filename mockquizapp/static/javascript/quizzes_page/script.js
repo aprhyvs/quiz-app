@@ -352,26 +352,19 @@ async function processFileStage2(data) {
         console.error("No quiz data")
         return;
     }
-    const strike = 3;
     const quiz_id = data.quiz_id;
     const upload_stage = data.upload_stage;
     let stage2Data;
-    for ( var i = 0; i < strike; i++) {
-        stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
-            'quiz_id': quiz_id,
-            'stage': upload_stage
-        });
-        console.log(stage2Data);
-        if (stage2Data) {
-            break;
-        } 
-    }
+    stage2Data = await getDataFromUrlWithParams('/api/student/upload/stage2', {
+        'quiz_id': quiz_id,
+        'stage': upload_stage
+    });
+    console.log(stage2Data);
     if (!stage2Data) {
         console.error("Stage 2 failed")
         return;
     }
     processFileStage3(stage2Data);
-    
 }
 
 async function processFileStage3(data) {
@@ -391,19 +384,13 @@ async function processFileStage3(data) {
             return;
         }
     print(stage3Data);
+    sessionStorage.setItem('quiz_id', quiz_id);
+    window.location.href = "/game_quiz";
+
 }
 
 
 document.addEventListener("DOMContentLoaded", async function () {
-
-
-    const res = await getDataFromUrlWithParams('/api/game/generate/questions', {
-        'question' : '1',
-        'quiz_id' : '11',
-    })
-
-
-
 
     const modal = document.getElementById("uploadQuizModal");
     const uploadBox = document.getElementById("upload-box");
