@@ -8,6 +8,15 @@ function updateImageIcon(image){
     profilePicDiv.style.backgroundImage = `url(${imageURL})`;
 }
 
+function displayRank(stats){ //Backend already takes care of rank type (weekly/monthly). Don't worry about this.
+    console.log(stats);
+    rankText = document.querySelector(".rank-text");
+    rankText.innerText = `Rank ${stats.rank}`;
+     
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Student Dashboard Loaded");
 
@@ -38,12 +47,10 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Invalid data structure:", data);
             return;
         }
-        console.log(data);
         const studentDatas = data.studentData;
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
         const profile_pic = getAbsoluteMediaURL(studentData.profile_pic);
-        console.log(profile_pic);
         displayStudentProfileData(studentData, studentStats);
         displayStudentData(studentData);
         displayStudentStats(studentStats);
@@ -100,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!score) return 0;
             return Math.round((score / totalItems) * 100);
         }
-
+        displayRank(studentStats)
         const quizzesTakenDiv = document.querySelector(".total-quizzes-taken-number");
         quizzesTakenDiv.innerText = `${studentStats.total_quizzes}`;
         

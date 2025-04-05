@@ -69,6 +69,7 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         stats['total_wrong_answers'] = get_total_wrong_answers_for_student(student)
         stats['monthlyStatistics'] = get_monthly_correct_and_wrong_for_student(student)
         stats['monthlyQuizzesTaken'] = get_monthly_quizzes_taken_for_student(student)
+        stats['rank'] = get_student_rank(student)
 
         data['studentData'] = studentData
         data['stats'] = stats
@@ -209,6 +210,17 @@ def get_student_leaderboards_util():
         data['type'] = "monthly"
         data['rankings'] = get_monthly_rankings_student()
     return data
+
+def get_student_rank(student):
+    leaderboards = get_student_leaderboards_util()
+    if leaderboards is None:
+        return None
+    rankings = leaderboards['rankings']
+    for i, ranking in enumerate(rankings):
+        if ranking['student_name'] == f"{student.fname} {student.lname}":
+            return i + 1
+        return None
+    return None
 
 # def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):
 #     subject = subject 
