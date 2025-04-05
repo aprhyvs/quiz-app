@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         if (res) {
             console.log(res);
-            const current_question = res.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
+            const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
             gameStart(current_question);
         }
     }

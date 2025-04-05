@@ -226,59 +226,41 @@ def get_index_content(index: str, questions: str):
     If the given number of question which is <index> does not exist, respond with: {"error": "Key '<index>' not found."}
     """
     # Replace <index> in system prompt with actual value
+    
     system_prompt = system_prompt.replace("<index>", index)
-
+    print(system_prompt)
     # Call generate_response_cohere
     response = generate_response_cohere(command=questions, system=system_prompt)
     return response
 
 
-def is_index_correct_format(data : dict , index : str) -> bool:
+def is_index_correct_format(data: dict, index: str) -> bool:
     if not isinstance(data, dict):
         return False
-        
-    selected_data = data.get(index, None)
-    if selected_data is None:
-        selected_data = data
-        if not "question" in selected_data:
-            return False 
-        if not "options" in selected_data:
-            return False
-        if not "correct_answer" in selected_data:
-            return False
-        if not isinstance(selected_data["options"], list):
-            return False
-        if len(selected_data["options"]) != 4:
-            return False
-        if not isinstance(selected_data["correct_answer"], str):
-            return False
-        for i in ["a", "b", "c", "d"]:
-            if i not in selected_data["correct_answer"].lower():
-                return False
-        if not isinstance(selected_data["question"], str):
-            return 
-        
-        return True
+
+    selected_data = data.get(index)
+    if not isinstance(selected_data, dict):
+        return False
     
+    required_keys = ["question", "options", "correct_answer"]
+    if not all(key in selected_data for key in required_keys):
+        return False
     
-    if not "question" in selected_data:
-        return False 
-    if not "options" in selected_data:
+    if not isinstance(selected_data["question"], str) or not selected_data["question"]:
         return False
-    if not "correct_answer" in selected_data:
+
+    if not isinstance(selected_data["options"], list) or len(selected_data["options"]) != 4:
         return False
-    if not isinstance(selected_data["options"], list):
-        return False
-    if len(selected_data["options"]) != 4:
-        return False
+
     if not isinstance(selected_data["correct_answer"], str):
         return False
-    for i in ["a", "b", "c", "d"]:
-        if i not in selected_data["correct_answer"].lower():
-            return False
-    if not isinstance(selected_data["question"], str):
+
+    valid_answers = {"a", "b", "c", "d"}
+    if selected_data["correct_answer"].strip().lower() not in valid_answers:
         return False
+
     return True
+
 
 
 def upload_file_view_status_1(request):
@@ -597,14 +579,18 @@ def on_game_data_generation(request):
         
         old_generated_questions = quiz.questions if quiz.questions else {}
         selected_questions = old_generated_questions.get(question , None)
-        
+        print("selected_questions : ", selected_questions)
         # If has selected questions then verify it if it correct format then send it
         if selected_questions:
-            is_valid = is_index_correct_format(selected_questions , question)
+            for_correct_format_data = { question : selected_questions} 
+            is_valid = is_index_correct_format(for_correct_format_data , question)
+            print("valid_for_correct_format_data : ", for_correct_format_data)
             if is_valid:       
-                selected_data['correct_answer'] = None
+                selected_questions['correct_answer'] = None
+                selected_questions["answer"] = None  
                 return JsonResponse({'question': selected_questions}, status=200)
         
+        # return JsonResponse({'error': 'Failed to generate questions.'}, status=500)
         print("generated questions")
         # If has not selected questions then generate it
         converted_questions = None
@@ -620,6 +606,7 @@ def on_game_data_generation(request):
             if not converted_questions:
                 return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
             
+            print("converted questions : ", converted_questions)
             is_valid = is_index_correct_format(converted_questions , question)
             if not is_valid:
                 return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
