@@ -169,7 +169,7 @@ def get_weekly_rankings_student() -> list:
             'total_quizzes': get_total_quizzes_for_student(student),
             'total_correct_answers': get_sum_of_correct_answers(student),
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
-            'student_pic' : student.profile_pic.path if student.profile_pic else None
+            'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
 
     return rankings
@@ -194,7 +194,7 @@ def get_monthly_rankings_student() -> list:
             'total_quizzes': get_total_quizzes_for_student(student),
             'total_correct_answers': get_sum_of_correct_answers(student),
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
-            'student_pic' : student.profile_pic.path if student.profile_pic else None
+            'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
     return rankings
  
