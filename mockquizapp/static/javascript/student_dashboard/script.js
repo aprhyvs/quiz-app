@@ -10,7 +10,12 @@ function updateImageIcon(image){
 
 function displayRank(stats){ //Backend already takes care of rank type (weekly/monthly). Don't worry about this.
     rankText = document.querySelector(".rank-text");
-    rankText.innerText = `Rank ${stats.rank}`;
+    if (stats.rank){
+        rankText.innerText = `Rank ${stats.rank}`;
+    }else{
+        rankText.innerText = `Rank Not Available`;
+     }
+    
      
 }
 
@@ -81,18 +86,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         const totalItems = studentStats.total_correct_answers + studentStats.total_wrong_answers;
-        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
-        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
-    
-        // Update the correct-wrong bar
         const correctBar = document.querySelector(".correct-bar");
         const wrongBar = document.querySelector(".wrong-bar");
+
+        
+        if (totalItems > 0) { // if the student has stats...
+            // Update the correct-wrong bar
+        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
+        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
+        
     
         correctBar.style.width = `${correctAnswerPercentage}%`;
         correctBar.textContent = `${correctAnswerPercentage}%`;
     
         wrongBar.style.width = `${wrongAnswerPercentage}%`;
         wrongBar.textContent = `${wrongAnswerPercentage}%`;
+        }else{
+            // Hide the bar pag walang quiz stats.    
+            correctBar.style.display = "none";
+            wrongBar.style.display = "none";
+        }
     }
     
     // Display Student Data in Dashboard
