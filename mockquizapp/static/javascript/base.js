@@ -85,13 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const enableDarkmode = () => {
         document.body.classList.add('darkmode')
         localStorage.setItem('darkmode', 'active');
-        generateVoiceMessage("Hello guys this is message");
+        // generateVoiceMessage("Hello guys this is message");
     }
 
     const disableDarkmode = () => {
         document.body.classList.remove('darkmode');
         localStorage.setItem('darkmode', null);
-        generateVoiceMessage("Hello guys this is message");
+        // generateVoiceMessage("Hello guys this is message");
     }
 
     if (darkmode === "active") enableDarkmode()
