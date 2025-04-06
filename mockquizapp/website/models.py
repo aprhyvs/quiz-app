@@ -143,20 +143,20 @@ class QuizData(models.Model):
             'quiz_title' : self.quiz_title,
             'is_answered' : self.is_answered,
             'number_of_correct' : self.number_of_correct,
-            'number_of_wrong' : self.number_of_wrong
+            'number_of_wrong' : self.number_of_wrong,
+            "questions" : []
         }
         
         admin_game = AdminData.objects.all().first()
         if admin_game:
             data["timer_countdown"] = admin_game.timer_countdown
             data["safe_level"] = admin_game.safe_level
-        
-        data["questions"] = []
+            
         for k in self.questions:
             data["questions"].append({
                 "number": k,
-                "question": self.questions[k]["question"],
-                "options": self.questions[k]["options"],
+                "question": self.questions[k].get("question", None),
+                "options": self.questions[k].get("options", None),
                 "correct_answer": None,
                 "answered": self.questions[k].get("answered", False),
                 "answer": self.questions[k].get("answer", None),

@@ -941,7 +941,6 @@ def on_game_get_quiz_data(request):
     
     if request.method == 'POST':
          
-        
         student = StudentData.objects.filter(account_id=request.user.pk).first()
         if not student:
             return JsonResponse({'error': 'Student not found.'}, status=404)
