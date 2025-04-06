@@ -66,18 +66,19 @@ body {
     text-align: center; 
 }
 
-.most-recent-quiz p{
+.most-recent-quiz p {
     font-size: 1.5rem;
     margin: 1em 0;
     text-align: center;
 }
 
-.most-recent-quiz span{
+.most-recent-quiz span {
     color: var(--green);
     font-weight: 700;
 }
 
-.most-recent-quiz button {
+.most-recent-quiz button,
+.view-quiz-button {
     border-radius: 4px;
     font-size: 1rem;
     padding: 0.5em 2em;
@@ -91,6 +92,16 @@ body {
     border: none;
 }
 
+.other-quiz p {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1em 0;
+}
+
+.other-quiz {
+    display: flex;
+    flex-direction: column;
+}
 
 .card-large {
     width: 49.5%;

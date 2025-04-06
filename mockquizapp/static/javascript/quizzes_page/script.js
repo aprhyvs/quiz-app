@@ -51,10 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // Display Student Data in Dashboard
+    /*
     function displayStudentData(studentData) {
         const studentNameDiv = document.querySelector(".student-name");
         studentNameDiv.innerHTML = `<h3 class="raleway-bold">Welcome, ${studentData.username}!</h3>`;
-    }
+    }*/
     
     function displayStudentStats(studentStats) {
         function getPercentage(score, totalItems){
@@ -215,21 +216,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-function displayListOfQuizzes(quizzes){ 
+function displayListOfQuizzes(quizzes) {
     function displayMostRecentQuiz(mostRecentQuiz) {
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
         isAnswered = mostRecentQuiz.is_answered;
+        
         // Display number of correct answers
         const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
         document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / 20`;
-        const passingScore = Math.ceil(totalItems* 0.75);
+        
+        const passingScore = Math.ceil(totalItems * 0.75);
         const statusElement = document.getElementById("recent-quiz-status");
         let statusText = "UNKNOWN";
         const testOptionsButton = document.getElementById("view-recent-quiz-button");
-        if (isAnswered == false){ // Determine if the student has not finished the quiz.
-            statusText = "INCOMPLETE"
+
+        if (isAnswered == false) { // Determine if the student has not finished the quiz.
+            statusText = "INCOMPLETE";
             statusElement.innerText = statusText;
-            statusElement.style.color === "black";
+            statusElement.style.color = "black"; // Fixed this
             testOptionsButton.innerText = "Resume";
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
@@ -237,51 +241,76 @@ function displayListOfQuizzes(quizzes){
             statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
             testOptionsButton.innerText = "View";
         }
-        //  Update "View" button with a link to view more quiz info
-        testOptionsButton.addEventListener("click", function (event) {
 
+        // Update "View" button with a link to view more quiz info
+        testOptionsButton.addEventListener("click", function (event) {
             if (isAnswered == false) {
                 sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
                 window.location.href = `/game_quiz/`
             }
-            
         });
     }
 
-    function displayOtherQuizzes(quizzes){  //Displays the other quizzes after the most recent quiz in chronological order
-        for (let i = 1; i < quizzes.length; i++) { // Start at not the most recent quiz ofc :3
-            const quiz = quizzes[i];
+    function displayOtherQuizzes(quizzes) {
+        const quizContainer = document.querySelector('.wrapper'); // Assuming this is where you want to append quizzes
+        
+        // Loop through quizzes starting from the second quiz
+        for (let index in quizzes) { // Using 'for...in' to loop through the array (index)
+            if (index === "0") continue; // Skip the most recent quiz, already displayed
+            
+            const quiz = quizzes[index];
+            
+            // Create a new div for each quiz
+            const quizItem = document.createElement("div");
+            quizItem.classList.add("card-small");
+            quizItem.classList.add("other-quiz");
 
+            // Set up the inner HTML for each quiz item
+            quizItem.innerHTML = `
+                <h3 class="raleway-bold">${quiz.quiz_title}</h3>
+                <p class="roboto-bold score-set">${quiz.number_of_correct} / 20</p><br>
+                <p class="roboto-light">Status:<br><span class="quiz-status roboto-bold">${quiz.is_answered ? 'COMPLETE' : 'INCOMPLETE'}</span></p>
+                <button class="roboto-bold view-quiz-button" id="view-quiz-${quiz.id}">View</button>
+            `;
+
+            // Append each quiz to the container
+            quizContainer.appendChild(quizItem);
+
+            // Add event listener to view button
+            document.getElementById(`view-quiz-${quiz.id}`).addEventListener("click", function () {
+                sessionStorage.setItem('quiz_id', quiz.id);
+                window.location.href = `/game_quiz/${quiz.id}`;
+            });
         }
     }
     
 
     
-    if (quizzes){
-        console.log(quizzes)
+    if (quizzes) {
+        console.log(quizzes);
+        
         if (!quizzes[0]) {
             console.log("No more quiz yet");
             let statusText = "NONE";
             const statusElement = document.getElementById("recent-quiz-status");
-            const statusParent = document.querySelector("#recent-quiz-status-parent")
+            const statusParent = document.querySelector("#recent-quiz-status-parent");
             const testOptionsButton = document.getElementById("view-recent-quiz-button");
 
             statusElement.style.color = "var(--text)";
             statusElement.innerText = statusText;
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status" style="color: var(--text);">${statusText}</p><p>Do a quiz?</p>`;
+            statusParent.innerHTML = `<p class="raleway-bold" id="quiz-status" style="color: var(--text);">${statusText}</p><p>Do a quiz?</p>`;
             statusParent.style.color = "var(--text)";
             testOptionsButton.innerText = "Play";
 
             testOptionsButton.addEventListener("click", function (event) {
+                // Action on clicking Play
             });
 
-        return;
+            return;
         }
 
         displayMostRecentQuiz(quizzes[0]);
         displayOtherQuizzes(quizzes);
-
-
     }
 }
 
@@ -303,9 +332,6 @@ function handleDraggedFile(file) {
 async function uploadFile(file) {
     let fileInput
     // Insert a file uploading screen
-
-    const modal = document.getElementById("uploadQuizModal");
-    modal.style.display = "none";
     
     //console.log("File uploaded"); return;  // Remove this line when everything about the upload is done.
     if (file) {
@@ -370,6 +396,7 @@ async function processFileStage2(data) {
         console.error("Stage 2 failed")
         return;
     }
+    document.getElementById("uploadQuizModalLoading").style.display = "flex"; 
     processFileStage3(stage2Data);
 }
 
@@ -389,12 +416,16 @@ async function processFileStage3(data) {
             console.error("Stage 3 failed")
             return;
         }
-    print(stage3Data);
     sessionStorage.setItem('quiz_id', quiz_id);
-    window.location.href = "/game_quiz";
-
+    document.getElementById("uploadQuizModalComplete").style.display = "flex"; 
 }
 
+//sunod function sa button pag change
+const generateQuiz = document.getElementById("generate-quiz-button")
+
+generateQuiz.addEventListener("click", function() {
+    window.location.href = "/game_quiz";
+});
 
 document.addEventListener("DOMContentLoaded", async function () {
 
