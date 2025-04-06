@@ -64,19 +64,19 @@ async function displayRankings(rankingsData) {
     
         // Ensure elements exist before modifying them
         if (firstRank) {
-            firstRank.textContent = weeklyRankings[0]?.student_name || "Currently Not Available";
+            firstRank.textContent = weeklyRankings[0]?.student_name || "Vacant";
         }
         if (secondRank) {
-            secondRank.textContent = weeklyRankings[1]?.student_name || "Currently Not Available";
+            secondRank.textContent = weeklyRankings[1]?.student_name || "Vacant";
         }
         if (thirdRank) {
-            thirdRank.textContent = weeklyRankings[2]?.student_name || "Currently Not Available";
+            thirdRank.textContent = weeklyRankings[2]?.student_name || "Vacant";
         }
         if (fourthRank) {
-            fourthRank.textContent = weeklyRankings[3]?.student_name || "Currently Not Available";
+            fourthRank.textContent = weeklyRankings[3]?.student_name || "Vacant";
         }
         if (fifthRank) {
-            fifthRank.textContent = weeklyRankings[4]?.student_name || "Currently Not Available";
+            fifthRank.textContent = weeklyRankings[4]?.student_name || "Vacant";
         }
     }
     
@@ -94,19 +94,19 @@ async function displayRankings(rankingsData) {
     
         // Ensure elements exist before modifying them
         if (firstRank) {
-            firstRank.textContent = monthlyRankings[0]?.student_name || "Currently Not Available";
+            firstRank.textContent = monthlyRankings[0]?.student_name || "Vacant";
         }
         if (secondRank) {
-            secondRank.textContent = monthlyRankings[1]?.student_name || "Currently Not Available";
+            secondRank.textContent = monthlyRankings[1]?.student_name || "Vacant";
         }
         if (thirdRank) {
-            thirdRank.textContent = monthlyRankings[2]?.student_name || "Currently Not Available";
+            thirdRank.textContent = monthlyRankings[2]?.student_name || "Vacant";
         }
         if (fourthRank) {
-            fourthRank.textContent = monthlyRankings[3]?.student_name || "Currently Not Available";
+            fourthRank.textContent = monthlyRankings[3]?.student_name || "Vacant";
         }
         if (fifthRank) {
-            fifthRank.textContent = monthlyRankings[4]?.student_name || "Currently Not Available";
+            fifthRank.textContent = monthlyRankings[4]?.student_name || "Vacant";
         }
     }
 
@@ -143,7 +143,10 @@ async function setupAdminChartBar(monthlyChart){
             maintainAspectRatio: false,
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1 // This ensures the step is always 1
+                    }
                 }
             }
         }

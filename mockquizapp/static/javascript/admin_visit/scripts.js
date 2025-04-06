@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         displayPassedAndFailedQuizzes(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
         showQuizzesTakenGraph(quizData.quizzes);
+        console.log("http://localhost")
     }
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Display number of correct answers
         const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${20}`;
     
         
         
@@ -129,13 +130,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
             statusElement.style.color === "var(--text)";
-            testOptionsButton.innerText = "Resume";
+            // testOptionsButton.innerText = "Resume";
             
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
             statusElement.style.color = statusText === "PASSED" ? "var(--green)" : "var(--red)";
-            testOptionsButton.innerText = "View";
+            // testOptionsButton.innerText = "View";
         }
 
 
@@ -149,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function displayPassedAndFailedQuizzes(quizzes) {
 
         function getPassedStatus(quiz){
-            if (quiz.is_answered == false) return None
+            if (quiz.is_answered == false) return null;
 
             const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
             const passingScore = Math.ceil(totalItems * 0.75);
@@ -190,42 +191,42 @@ document.addEventListener('DOMContentLoaded', async function () {
         wrongAnswers[quizMonth] += quiz.number_of_wrong;
     });
 
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Correct Answers',
-                    data: correctAnswers,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Wrong Answers',
-                    data: wrongAnswers,
-                    fill: false,
-                    borderColor: 'rgb(255, 99, 132)',
-                    tension: 0.1
-                }
-            ]
-        };
-    
-        const config = {
-            type: 'line',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Correct Answers',
+                data: correctAnswers,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            },
+            {
+                label: 'Wrong Answers',
+                data: wrongAnswers,
+                fill: false,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }
+        ]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        };
-    
-        const ctx = document.getElementById('monthlyChart').getContext('2d');
-        new Chart(ctx, config);
+        }
+    };
+
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(ctx, config);
     }
 
     function showQuizzesTakenGraph(graphData){
