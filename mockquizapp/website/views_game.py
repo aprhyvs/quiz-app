@@ -866,7 +866,7 @@ def on_game_data_answer(request):
         
         old_generated_questions : dict = quiz.questions if quiz.questions else {}
         selected_questions : dict = old_generated_questions.get(question , None)
-        if not selected_questions:
+        if selected_questions is None or not selected_questions:
             return JsonResponse({'error': 'Question not found.'}, status=404)
         """
         questions = {
