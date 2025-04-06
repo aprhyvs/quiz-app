@@ -71,6 +71,16 @@ html, body {
     transition: fill 0.3s ease;
 }
 
+.flash-red path {
+    fill: var(--red); /* or any color you want to use, such as #FFD700 */
+    transition: fill 0.3s ease;
+}
+
+.flash-green path {
+    fill: var(--green); /* or any color you want to use, such as #FFD700 */
+    transition: fill 0.3s ease;
+}
+
 /* SEE COLORS BELOW */
 /* .choices svg:hover path
    fill: var(--green); - CORRECT

@@ -4,17 +4,12 @@ var global_current_question = null;
 var userAnswer = [];
 let temporary_answer = null;
 var game_settings = [];
-var worth_open = false;
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
 
 
 levelInfo.addEventListener("click", function () {
-
         modal.style.display = "flex"; 
-        console.log(worth_open);
-
-    //TODO MAKE OVERLAY PAKAKAON
 });
 
 //level-points-pop content
@@ -56,7 +51,6 @@ function playAudio(audio){
 async function endGame() {
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
-        console.log('Quiz status ', quiz_status);
         console.log("Finished Game, Nigga!!!");
     }
 
@@ -70,7 +64,6 @@ async function getAnsweredQuestions(quiz_id){
         'quiz_id': quiz_id
     });
     if (res) {
-         console.log(res);
          return res;
     }
 }
@@ -83,7 +76,6 @@ async function getQuizStatus(quiz_id){
         'quiz_id': quiz_id
     });
     if (res) {
-         console.log(res);
          return res;
     }
 }
@@ -94,7 +86,6 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
         console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
-            console.log(current_answered_questions);
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
                 return true;
@@ -111,8 +102,6 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
 
 
 async function processChoice(choiceString){
-    console.log(choiceString);
-    
     async function evaluateChoice(choice) {
         const current_question = global_current_question;
         const quiz_id = sessionStorage.getItem('quiz_id');
@@ -123,7 +112,6 @@ async function processChoice(choiceString){
                 'user_answer' : choice
             });
                 if (res) {
-                    console.log(res);
                     return res;
                 }
             }
@@ -132,26 +120,41 @@ async function processChoice(choiceString){
     const result = await evaluateChoice(choiceString);
     if (result){
         const current_question = global_current_question;
-        showAnswerEffects(result, current_question);
+        showAnswerEffects(choiceString, current_question);
     }
-      // When the next question shows up, clear the interval:
-      clearResetInterval();
 
       // Optionally reset the flash-yellow class manually
       resetFlashYellowClass();
 }
 
-async function showAnswerEffects(result, current_question) {
-        //TODO: Show the visual effects and play audio here.
-        //TODO: Mon patukdo man pano i change an kulay kay ipa green or red depending kun nano an tama na answer.
+async function showWrongAndCorrectAnswer(choice, current_question){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
+        'quiz_id': quiz_id,
+        'question': current_question
+    });
+    if (res) {
+        console.log(res);
+    }
+}
+
+
+async function showAnswerEffects(choice, current_question) {
+    //TODO: Show the visual effects and play audio here.
+    //TODO: Mon patukdo man pano i change an kulay kay ipa green or red depending kun nano an tama na answer.
+    showWrongAndCorrectAnswer(choice, current_question);
+
+
+
+
+
     // proceed to the next question
-    console.log(current_question);
     const isLastQuestion = await checkQuizNumber(current_question);
-    console.log(isLastQuestion);
     if (isLastQuestion == true) {
         console.log("Is it the final question?")
         endGame();
     }else{
+
         nextQuestion(current_question);
     }
 }
@@ -160,6 +163,28 @@ async function nextQuestion(current_question){
     global_current_question = current_question + 1;
     const questionData = await questionFetch(global_current_question);
     displayQuestion(questionData);
+}
+
+function flashRed(choiceElement){
+    if (choiceElement) {
+        choiceElement.classList.add('flash-red');
+        choiceElement.classList.remove('svg:hover');
+    }
+}
+
+function flashGreen(choiceElement){
+    if (choiceElement) {
+        choiceElement.classList.add('flash-green');
+        choiceElement.classList.remove('svg:hover');
+    }
+}
+
+
+function flashYellow(choiceElement){
+    if (choiceElement) {
+        choiceElement.classList.add('flash-yellow');
+        choiceElement.classList.remove('svg:hover');
+    }
 }
 
 function showConfirmationPrompt(choice) {
@@ -173,10 +198,7 @@ function showConfirmationPrompt(choice) {
 
     // Now add the flash-yellow class to the newly selected SVG element
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
-    if (choiceElement) {
-        choiceElement.classList.add('flash-yellow');
-        console.log("flash-yellow class added to", choiceElement);
-    }
+    flashYellow(choiceElement);
 
     // Show the confirmation prompt
     confirmationPromptElement.style.display = "flex";
@@ -190,17 +212,20 @@ function resetFlashYellowClass() {
     // Remove flash-yellow from all SVGs when a new question appears
     const allChoiceElements = document.querySelectorAll('.svg-choice-A, .svg-choice-B, .svg-choice-C, .svg-choice-D');
     allChoiceElements.forEach(element => {
+        element.classList.add('svg:hover');
         element.classList.remove('flash-yellow');
     });
 }
 
-// Set an interval to reset the flash-yellow class every 5 seconds (for example)
-const resetInterval = setInterval(resetFlashYellowClass, 3000);
-
-// Optionally, clear the interval when needed (e.g., when changing to the next question)
-function clearResetInterval() {
-    clearInterval(resetInterval);
-    console.log("Interval cleared");
+function resetFlashes() {
+    // Remove flash-yellow from all SVGs when a new question appears
+    const allChoiceElements = document.querySelectorAll('.svg-choice-A, .svg-choice-B, .svg-choice-C, .svg-choice-D');
+    allChoiceElements.forEach(element => {
+        element.classList.add('svg:hover');
+        element.classList.remove('flash-yellow');
+        element.classList.remove('flash-red');
+        element.classList.remove('flash-green');
+    });
 }
 
 function displayQuestion(questionData){
@@ -234,7 +259,6 @@ async function questionFetch(current_question){
             'question': current_question,
         });
         if (res) {
-            console.log(res);
             return res.question;
         }
     }
@@ -358,6 +382,7 @@ document.querySelector(".choice-D").addEventListener('click', function() {
 
 function closeConfirmationPrompt() {
     document.getElementById("confirmation-form-pop").style.display = "none";
+    resetFlashYellowClass(); 
 }
 
 document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
@@ -371,10 +396,10 @@ document.getElementById("cancel-confirmation-but").addEventListener('click', fun
 // Background Wrapper
 
 function closeWorthSidenav(){
-
+    modal.style.display = "none";
     
 }
 
-document.querySelector(".background-wrapper").addEventListener('click', function() {
+document.querySelector(".modal").addEventListener('click', function() {
     closeWorthSidenav()
 });
