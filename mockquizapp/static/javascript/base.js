@@ -49,7 +49,17 @@ async function getDataFromUrlWithParams(url, params){
 }
 
 async function generateVoiceMessage(textMessage){
-    fetch('/api/generate/voice')
+    const formData = new FormData();
+    formData.append('text', textMessage);
+    fetch('/api/generate/voice',
+    {
+        method: 'POST',
+        headers: { 
+            "X-CSRFToken": csrf_token,
+        },
+        body: formData,
+    }
+    )
     .then(response => {
         if (!response.ok) {
         throw new Error('Network response was not ok');
