@@ -66,6 +66,11 @@ html, body {
     stroke: #5f8cdf; 
 }
 
+.svg-choice .flash-yellow path {
+    fill: var(--gold);
+    transition: fill 0.3s ease;
+}
+
 /* SEE COLORS BELOW */
 /* .choices svg:hover path
    fill: var(--green); - CORRECT
