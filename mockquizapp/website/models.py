@@ -123,7 +123,7 @@ class QuizData(models.Model):
         3 = Title are converted to python objects dictionary and Ready to start the quiz
     """
     worth_sequence = models.JSONField(default=dict)
-    safe_level = models.CharField(default="3,6,9,12,15", max_length=50)
+    safe_level = models.CharField(default="3,6,9,12,15,20", max_length=50)
     
     
     
