@@ -117,7 +117,7 @@ async function processChoice(choiceString){
 
 async function showAnswerEffects(result, current_question) {
         //TODO: Show the visual effects and play audio here.
-
+        //TODO: Mon patukdo man pano i change an kulay kay ipa green or red depending kun nano an tama na answer.
     // proceed to the next question
     console.log(current_question);
     const isLastQuestion = await checkQuizNumber(current_question);
@@ -140,7 +140,7 @@ function showConfirmationPrompt(choice) {
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
     if (choiceElement) {
-        //TODO: Make the choice flash yellow during confirmation screen.
+        //TODO: Mon pls make the current choice's element turn yellow during confirmation screen.
         choiceElement.classList.add('flash-yellow');
     }
     confirmationPromptElement.style.display = "flex";
