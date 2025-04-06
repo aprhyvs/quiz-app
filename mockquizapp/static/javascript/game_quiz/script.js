@@ -3,14 +3,18 @@ const levelInfo = document.querySelector(".level-info");
 var global_current_question = null;
 var userAnswer = [];
 let temporary_answer = null;
-
-
+var game_settings = [];
+var worth_open = false;
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
 
 
 levelInfo.addEventListener("click", function () {
-    modal.style.display = "flex"; 
+
+        modal.style.display = "flex"; 
+        console.log(worth_open);
+
+    //TODO MAKE OVERLAY PAKAKAON
 });
 
 //level-points-pop content
@@ -362,4 +366,15 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
 });
 document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
     closeConfirmationPrompt();
+});
+
+// Background Wrapper
+
+function closeWorthSidenav(){
+
+    
+}
+
+document.querySelector(".background-wrapper").addEventListener('click', function() {
+    closeWorthSidenav()
 });
