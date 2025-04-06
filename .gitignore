@@ -55,3 +55,5 @@ mockquizapp/website/__pycache__
 mockquizapp/media/profile_pics
 
 test.py
+
+voice_files/

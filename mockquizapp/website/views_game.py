@@ -40,7 +40,7 @@ import random
 from docx import Document
 from PyPDF2 import PdfReader
 import time
-
+import uuid
 import json
 from django.http import HttpResponse, JsonResponse
 from gtts import gTTS
@@ -1265,6 +1265,7 @@ def on_game_data_generate_voice(request):
         return JsonResponse({"error": "User not authenticated"}, status=401)
     
     if request.method == 'POST':
+        # Get the text from POST request
         mytext = request.POST.get('text', None)
         if not mytext:
             return JsonResponse({'error': 'No text provided.'}, status=400)
@@ -1274,19 +1275,30 @@ def on_game_data_generate_voice(request):
         # Generate the TTS object
         tts = gTTS(text=mytext, lang=language, slow=False)
 
-        # Save the generated audio to a temporary file
-        audio_file = 'temp.mp3'
-        tts.save(audio_file)
+        # Generate a unique filename using UUID
+        unique_filename = f"{uuid.uuid4()}.mp3"
+        folder_path = "voice_files"  # Define the folder where files will be saved
+
+        # Create the folder if it doesn't exist
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        # Full path to the audio file
+        audio_file_path = os.path.join(folder_path, unique_filename)
+        
+        # Save the audio file
+        tts.save(audio_file_path)
 
         # Serve the audio file as a response
-        with open(audio_file, 'rb') as audio:
+        with open(audio_file_path, 'rb') as audio:
             response = HttpResponse(audio.read(), content_type='audio/mpeg')
-            response['Content-Disposition'] = f'attachment; filename="{audio_file}"'
+            response['Content-Disposition'] = f'attachment; filename="{unique_filename}"'
 
-        # Optionally, delete the temporary file after serving
-        os.remove(audio_file)
+        # Delete the file after sending the response
+        os.remove(audio_file_path)
         
         return response
 
+    return JsonResponse({"error": "Invalid request method."}, status=405)
 
 

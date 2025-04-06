@@ -84,12 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const enableDarkmode = () => {
         document.body.classList.add('darkmode')
-        localStorage.setItem('darkmode', 'active')
+        localStorage.setItem('darkmode', 'active');
+        generateVoiceMessage("Hello guys this is message");
     }
 
     const disableDarkmode = () => {
-        document.body.classList.remove('darkmode')
-        localStorage.setItem('darkmode', null)
+        document.body.classList.remove('darkmode');
+        localStorage.setItem('darkmode', null);
+        generateVoiceMessage("Hello guys this is message");
     }
 
     if (darkmode === "active") enableDarkmode()
@@ -98,5 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         darkmode = localStorage.getItem('darkmode')
         darkmode !== "active" ? enableDarkmode() : disableDarkmode()
     })
+
 });
 
