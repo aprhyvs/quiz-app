@@ -916,7 +916,7 @@ def on_game_data_answer(request):
                 user_answer = safe_level_selected_question["answer"]
                 
                 if user_answer.lower() in correct_answer.lower() or user_answer == correct_answer: 
-                    worth_assign = quiz.worth_sequence.get(question)
+                    worth_assign = quiz.worth_sequence.get(str(question_to_int))
                     quiz.total_worth = quiz.total_worth + worth_assign
                     print("Total worth", quiz.total_worth)
                 
