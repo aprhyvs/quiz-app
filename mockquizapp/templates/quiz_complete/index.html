@@ -23,13 +23,13 @@
     {% include 'components/navbar_student.html' %}
     
     <div class="wrapper">
-        <h1 id="quiz_status" class="raleway-bold">quiz status</h1>
-        <h2 id="quiz_title" class="raleway-bold">quiz title</h2>
+        <h1 id="quiz_status" class="raleway-bold">Quiz Complete!</h1>
+        <h2 id="quiz_title" class="raleway-bold" style="text-align: center;">quiz title</h2>
         <p id="score" class="roboto-bold">0 / 20</p>
         <p id="status" class="roboto-bold">null</p>
         <p id="total_points" class="roboto-bold">0</p>
-        <button id="continue" onclick="window.location.href='{% url 'student-dashboard' %}'" class="roboto-bold">Continue</button>
-        <button id="try_quiz" class="roboto-light">Try again?</button>
+        <button id="continue" onclick="window.location.href='{% url 'student-dashboard' %}'" class="roboto-bold">Try Again?</button>
+        {% comment %} <button id="try_quiz" class="roboto-light">Try again?</button> {% endcomment %}
     </div>
 
 {% endblock body_block %}
