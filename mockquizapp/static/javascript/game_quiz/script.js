@@ -4,6 +4,11 @@ var global_current_question = null;
 var userAnswer = [];
 let temporary_answer = null;
 
+
+//TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
+//TODO          - Make the questions progress upon answering, Implement powerups.
+
+
 levelInfo.addEventListener("click", function () {
     modal.style.display = "flex"; 
 });
@@ -38,29 +43,51 @@ for (let i = 0; i < points.length; i++) {
     listContainer.appendChild(levelPointDiv);
 }
 
-function processChoice(choiceString){
+function playAudio(audio){
+    const audioElement = document.createElement('audio');
+    audioElement.src = audio;
+    audioElement.play();
+}
+
+
+async function processChoice(choiceString){
     console.log(choiceString);
 
     async function evaluateChoice(choice) {
+        const current_question = global_current_question;
         const quiz_id = sessionStorage.getItem('quiz_id');
         if (quiz_id) {
-            res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
-                'quiz_id': quiz_id
+            res = await getDataFromUrlWithParams(`/api/game/answer`,{
+                'quiz_id': quiz_id,
+                'question' : current_question,
+                'user_answer' : choice
             });
                 if (res) {
-                    const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
-                    const question = await questionFetch(current_question);
-                    if (question) {
-                    displayQuestion(question);
-                global_current_question = current_question;
+                    console.log(res);
+                    return res;
                 }
             }
         }
+
+    const result = await evaluateChoice(choiceString);
+    if (result){
+        showAnswerEffects(result);
     }
 }
 
-function showConfirmationPrompt(choice){
+function showAnswerEffects(result){
+        //TODO: Show the visual effects and play audio here.
+
+
+}
+
+function showConfirmationPrompt(choice) {
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+    if (choiceElement) {
+        //TODO: Make the choice flash yellow during confirmation screen.
+        choiceElement.style.fill = "var(--gold)";
+    }
     confirmationPromptElement.style.display = "flex";
     temporary_answer = choice;
 }

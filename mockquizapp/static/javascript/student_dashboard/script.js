@@ -143,62 +143,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayMostRecentQuiz(mostRecentQuiz) {
-        // Display the quiz title
-        if (!mostRecentQuiz) {
-            console.log("No more quiz yet");
-            let statusText = "NONE";
-            const statusElement = document.getElementById("quiz-status");
-            const statusParent = document.querySelector(".quiz-status-parent")
-            const testOptionsButton = document.getElementById("view-quiz-button");
-
-            statusElement.style.color = "var(--text)";
-            statusElement.innerText = statusText;
-            statusParent.innerHTML = `<p class="raleway-bold id="quiz-status">${statusText}</p><p>Do a quiz?</p>`;
-            
-            statusParent.style.color = "var(--text)";
-            testOptionsButton.innerText = "Play";
-
-            testOptionsButton.addEventListener("click", function (event) {
-                
-            });
-
-            return;
-        }
-
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
-
         isAnswered = mostRecentQuiz.is_answered;
-
         // Display number of correct answers
         const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
         document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
-    
-        
-        
-        
         const passingScore = Math.ceil(totalItems* 0.75);
-        const statusElement = document.getElementById("quiz-status");
+        const statusElement = document.getElementById("recent-quiz-status");
         let statusText = "UNKNOWN";
-
-        const testOptionsButton = document.getElementById("view-quiz-button");
-
+        const testOptionsButton = document.getElementById("view-recent-quiz-button");
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
-            statusElement.style.color === "var(--text)";
+            statusElement.style.color === "black";
             testOptionsButton.innerText = "Resume";
-            
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "var(--green)" : "var(--red)";
+            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
             testOptionsButton.innerText = "View";
         }
-
-
         //  Update "View" button with a link to view more quiz info
-        
         testOptionsButton.addEventListener("click", function (event) {
+
+            if (isAnswered == false) {
+                sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
+                window.location.href = `/game_quiz/`
+            }
             
         });
     }
@@ -206,8 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayPassedAndFailedQuizzes(quizzes) {
 
         function getPassedStatus(quiz){
-            if (quiz.is_answered == false) return None
-
+            if (quiz.is_answered == false) return null;
             const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
             const passingScore = Math.ceil(totalItems * 0.75);
             if (quiz.number_of_correct > passingScore) {
@@ -338,27 +308,3 @@ document.addEventListener("DOMContentLoaded", function () {
 // total quizzes taken per month
 
 // upload quiz modal
-
-document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("uploadQuizModal");
-    const openModalBtn = document.getElementById("uploadQuizButton");
-    const closeModalBtns = document.querySelectorAll(".close");
-    
-    openModalBtn.addEventListener("click", function () {
-        modal.style.display = "block";
-    });
-
-    closeModalBtns.forEach(btn => {
-        btn.addEventListener("click", function () {
-            modal.style.display = "none";
-        });
-    });
-
-    window.addEventListener("click", function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-
-    
-});
