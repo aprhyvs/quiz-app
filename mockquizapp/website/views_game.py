@@ -501,13 +501,13 @@ def upload_file_view_status_2(request):
         
         # TODO: Generate a python object from generated questionaire from the uploaded 
         print("Generating Questionaire using G4F")
-        if len(quiz.raw_generated_questions) == 0:
-            questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_COMMAND)
-            if not questionaire_dict_text:
-                return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
+        # if len(quiz.raw_generated_questions) == 0:
+        #     questionaire_dict_text = generate_response_cohere(quiz.raw_generated_questions, CONVERT_QUESTIONS_TO_OBJECT_COMMAND)
+        #     if not questionaire_dict_text:
+        #         return JsonResponse({'error': 'Failed to generate questionnaire object.'}, status=500)
             
-            quiz.raw_generated_json_questions = questionaire_dict_text
-            quiz.save()
+        #     quiz.raw_generated_json_questions = questionaire_dict_text
+        #     quiz.save()
             
         # print(questionaire_dict_text) 
         # print("What converted to : {}".format(questionaire_dict_text))
@@ -555,6 +555,9 @@ def upload_file_view_status_2(request):
         #     return JsonResponse({'error': 'Invalid questionaire data.'}, status=400)
         # TODO: Save the questionaire in the database
         try:
+            raw_cleaned_generated_question = quiz.raw_generated_questions.replace('"', '')
+            raw_cleaned_generated_question = raw_cleaned_generated_question.replace("'", '')
+            quiz.raw_generated_json_questions = raw_cleaned_generated_question
             quiz.upload_stage = 2   
             quiz.save()
             return JsonResponse({"quiz_id": quiz.pk , "upload_stage": quiz.upload_stage }, status=200)
