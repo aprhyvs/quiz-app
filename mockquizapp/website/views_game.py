@@ -206,7 +206,7 @@ def extract_title(response: str):
     return "No valid title found"
 
 
-def get_index_content(index: str, questions: str):
+def get_index_content(index: str, questions: str , past_error = None):
     system_prompt = """
     Extract the content of the specific number of the question from the provided questions and return it as a valid JSON object.
 
@@ -292,6 +292,11 @@ def get_index_content(index: str, questions: str):
     
     """
     # Replace <index> in system prompt with actual value
+    if past_error is not None:
+        system_prompt += f"""
+        Here is your past result error! Please make sure it does not repeat the same error again. 
+        Error: {past_error}
+        """
     
     system_prompt = system_prompt.replace("<index>", index)
     print(system_prompt)
@@ -662,12 +667,14 @@ def on_game_data_generation(request):
         converted_questions = None
         if not selected_questions:
             converted_questions = None
+            past_error = None
             for _ in range(3):
-                selected_questions = get_index_content(index=question , questions=quiz.raw_generated_questions)
+                selected_questions = get_index_content(index=question , questions=quiz.raw_generated_questions, past_error=past_error)
                 if selected_questions:
                     converted_questions = text_to_dictionary(selected_questions)
                     if converted_questions:
                         break
+                past_error = selected_questions
                 time.sleep(1)
             if not converted_questions:
                 return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
