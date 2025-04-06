@@ -66,8 +66,8 @@ html, body {
     stroke: #5f8cdf; 
 }
 
-.svg-choice .flash-yellow path {
-    fill: var(--gold);
+.flash-yellow path {
+    fill: var(--gold); /* or any color you want to use, such as #FFD700 */
     transition: fill 0.3s ease;
 }
 
@@ -167,6 +167,13 @@ html, body {
 }
 
 /* modal */
+
+.pop-up h1,
+.pop-up h6,
+.pop-up button {
+    color: #FCFCFC;
+}
+
 .ingame-settings-wrapper {
     display: flex;
     justify-content: center;

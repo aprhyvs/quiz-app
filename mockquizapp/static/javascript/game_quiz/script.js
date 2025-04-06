@@ -111,8 +111,12 @@ async function processChoice(choiceString){
     if (result){
         const current_question = global_current_question;
         showAnswerEffects(result, current_question);
-
     }
+      // When the next question shows up, clear the interval:
+      clearResetInterval();
+
+      // Optionally reset the flash-yellow class manually
+      resetFlashYellowClass();
 }
 
 async function showAnswerEffects(result, current_question) {
@@ -138,13 +142,43 @@ async function nextQuestion(current_question){
 
 function showConfirmationPrompt(choice) {
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    
+    // Remove the flash-yellow class from any previously selected SVGs
+    const previouslySelectedElement = document.querySelector('.flash-yellow');
+    if (previouslySelectedElement) {
+        previouslySelectedElement.classList.remove('flash-yellow');
+    }
+
+    // Now add the flash-yellow class to the newly selected SVG element
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
     if (choiceElement) {
-        //TODO: Mon pls make the current choice's element turn yellow during confirmation screen.
         choiceElement.classList.add('flash-yellow');
+        console.log("flash-yellow class added to", choiceElement);
     }
+
+    // Show the confirmation prompt
     confirmationPromptElement.style.display = "flex";
+
+    // Store the temporary answer (if needed)
     temporary_answer = choice;
+}
+
+// Reset function to ensure the class is cleared after each question.
+function resetFlashYellowClass() {
+    // Remove flash-yellow from all SVGs when a new question appears
+    const allChoiceElements = document.querySelectorAll('.svg-choice-A, .svg-choice-B, .svg-choice-C, .svg-choice-D');
+    allChoiceElements.forEach(element => {
+        element.classList.remove('flash-yellow');
+    });
+}
+
+// Set an interval to reset the flash-yellow class every 5 seconds (for example)
+const resetInterval = setInterval(resetFlashYellowClass, 3000);
+
+// Optionally, clear the interval when needed (e.g., when changing to the next question)
+function clearResetInterval() {
+    clearInterval(resetInterval);
+    console.log("Interval cleared");
 }
 
 function displayQuestion(questionData){
