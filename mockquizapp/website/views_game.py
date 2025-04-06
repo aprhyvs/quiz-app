@@ -905,17 +905,20 @@ def on_game_data_answer(request):
         if question in safe_level:
             question_to_int = int(question)
             while True:
+                print("Checking safe level for question", question_to_int)
                 
                 safe_level_selected_question = quiz.questions.get(str(question_to_int), None)
-                if not safe_level_selected_question:
+                print("safe_level_selected_question :", safe_level_selected_question)
+                if not safe_level_selected_question or safe_level_selected_question is None:
                     continue
                 
                 correct_answer = safe_level_selected_question["correct_answer"]
                 user_answer = safe_level_selected_question["answer"]
                 
-                if user_answer.lower() in correct_answer.lower(): 
+                if user_answer.lower() in correct_answer.lower() or user_answer == correct_answer: 
                     worth_assign = quiz.worth_sequence.get(question)
                     quiz.total_worth = quiz.total_worth + worth_assign
+                    print("Total worth", quiz.total_worth)
                 
                 question_to_int = question_to_int - 1
                 if str(question_to_int) in safe_level:
