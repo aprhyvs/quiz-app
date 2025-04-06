@@ -26,45 +26,6 @@
             <div class="wrapper-quiz">
                 <h1 class="raleway-bold">List of Quizzes</h1>
                 <button id="uploadQuizButton" class="roboto-regular">Upload Quiz</button>
-                <button id="viewLeaderboards" class="roboto-regular" 
-                    onclick="window.location.href='{% url 'student-leaderboard' %}'">
-                    Leaderboards
-                </button>
-            </div>
-
-            <div class="wrapper">
-                <div class="card-small most-recent-quiz">
-                    <h3 class="raleway-bold">Most Recent Quiz</h3>
-                    <p class="raleway-bold quiz-title"></p>
-                    <p class="roboto-bold score-set"></p>
-                    <p class="roboto-light quiz-status-parent" id="recent-quiz-status-parent">Status: <span id="recent-quiz-status"></span><br> </p>
-                    <button class="roboto-bold view-quiz-button" id="view-recent-quiz-button">View</button>
-                </div>
-            </div>
-            
-            No code was selected, so I will provide a general improvement to the code. Here's a modified version of the code with some improvements:
-
-```html
-{% extends "base.html" %}
-{% load static %}
-
-{% block head_block %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/quizzes_page/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
-    <script> document.cookie = "csrftoken={{ csrf_token }}"; </script>
-    <script defer src="{% static 'javascript/quizzes_page/script.js' %}"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-{% endblock head_block %}
-
-{% block body_block %}
-    {% include 'components/navbar_student.html' %}
-
-    <main>
-        <section class="quiz">
-            <div class="wrapper-quiz">
-                <h1 class="raleway-bold">List of Quizzes</h1>
-                <button id="uploadQuizButton" class="roboto-regular">Upload Quiz</button>
                 <button id="viewLeaderboards" class="roboto-regular" onclick="window.location.href='{% url 'student-leaderboard' %}'">
                     Leaderboards
                 </button>
