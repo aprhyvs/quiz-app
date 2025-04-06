@@ -10,9 +10,6 @@ from .student_utils import *
 
 
 
-# pip install python-docx
-# pip install PyPDF2
-
 
 # STATISTICS
 # 1. Total amount of quizes

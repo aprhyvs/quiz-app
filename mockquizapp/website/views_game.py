@@ -2,6 +2,9 @@
 
 #pip install cohere
 #pip install -U g4f[all]
+# pip install python-docx
+# pip install PyPDF2
+# pip install gtts
 g4f_client = None
 cohere_client = None
 
