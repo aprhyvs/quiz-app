@@ -264,10 +264,10 @@ Generate 21 questions with A, B, C, D options based on the provided content.
 Following this format:
 
 <index> : <question>
- A : <choice>
- B : <choice>
- C : <choice>
- D : <choice>
+ A. <choice>
+ B. <choice>
+ C. <choice>
+ D. <choice>
  Correct Answer : <letter>
  
  
@@ -284,10 +284,10 @@ Generate 21 questions with A, B, C, D options based on the provided content.
 Following this format:
 
 <index> : <question>
- A : <choice>
- B : <choice>
- C : <choice>
- D : <choice>
+ A. <choice>
+ B. <choice>
+ C. <choice>
+ D. <choice>
  Correct Answer : <letter>
  
  

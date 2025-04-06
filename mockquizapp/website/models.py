@@ -87,7 +87,7 @@ class QuizData(models.Model):
     number_of_answered_questions = models.IntegerField(default=0)
     quiz_title = models.CharField(max_length=50 , default="")
     total_worth = models.IntegerField(default=0)
-    questions = models.JSONField(default=dict)
+    questions = models.JSONField(default=dict , blank=True, null=True)
     upload_stage = models.IntegerField(default=0)
     raw_file_content = models.TextField(default="" )
     raw_generated_questions = models.TextField(default="" )
@@ -95,11 +95,11 @@ class QuizData(models.Model):
     file_ext = models.CharField(max_length=50 , default="")
     
     game_has_5050 = models.BooleanField(default=False)
-    game_data_5050 = models.JSONField(default=dict)
+    game_data_5050 = models.JSONField(default=dict, blank=True, null=True)
     game_has_ai_hint = models.BooleanField(default=False)
-    game_data_ai_hint = models.JSONField(default=dict)
+    game_data_ai_hint = models.JSONField(default=dict, blank=True, null=True)
     game_has_times2 = models.BooleanField(default=False)
-    game_data_times2 = models.JSONField(default=dict)
+    game_data_times2 = models.JSONField(default=dict, blank=True, null=True)
     game_has_pass = models.BooleanField(default=False)
 
     """
