@@ -50,7 +50,9 @@ function playAudio(audio){
 }
 
 function endGame() {
+    const quiz_status = getQuizStatus(sessionStorage.getItem('quiz_id'));
     console.log("Finished Game, Nigga!!!");
+    
 }
 
 async function getAnsweredQuestions(quiz_id){
@@ -58,6 +60,19 @@ async function getAnsweredQuestions(quiz_id){
         return null;
     }
     res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
+        'quiz_id': quiz_id
+    });
+    if (res) {
+         console.log(res);
+         return res;
+    }
+}
+
+async function getQuizStatus(quiz_id){
+    if (!quiz_id) {
+        return null;
+    }
+    res = await getDataFromUrlWithParams(`/api/game/finish`,{
         'quiz_id': quiz_id
     });
     if (res) {

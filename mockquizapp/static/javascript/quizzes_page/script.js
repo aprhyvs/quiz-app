@@ -34,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const studentDatas = data.studentData;
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
-        
-        displayStudentData(studentData);
-        displayStudentStats(studentStats);
     })
 
     getDataFromUrl("/api/student/quizzes") // Gets all quizzes
@@ -259,27 +256,41 @@ function displayListOfQuizzes(quizzes) {
             if (index === "0") continue; // Skip the most recent quiz, already displayed
             
             const quiz = quizzes[index];
-            
+            const singit = document.querySelector('.wrapper');
             // Create a new div for each quiz
-            const quizItem = document.createElement("div");
-            quizItem.classList.add("card-small");
-            quizItem.classList.add("other-quiz");
-
-            // Set up the inner HTML for each quiz item
-            quizItem.innerHTML = `
-                <h3 class="raleway-bold">${quiz.quiz_title}</h3>
+            singit.insertAdjacentHTML("beforeend", 
+                `
+                <div class="card-small other-quiz">
+                <h3 class="raleway-bold"></h3>
+                <p class="raleway-bold quiz-title">${quiz.quiz_title}</p>
                 <p class="roboto-bold score-set">${quiz.number_of_correct} / 20</p><br>
-                <p class="roboto-light">Status:<br><span class="quiz-status roboto-bold">${quiz.is_answered ? 'COMPLETE' : 'INCOMPLETE'}</span></p>
+                <p class="roboto-light">Status: <span class="quiz-status roboto-bold" id="quiz-status-${quiz.id}">${quiz.is_answered ? 'COMPLETE' : 'INCOMPLETE'}</span></p>
                 <button class="roboto-bold view-quiz-button" id="view-quiz-${quiz.id}">View</button>
-            `;
+                </div>
+                `);
+            const statusElement = document.getElementById(`quiz-status-${quiz.id}`);
+            const testOptionsButton = document.getElementById(`view-quiz-${quiz.id}`);
 
-            // Append each quiz to the container
-            quizContainer.appendChild(quizItem);
+            //check if quiz is completed or not
+            const isAnswered = quiz.is_answered;
+            if (isAnswered == false) { // Determine if the student has not finished the quiz.
+                statusText = "INCOMPLETE";
+                statusElement.innerText = statusText;
+                statusElement.style.color = "black"; // Fixed this
+                testOptionsButton.innerText = "Resume";
+            } else { // Determine if the student passed (assuming 75% passing rate)
+                statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+                statusElement.innerText = statusText;
+                statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+                testOptionsButton.innerText = "View";
+            }
+
+            
 
             // Add event listener to view button
-            document.getElementById(`view-quiz-${quiz.id}`).addEventListener("click", function () {
+            testOptionsButton.addEventListener("click", function () {
                 sessionStorage.setItem('quiz_id', quiz.id);
-                window.location.href = `/game_quiz/${quiz.id}`;
+                window.location.href = `/game_quiz`;
             });
         }
     }
