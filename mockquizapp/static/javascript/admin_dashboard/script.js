@@ -250,7 +250,6 @@ function collectFormData() {
     if (safeLevelSelected) {
         formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
     }
-
     return formData;
 }
 
