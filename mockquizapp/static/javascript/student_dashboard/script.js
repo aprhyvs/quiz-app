@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
         isAnswered = mostRecentQuiz.is_answered;
         // Display number of correct answers
         const totalItems = mostRecentQuiz.number_of_correct + mostRecentQuiz.number_of_wrong;
-        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / ${totalItems}`;
+        document.querySelector(".score-set").innerText = `${mostRecentQuiz.number_of_correct} / 20`;
         const passingScore = Math.ceil(totalItems* 0.75);
         const statusElement = document.getElementById("recent-quiz-status");
         let statusText = "UNKNOWN";

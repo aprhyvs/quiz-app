@@ -52,7 +52,7 @@ function playAudio(audio){
 
 async function processChoice(choiceString){
     console.log(choiceString);
-
+    
     async function evaluateChoice(choice) {
         const current_question = global_current_question;
         const quiz_id = sessionStorage.getItem('quiz_id');
@@ -71,14 +71,23 @@ async function processChoice(choiceString){
 
     const result = await evaluateChoice(choiceString);
     if (result){
-        showAnswerEffects(result);
+        const current_question = global_current_question;
+        showAnswerEffects(result, current_question);
+
     }
 }
 
-function showAnswerEffects(result){
+function showAnswerEffects(result, current_question) {
         //TODO: Show the visual effects and play audio here.
 
+    // proceed to the next question
+    nextQuestion(current_question);
+}
 
+async function nextQuestion(current_question){
+    global_current_question = current_question + 1;
+    const questionData = await questionFetch(global_current_question);
+    displayQuestion(questionData);
 }
 
 function showConfirmationPrompt(choice) {
@@ -86,7 +95,6 @@ function showConfirmationPrompt(choice) {
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
     if (choiceElement) {
         //TODO: Make the choice flash yellow during confirmation screen.
-        choiceElement.style.fill = "var(--gold)";
     }
     confirmationPromptElement.style.display = "flex";
     temporary_answer = choice;
@@ -94,7 +102,9 @@ function showConfirmationPrompt(choice) {
 
 function displayQuestion(questionData){
     const questionElement = document.querySelector(".question-text");
-    const options = questionData.options.map(opt => opt.replace(/^[A-D]\.\s*/, ""));
+    const options = questionData.options.map(opt =>
+        opt.replace(/^[A-D][\.\:\-\s]*\s*/, "")
+      );
     questionElement.innerText = questionData.question;
     displayChoices(options);
 }
