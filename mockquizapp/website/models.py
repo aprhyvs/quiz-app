@@ -110,7 +110,8 @@ class QuizData(models.Model):
                 "correct_answer": "Paris",
                 "answered": False,
                 "answer": None,
-                "worth" : 100
+                "worth" : 100,
+                "is_correct" : False
             },
         }
     """

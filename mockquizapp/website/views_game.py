@@ -876,7 +876,8 @@ def on_game_data_answer(request):
                     "correct_answer": "Paris",
                     "answered": False,
                     "answer": None,
-                    "worth" : 100
+                    "worth" : 100,
+                    "is_correct" : False
                 },
                 ...
             }
@@ -894,8 +895,10 @@ def on_game_data_answer(request):
         
         if user_answer.lower() in real_answer.lower():
             quiz.number_of_correct += 1
+            selected_questions["is_correct"] = True
         else:
             quiz.number_of_wrong += 1
+            selected_questions["is_correct"] = False
             
         quiz.questions[question] = selected_questions
         quiz.save()
@@ -1115,7 +1118,8 @@ def on_game_data_answer_with_x2(request):
                     "correct_answer": "Paris",
                     "answered": False,
                     "answer": None,
-                    "worth" : 100
+                    "worth" : 100,
+                    "is_correct" : False
                 },
                 ...
             }
@@ -1133,9 +1137,11 @@ def on_game_data_answer_with_x2(request):
         if answer_1.lower() in real_answer.lower() or answer_2.lower() in real_answer.lower():
             quiz.number_of_correct += 1
             selected_questions["answer"] = real_answer
+            selected_questions["is_correct"] = True
         else:
             quiz.number_of_wrong += 1
             selected_questions["answer"] = answer_1
+            selected_questions["is_correct"] = False
         
         quiz.game_data_times2 = { question: [answer_1, answer_2]}
         quiz.questions[question] = selected_questions
@@ -1235,7 +1241,8 @@ def on_game_data_pass(request):
                     "correct_answer": "Paris",
                     "answered": False,
                     "answer": None,
-                    "worth" : 100
+                    "worth" : 100,
+                    "is_correct" : False
                 },
                 ...
             }
@@ -1244,6 +1251,7 @@ def on_game_data_pass(request):
         selected_data["answered"] = False
         selected_data["answer"] = None
         selected_data["worth"] = 0
+        selected_questions["is_correct"] = False
         old_generated_questions[question] = selected_data
         quiz.questions = old_generated_questions
         quiz.game_has_pass = True
