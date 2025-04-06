@@ -1177,7 +1177,7 @@ def on_game_data_generate_voice(request):
         if not mytext:
             return JsonResponse({'error': 'No text provided.'}, status=400)
         
-        language = 'en'
+        language = 'en-uk'
 
         # Generate the TTS object
         tts = gTTS(text=mytext, lang=language, slow=False)
