@@ -224,6 +224,72 @@ def get_index_content(index: str, questions: str):
     4. Ensure that the resulting JSON object is properly formatted and can be parsed without errors.
 
     If the given number of question which is <index> does not exist, respond with: {"error": "Key '<index>' not found."}
+    
+    Ensure it will work with this format checker;
+    ```
+    def text_to_dictionary(response: str):
+        # Check if the input is a string
+        if not isinstance(response, str):
+            print("Error: Response must be a string")
+            return None
+
+        try:
+            # Use regex to extract the dictionary-like content
+            match = re.search(r'{[\s\S]*}', response, re.DOTALL)
+            if match:
+                python_dict_text = match.group(0)
+
+                # Preprocess to make it JSON-compatible
+                json_text = re.sub(r'\\"', '"', python_dict_text) 
+                
+                # 2. Convert integer keys to JSON string keys (e.g., `1:` -> `"1":`)
+                json_text = re.sub(r'"\\?"(\w+)\\?"":', r'"\1":', json_text)  # Normalize keys (handles words and numbers)
+
+                # Attempt to parse the JSON content
+                try:
+                    parsed_json = json.loads(json_text)
+                    return parsed_json
+                except json.JSONDecodeError as e:
+                    print(f"JSON parsing error: {e}")
+                    print("Ensure proper formatting in the dictionary.")
+                    return None
+            else:
+                print("No dictionary-like content found in the response")
+                return None
+        except Exception as e:
+            print(f"Unexpected error occurred: {e}")
+            return None
+
+
+
+    def is_index_correct_format(data: dict, index: str) -> bool:
+        if not isinstance(data, dict):
+            return False
+
+        selected_data = data.get(index)
+        if not isinstance(selected_data, dict):
+            return False
+        
+        required_keys = ["question", "options", "correct_answer"]
+        if not all(key in selected_data for key in required_keys):
+            return False
+        
+        if not isinstance(selected_data["question"], str) or not selected_data["question"]:
+            return False
+
+        if not isinstance(selected_data["options"], list) or len(selected_data["options"]) != 4:
+            return False
+
+        if not isinstance(selected_data["correct_answer"], str):
+            return False
+
+        valid_answers = {"a", "b", "c", "d"}
+        if selected_data["correct_answer"].strip().lower() not in valid_answers:
+            return False
+
+        return True
+    ```
+    
     """
     # Replace <index> in system prompt with actual value
     
