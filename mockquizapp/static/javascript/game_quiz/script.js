@@ -49,6 +49,44 @@ function playAudio(audio){
     audioElement.play();
 }
 
+function endGame() {
+    console.log("Finished Game, Nigga!!!");
+}
+
+async function getAnsweredQuestions(quiz_id){
+    if (!quiz_id) {
+        return null;
+    }
+    res = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
+        'quiz_id': quiz_id
+    });
+    if (res) {
+         console.log(res);
+         return res;
+    }
+}
+
+async function checkQuizNumber(current_question){ // Check if the number of correct answers and wrong answers total to 20, if it is, return true and go to end screen.
+    console.log("Checking last question... ", current_question);
+    if (parseInt(current_question) > 19){
+        const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
+        console.log("More than 19 questions have been answered!");
+        if (current_answered_questions) {
+            console.log(current_answered_questions);
+            const quizData = current_answered_questions.data;
+            if (quizData.currently_answered_question == 20) {
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+
 
 async function processChoice(choiceString){
     console.log(choiceString);
@@ -77,11 +115,19 @@ async function processChoice(choiceString){
     }
 }
 
-function showAnswerEffects(result, current_question) {
+async function showAnswerEffects(result, current_question) {
         //TODO: Show the visual effects and play audio here.
 
     // proceed to the next question
-    nextQuestion(current_question);
+    console.log(current_question);
+    const isLastQuestion = await checkQuizNumber(current_question);
+    console.log(isLastQuestion);
+    if (isLastQuestion == true) {
+        console.log("Is it the final question?")
+        endGame();
+    }else{
+        nextQuestion(current_question);
+    }
 }
 
 async function nextQuestion(current_question){
@@ -95,6 +141,7 @@ function showConfirmationPrompt(choice) {
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
     if (choiceElement) {
         //TODO: Make the choice flash yellow during confirmation screen.
+        choiceElement.classList.add('flash-yellow');
     }
     confirmationPromptElement.style.display = "flex";
     temporary_answer = choice;
