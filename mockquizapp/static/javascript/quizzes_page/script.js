@@ -270,7 +270,8 @@ function displayListOfQuizzes(quizzes) {
                 `);
             const statusElement = document.getElementById(`quiz-status-${quiz.id}`);
             const testOptionsButton = document.getElementById(`view-quiz-${quiz.id}`);
-
+            const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
+            const passingScore = Math.ceil(totalItems * 0.75);
             //check if quiz is completed or not
             const isAnswered = quiz.is_answered;
             if (isAnswered == false) { // Determine if the student has not finished the quiz.
@@ -278,20 +279,30 @@ function displayListOfQuizzes(quizzes) {
                 statusElement.innerText = statusText;
                 statusElement.style.color = "black"; // Fixed this
                 testOptionsButton.innerText = "Resume";
-            } else { // Determine if the student passed (assuming 75% passing rate)
-                statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
-                statusElement.innerText = statusText;
-                statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
-                testOptionsButton.innerText = "View";
-            }
 
-            
-
-            // Add event listener to view button
+                // Add event listener to Resume button
             testOptionsButton.addEventListener("click", function () {
                 sessionStorage.setItem('quiz_id', quiz.id);
                 window.location.href = `/game_quiz`;
             });
+
+
+            } else { // Determine if the student passed (assuming 75% passing rate)
+                statusText = quiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
+                statusElement.innerText = statusText;
+                statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+                testOptionsButton.innerText = "View";
+
+                testOptionsButton.addEventListener("click", function () {
+                    sessionStorage.setItem('quiz_id', quiz.id);
+                    window.location.href = `/quiz_complete/`;
+                });
+
+            }
+
+            
+
+            
         }
     }
     

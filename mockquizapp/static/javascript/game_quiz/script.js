@@ -49,10 +49,13 @@ function playAudio(audio){
     audioElement.play();
 }
 
-function endGame() {
-    const quiz_status = getQuizStatus(sessionStorage.getItem('quiz_id'));
-    console.log("Finished Game, Nigga!!!");
-    
+async function endGame() {
+    const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
+    if (quiz_status) {
+        console.log('Quiz status ', quiz_status);
+        console.log("Finished Game, Nigga!!!");
+    }
+
 }
 
 async function getAnsweredQuestions(quiz_id){
