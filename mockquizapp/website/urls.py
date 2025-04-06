@@ -6,6 +6,11 @@ from .views import *
 
 
 urlpatterns = [
+
+    path('api/student/upload/stage1', view=upload_file_view_status_1),
+    path('api/student/upload/stage2', view=upload_file_view_status_2),
+    path('api/student/upload/stage3', view=upload_file_view_status_3),
+    
     #=============================== Views Pages ===============================#
     path('', home, name='home'),
     path('register-student/', register_page, name='register-page'),
@@ -49,9 +54,7 @@ urlpatterns = [
     path('api/student/verify_email', view=verify_email),
     path('api/student/leaderboards', view=get_student_leaderboards),
     
-    path('api/student/upload/stage1', view=upload_file_view_status_1),
-    path('api/student/upload/stage2', view=upload_file_view_status_2),
-    path('api/student/upload/stage3', view=upload_file_view_status_3),
+    
     
     path('api/game/generate/questions', view=on_game_data_generation),
     path('api/game/generate/hints', view=on_game_data_ask_ai),

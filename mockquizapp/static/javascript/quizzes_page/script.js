@@ -232,20 +232,24 @@ function displayListOfQuizzes(quizzes) {
             statusElement.innerText = statusText;
             statusElement.style.color = "black"; // Fixed this
             testOptionsButton.innerText = "Resume";
+
+            testOptionsButton.addEventListener("click", function () {
+                sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
+                window.location.href = `/game_quiz`;
+            });
+            
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
             statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
             testOptionsButton.innerText = "View";
-        }
 
-        // Update "View" button with a link to view more quiz info
-        testOptionsButton.addEventListener("click", function (event) {
-            if (isAnswered == false) {
+            testOptionsButton.addEventListener("click", function () {
                 sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
-                window.location.href = `/game_quiz/`
-            }
-        });
+                window.location.href = `/quiz_complete/`;
+            });
+
+        }
     }
 
     function displayOtherQuizzes(quizzes) {
