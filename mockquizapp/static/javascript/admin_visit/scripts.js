@@ -36,8 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         displayMostRecentQuiz(quizData.quizzes[0]);
         displayPassedAndFailedQuizzes(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
-        showQuizzesTakenGraph(quizData.quizzes);
-        console.log("http://localhost")
+        showQuizzesTakenGraph(quizData.quizzes); 
     }
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 

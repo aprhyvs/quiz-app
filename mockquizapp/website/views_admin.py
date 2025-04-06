@@ -37,57 +37,7 @@ def update_rankings(request):
     rankings['weekly'] = get_weekly_rankings()
     rankings['monthly'] = get_monthly_rankings()
     return JsonResponse({"rankings": rankings}, status=200)
-
-def update_student_data_admin(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
-    
-    if request.method == 'POST':
-        student_id = request.POST.get('student_id' , None)
-        
-        if not student_id:
-            return JsonResponse({"error": "Student ID not provided"}, status=400)
-        
-        
-        student = StudentData.objects.filter(id=student_id).first()
-        if not student:
-            return JsonResponse({"error": "Student not found"}, status=404)
-        profile_pic = request.FILES.get('profile_pic')
-        if profile_pic:
-            student.profile_pic = profile_pic
-        fname = request.POST.get('fname', None)
-        if fname:
-            student.fname = fname
-        mname = request.POST.get('mname', None)
-        if mname:
-            student.mname = mname
-        lname = request.POST.get('lname', None)
-        if lname:
-            student.lname = lname
-        school = request.POST.get('school', None)
-        if school:
-            student.school = school
-        address = request.POST.get('address', None)
-        if address:
-            student.address = address
-        gmail = request.POST.get('gmail', None)
-        if gmail:
-            student.gmail = gmail
-        phone = request.POST.get('phone', None)
-        if phone:
-            student.phone = phone
-        username = request.POST.get('username', None)
-        if username:
-            if StudentData.objects.filter(username=username).exists():
-                return JsonResponse({"error": "Username already exists"}, status=400)
-            student.username = username
-        password = request.POST.get('password', None)
-        if password:
-            student.password = password
-        student.save()
-        
-        return JsonResponse({"message": "Student data updated successfully"}, status=200)
-             
+         
 def delete_student(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "User not authenticated"}, status=401)
@@ -104,6 +54,10 @@ def delete_student(request):
          
         User.objects.filter(username=student.username).delete()
         student.delete()
+        
+        quizzes = QuizData.objects.filter(student_id=student_id)
+        if quizzes.count() > 0:
+            quizzes.delete()
         
         return JsonResponse({"message": "Student deleted successfully"}, status=200)
         
