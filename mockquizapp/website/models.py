@@ -155,9 +155,9 @@ class QuizData(models.Model):
                 "question": self.questions[k]["question"],
                 "options": self.questions[k]["options"],
                 "correct_answer": None,
-                "answered": self.questions[k]["answered"],
-                "answer": self.questions[k]["answer"],
-                "worth" : self.questions[k]["worth"]
+                "answered": self.questions[k].get("answered", False),
+                "answer": self.questions[k].get("answer", None),
+                "worth" : self.questions[k].get("worth", 0),
             })
         
         data["worth_sequence"] = self.worth_sequence

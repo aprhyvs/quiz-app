@@ -52,7 +52,7 @@ from .student_utils import *
 
 
 TEXTLENGTH_REQUIRED = 300
-
+TOTAL_QUESTIONS = 20
 
 def generate_response_cohere(command : str , system : str):
     global cohere_client
@@ -1301,4 +1301,32 @@ def on_game_data_generate_voice(request):
 
     return JsonResponse({"error": "Invalid request method."}, status=405)
 
+
+
+def on_game_is_complete(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        if (quiz.number_of_correct + quiz.number_of_wrong ) == TOTAL_QUESTIONS:
+            quiz.is_answered = True
+            quiz.save()
+            return JsonResponse({'message': 'Quiz is completed.', 'is_completed': True, 'data': quiz.game_data()}, status=200)
+        
+        return JsonResponse({'message': 'Quiz is not completed.', 'is_completed': False , 'data': quiz.game_data()}, status=200)
 
