@@ -671,8 +671,10 @@ def on_game_data_generation(request):
         if not selected_questions:
             converted_questions = None
             past_error = None
+            raw_cleaned_generated_question = quiz.raw_generated_questions.replace('"', '') # remove double quotes
+            raw_cleaned_generated_question = raw_cleaned_generated_question.replace("'", '') # remove double quotes
             for _ in range(3):
-                selected_questions = get_index_content(index=question , questions=quiz.raw_generated_questions, past_error=past_error)
+                selected_questions = get_index_content(index=question , questions=raw_cleaned_generated_question, past_error=past_error)
                 if selected_questions:
                     converted_questions = text_to_dictionary(selected_questions)
                     if converted_questions:
