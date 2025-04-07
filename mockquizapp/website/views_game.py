@@ -679,16 +679,21 @@ def on_game_data_generation(request):
                 if selected_questions:
                     converted_questions = text_to_dictionary(selected_questions)
                     if converted_questions:
-                        break
+                        is_valid = is_index_correct_format(converted_questions , question)
+                        if is_valid:
+                            break
+                        else:
+                            converted_questions = None
+                        
                 past_error = selected_questions
                 time.sleep(1)
             if not converted_questions:
                 return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
             
             print("converted questions : ", converted_questions)
-            is_valid = is_index_correct_format(converted_questions , question)
-            if not is_valid:
-                return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
+            # is_valid = is_index_correct_format(converted_questions , question)
+            # if not is_valid:
+            #     return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
         
         selected_data = converted_questions.get(question, None)
         if selected_data is None:
@@ -1366,3 +1371,7 @@ def on_game_check_power_up(request):
             'has_2x' : quiz.game_has_times2,
             'x2_data' : quiz.game_data_times2
         }, status=200)
+        
+        
+        
+        
