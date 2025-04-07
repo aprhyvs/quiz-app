@@ -265,8 +265,8 @@ async function processFileStage3(data) {
         }
     sessionStorage.setItem('quiz_id', quiz_id);
     setTimeout(() => {
-        document.getElementById("loading-bar").innerHTML = "85%"; 
-        document.getElementById("loading-bar").innerHTML = "100%";
+        document.getElementById("loading-bar").innerHTML = "100%"; 
+        document.getElementById("loading-bar").width = "100%";
     }, 1000); // Delay of 1 second
     setTimeout(() => {
         document.getElementById("uploadQuizModalLoading").style.display = "none";
