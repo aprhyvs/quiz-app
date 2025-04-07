@@ -157,14 +157,7 @@ async function showWrongAndCorrectAnswer(choice, current_question){
 
 
 async function showAnswerEffects(choice, current_question) {
-    //TODO: Show the visual effects and play audio here.
-    //TODO: Mon patukdo man pano i change an kulay kay ipa green or red depending kun nano an tama na answer.
     showWrongAndCorrectAnswer(choice, current_question);
-
-
-    
-
-
     // proceed to the next question
     const isLastQuestion = await checkQuizNumber(current_question);
     if (isLastQuestion == true) {
