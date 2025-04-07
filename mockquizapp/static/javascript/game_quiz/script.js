@@ -30,8 +30,8 @@ for (let i = 0; i < points.length; i++) {
     
     listContainer.insertAdjacentHTML("afterbegin", 
         `
-        <div class="level-point-${level}">
-        <p class="level-${level} roboto-bold">${level}</p>
+        <div class="level-point-${level} level-point">
+        <p class="level-${level} level roboto-bold">${level}</p>
         <p class="points roboto-light">${points[reversedIndex]}</p>
         </div>
         `);
