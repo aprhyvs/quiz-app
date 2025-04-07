@@ -233,12 +233,19 @@ p.grey {
     background-color: color-mix(in srgb, var(--primary) 50%, var(--background) 10%);
     border-radius: 0.5em;
 }
+
+ 
+
+
 .upload-bar-content {
-    width: 80%;
+    width: 10%;
     padding: 0.25em;
     background-color: var(--primary);
     border-radius: 0.5em;
+    color: var(--button-fg);
+    transition: width 0.5s ease-in-out;
 }
+
 /* leaderboards */
 
 .wrapper-quiz svg {

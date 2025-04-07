@@ -41,7 +41,7 @@
             </div>
 
             <!-- Upload Quiz Modal -->
-            <div id="uploadQuizModal" class="modal">
+            {% comment %} <div id="uploadQuizModal" class="modal">
                 <div class="modal-content">
                     <div class="upload-box" id="upload-box">
                         <svg width="100%" height="100%" viewBox="0 0 200 200">
@@ -65,10 +65,10 @@
                         </div><!--upload-content-->
                     </div><!--upload-box-->
                 </div><!--modal-content-->
-            </div><!--modal-->
+            </div><!--modal--> {% endcomment %}
 
             <!-- Upload Quiz Modal Loading stage 2-->
-            <div id="uploadQuizModalLoading" class="modal" style="display: none;">
+            {% comment %} <div id="uploadQuizModalLoading" class="modal" style="display: none;">
                 <div class="modal-content">
                     <div class="upload-box" id="upload-box">
                         <svg width="100%" height="100%" viewBox="0 0 200 200">
@@ -91,10 +91,10 @@
                         </div><!--upload-content-->
                     </div><!--upload-box-->
                 </div><!--modal-content-->
-            </div><!--modal-->
+            </div><!--modal--> {% endcomment %}
 
             <!-- Upload Quiz Modal Complete stage 3-->
-            <div id="uploadQuizModalComplete" class="modal" style="display: none;">
+            {% comment %} <div id="uploadQuizModalComplete" class="modal" style="display: none;">
                 <div class="modal-content">
                     <div class="upload-box" id="upload-box">
                         <svg width="100%" height="100%" viewBox="0 0 200 200">
@@ -112,7 +112,7 @@
 
                             <h2 class="raleway-bold">Upload Complete</h2>
                             <
-            <!-- Upload Quiz Modal -->
+            <!-- Upload Quiz Modal --> {% endcomment %}
             <div id="uploadQuizModal" class="modal">
                 <div class="modal-content">
                     <div class="upload-box" id="upload-box">
@@ -158,7 +158,7 @@
 
                             <h2 class="raleway-bold">Uploading...</h2>
                             <div class="upload-bar">
-                                <div class="upload-bar-content roboto-regular">01%</div>
+                                <div class="upload-bar-content roboto-regular" id="loading-bar">0%</div>
                             </div>
                            
                         </div><!--upload-content-->
@@ -184,7 +184,7 @@
                             </svg>
 
                             <h2 class="raleway-bold">Upload Complete</h2>
-                            <p class="roboto-light" id="uploaded-quiz-file-name">filename here</p><!--include file type-->
+                            <p class="roboto-light" id="uploaded-quiz-file-name">filename here</p>
                             <button class="roboto-bold" id="generate-quiz-button">Generate Quiz</button>
                            
                         </div><!--upload-content-->
@@ -192,6 +192,31 @@
                 </div><!--modal-content-->
             </div><!--modal-->
 
+            <!-- Upload Quiz Modal Complete stage 3-->
+            <div id="uploadQuizModalError" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="upload-box" id="upload-box">
+                        <svg width="100%" height="100%" viewBox="0 0 200 200">
+                            <path d="M 15,5 H 185 A 10 10 0 0 1 195 15 V 185 A 10 10 0 0 1 185 195 H 15 A 10 10 0 0 1 5 185 V 15 A 10 10 0 0 1 15 5 Z"
+                                stroke="currentColor" fill="transparent"
+                                stroke-width="2.5" stroke-dasharray="12, 8" />
+                        </svg>
+
+                        <div class="upload-content">
+                            <!-- Upload icon -->
+                            <svg width="169" height="200" viewBox="0 0 169 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M94.9997 4H78.9997H36.333C18.6599 4 4.33301 18.3269 4.33301 36V164C4.33301 181.674 18.6599 196 36.333 196H78.9997M94.9997 4L153.666 64M94.9997 4V53.3333C94.9997 59.2243 99.7751 64 105.666 64H153.666M153.666 64V98" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M137.667 196V132M137.667 132L164.333 158.667M137.667 132L111 158.667" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+
+                            <h2 class="raleway-bold">Upload Error</h2>
+                            <p class="roboto-light" id="uploaded-quiz-error"></p>
+                            <button class="roboto-bold" id="cancel-quiz-button">Try Again</button>
+                           
+                        </div><!--upload-content-->
+                    </div><!--upload-box-->
+                </div><!--modal-content-->
+            </div><!--modal-->
 
 
         </section>

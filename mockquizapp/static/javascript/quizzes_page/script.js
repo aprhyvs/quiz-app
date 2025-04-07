@@ -184,6 +184,7 @@ async function uploadFile(file) {
         fileInput = file;
     }else{
         fileInput = document.getElementById('file-input').files[0];
+        document.getElementById('uploaded-quiz-file-name').innerText = fileInput.name
     }
 
     console.log("Uploading file...")
@@ -196,34 +197,26 @@ async function uploadFile(file) {
       return;
     }
     console.log("Legit uploading the file to stage 1")
+    document.getElementById("uploadQuizModalLoading").style.display = "flex";
+
+    setTimeout(() => {
+        
+        document.getElementById("loading-bar").innerHTML = "35%"; 
+        document.getElementById("loading-bar").style.width = "35%"; 
+    }, 1000); // Delay of 1 second
     const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
         'file': fileInput
     });
-        console.log(stage1Data);
-        if (!stage1Data) {
-            console.error("Stage 1 failed")
-            return;
-        }
-        processFileStage2(stage1Data);
+    console.log(stage1Data);
+    if (!stage1Data) { 
+        document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
+        document.getElementById("uploadQuizModalError").style.display = "flex";
+        return;
+    }
+    processFileStage2(stage1Data);
     
-    
+}
 
-    // try {
-    //   const response = await fetch("/api/student/upload/stage1", {
-    //     method: "POST",
-    //     headers: {
-    //         "X-CSRFToken": csrf_token, // CSRF token for Django
-    //     },
-    //     body: formData,
-    //   });
-
-    //   const result = await response.json();
-    //   console.log("Upload success:", result);
-    //   processFileStage2(result); // Proceed to Stage 2
-    // } catch (error) {
-    //   console.error("Upload error:", error);
-    // }
-  }
 
 async function processFileStage2(data) {
     if (!data) {
@@ -240,9 +233,15 @@ async function processFileStage2(data) {
     console.log(stage2Data);
     if (!stage2Data) {
         console.error("Stage 2 failed")
+        document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
+        document.getElementById("uploadQuizModalError").style.display = "flex";
         return;
     }
-    document.getElementById("uploadQuizModalLoading").style.display = "flex"; 
+    
+    setTimeout(() => { 
+        document.getElementById("loading-bar").innerHTML = "85%"; 
+        document.getElementById("loading-bar").style.width = "85%"; 
+    }, 1000); // Delay of 1 second
     processFileStage3(stage2Data);
 }
 
@@ -260,10 +259,19 @@ async function processFileStage3(data) {
         console.log(stage3Data);
         if (!stage3Data) {
             console.error("Stage 3 failed")
+            document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
+            document.getElementById("uploadQuizModalError").style.display = "flex";
             return;
         }
     sessionStorage.setItem('quiz_id', quiz_id);
-    document.getElementById("uploadQuizModalComplete").style.display = "flex"; 
+    setTimeout(() => {
+        document.getElementById("loading-bar").innerHTML = "85%"; 
+        document.getElementById("loading-bar").innerHTML = "100%";
+    }, 1000); // Delay of 1 second
+    setTimeout(() => {
+        document.getElementById("uploadQuizModalLoading").style.display = "none";
+        document.getElementById("uploadQuizModalComplete").style.display = "flex"; 
+    }, 2000);
 }
 
 //sunod function sa button pag change
@@ -293,6 +301,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         event.preventDefault();
         document.getElementById("logout-form-pop").style.display = "none"; 
     });
+
+    document.getElementById("cancel-quiz-button").addEventListener("click", async function (event) {
+        event.preventDefault();
+        document.getElementById("uploadQuizModal").style.display = "none";
+        document.getElementById("uploadQuizModalLoading").style.display = "none";
+        document.getElementById("uploadQuizModalComplete").style.display = "none"; 
+        document.getElementById("uploadQuizModalError").style.display = "none"; 
+    })
 
 
 
