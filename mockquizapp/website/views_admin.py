@@ -205,8 +205,9 @@ def set_game_settings(request):
         game_settings['leaderboard_reset'] = request.POST.get('leaderboard_reset')
         if not game_settings['leaderboard_reset'] or game_settings['leaderboard_reset'] not in ['weekly', 'monthly']:
             return JsonResponse({"error": "Leaderboards reset must be weekly or monthly"}, status=400)
-        game_settings['timer_countdown'] = request.POST.get('timer_countdown')
-        if not game_settings['timer_countdown'] or game_settings['timer_countdown'] not in [25, 30 , 40]: 
+        game_settings['timer_countdown'] = request.POST.get('timer_countdown' , "")
+        print(game_settings['timer_countdown'])
+        if not game_settings['timer_countdown'] or not game_settings['timer_countdown'].isdigit() or game_settings['timer_countdown'] not in ["25", "30" , "40"]: 
             return JsonResponse({"error": "Timer countdown must be a number"}, status=400)
         game_settings['safe_level'] = request.POST.get('safe_level')
         if not game_settings['safe_level'] or game_settings['safe_level'] not in ["3, 6, 9, 12, 15", "4, 8, 12, 16", "5, 10, 15" ]:
