@@ -181,6 +181,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (isAnswered == false) {
                 sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
                 window.location.href = `/game_quiz/`
+            } else{
+                sessionStorage.setItem('quiz_id', mostRecentQuiz.id);
+                window.location.href = `/quiz_complete/`
             }
             
         });
