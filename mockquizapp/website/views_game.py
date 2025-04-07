@@ -1039,8 +1039,8 @@ def on_game_data_5050(request):
             return JsonResponse({'error': 'Question not found.'}, status=404)
         
         
-        if question in quiz.game_data_5050 :
-            return JsonResponse({'5050': quiz.game_data_5050.get(question)}, status=200)
+        # if question in quiz.game_data_5050 :
+        #     return JsonResponse({'5050': quiz.game_data_5050.get(question)}, status=200)
         
         # Check if there is a data in dictionary game_data_5050
         if bool(quiz.game_data_5050):
@@ -1049,7 +1049,9 @@ def on_game_data_5050(request):
         decoy_5050 = []
         correct_answer = selected_questions["correct_answer"]
         decoy_5050.append(correct_answer)
-        for decoy in ["A", "B", "C", "D"]:
+        decoy_sample = ["A", "B", "C", "D"]
+        random.shuffle(decoy_sample)
+        for decoy in decoy_sample: 
             if decoy != correct_answer:
                 decoy_5050.append(decoy)
         
