@@ -83,14 +83,17 @@ html, body {
 
 .modal-flash-red {
     background-color: var(--red);
+    transition: 0.3s ease;
 }
 
 .modal-flash-green {
     background-color: var(--green);
+    transition: 0.3s ease;
 }
 
 .modal-flash-yellow {
     background-color: var(--gold);
+    transition: 0.3s ease;
 }
 
 /* SEE COLORS BELOW */

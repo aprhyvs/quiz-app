@@ -137,8 +137,10 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         console.log('Player is ' +isCorrect);
+        
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+
             resetFlashYellowClass();
             flashGreen(choiceElement);
         }else{
@@ -151,6 +153,7 @@ async function showWrongAndCorrectAnswer(choice, current_question){
             const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
             flashGreen(correctAnswerElement);
         }
+        highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
     }
 }
@@ -175,6 +178,8 @@ async function nextQuestion(current_question){
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
     displayQuestion(questionData);
+    showQuestionWorth(global_current_question, questionData.worth);
+    highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
 }
 
 function flashRed(choiceElement){
@@ -302,7 +307,6 @@ function modalFlash(choiceElement, color){
     }
 }
 
-
 async function highlightQuestionWorth(worthElement, question_number){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
     const isCorrect = await getCorrectStatus(question_number);
     if (isCorrect == true){
@@ -315,9 +319,35 @@ async function highlightQuestionWorth(worthElement, question_number){ //TODO: Ma
     }
 }
 
-function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
-    modalFlash(worthElement, "yellow");
+function highlightQuestionWorthRealtime(worthElement, isCorrect){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    if (isCorrect == true){
+        console.log("Correct ");
+        console.log(worthElement);
+        modalFlash(worthElement, "green");
+    }else{
+        console.log("Wrong ");
+        modalFlash(worthElement, "red");
+    }
+}
 
+function removeModalFlash(choiceElement, color){
+    if (choiceElement) {
+        if (color == "yellow"){
+            choiceElement.classList.remove('modal-flash-yellow');
+        }
+        if (color == "red"){
+            choiceElement.classList.remove('modal-flash-red');
+        }
+        if (color == "green"){
+            choiceElement.classList.remove('modal-flash-green');
+        }
+    }
+}
+
+function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    const previousWorthElement = document.querySelector(`.level-point-${global_current_question - 1}`);
+    removeModalFlash(previousWorthElement, "yellow");
+    modalFlash(worthElement, "yellow");
 }
 
 async function highlightAnsweredQuestionsWorth(questions){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
@@ -333,7 +363,13 @@ async function highlightAnsweredQuestionsWorth(questions){ //TODO: Make the wort
     });
 }
 
+function showQuestionWorth(number, worth){
+    const questionInfoElement = document.querySelector(`.q-level`);
+    const pointsElement = document.querySelector(`.points`)
 
+    questionInfoElement.innerText = "Q" + number;
+    pointsElement.innerText = "₱" + worth;
+}
 
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -350,6 +386,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 displayQuestion(question);
                 global_current_question = current_question;
                 highlightAnsweredQuestionsWorth(questions);
+                highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
+                showQuestionWorth(current_question, question.worth);
+                console.log(question);
             }
         }
     }
