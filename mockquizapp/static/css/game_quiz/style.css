@@ -81,6 +81,18 @@ html, body {
     transition: fill 0.3s ease;
 }
 
+.modal-flash-red {
+    background-color: var(--red);
+}
+
+.modal-flash-green {
+    background-color: var(--green);
+}
+
+.modal-flash-yellow {
+    background-color: var(--gold);
+}
+
 /* SEE COLORS BELOW */
 /* .choices svg:hover path
    fill: var(--green); - CORRECT
