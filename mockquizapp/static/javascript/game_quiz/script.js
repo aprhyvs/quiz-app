@@ -288,20 +288,35 @@ async function getCorrectStatus(question_number){
     }
 }
 
+function modalFlash(choiceElement, color){
+    if (choiceElement) {
+        if (color == "green"){
+            choiceElement.classList.add('modal-flash-green');
+        }
+        if (color == "red"){
+            choiceElement.classList.add('modal-flash-red');
+        }
+        if (color == "yellow"){
+            choiceElement.classList.add('modal-flash-yellow');
+        }
+    }
+}
+
+
 async function highlightQuestionWorth(worthElement, question_number){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
     const isCorrect = await getCorrectStatus(question_number);
     if (isCorrect == true){
         console.log("Correct ");
         console.log(worthElement);
-        flashGreen(worthElement);
+        modalFlash(worthElement, "green");
     }else{
         console.log("Wrong ");
-        flashRed(worthElement);
+        modalFlash(worthElement, "red");
     }
 }
 
 function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
-    worthElement.classList.add('flash-yellow');
+    modalFlash(worthElement, "yellow");
 
 }
 
