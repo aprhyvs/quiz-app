@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Invalid data structure:", quizData);
             return;
         }
-        displayMostRecentQuiz(quizData.quizzes[0]);
+        const recentQuizData = quizData?.quizzes.length > 0 ? quizData?.quizzes[0] : null;
+        displayMostRecentQuiz(recentQuizData);
         displayPassedAndFailedQuizzes(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
         showQuizzesTakenGraph(quizData.quizzes);
@@ -143,6 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayMostRecentQuiz(mostRecentQuiz) {
+        if (!mostRecentQuiz) { 
+            let statusText = "NONE";
+            const statusElement = document.getElementById("recent-quiz-status");
+            const statusParent = document.querySelector(".quiz-status-parent")
+            const testOptionsButton = document.getElementById("view-recent-quiz-button");
+            statusParent.innerHTML = `<p class="raleway-bold id="recent-quiz-status" style="color: var(--text);">${statusText}</p>`;
+            statusElement.innerText = statusText;
+            statusParent.style.color = "var(--text)";
+            testOptionsButton.style.display = "none"; 
+            return;
+        }
         document.querySelector(".quiz-title").innerText = mostRecentQuiz.quiz_title;
         isAnswered = mostRecentQuiz.is_answered;
         // Display number of correct answers
@@ -204,18 +216,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function showAnswersGraph(graphData) {
-        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
         // Initialize arrays to store correct and wrong answers per month
         const correctAnswers = new Array(12).fill(0);
         const wrongAnswers = new Array(12).fill(0);
+        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-        // Process quiz data and organize it by month
-        graphData.forEach(quiz => {
-        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
-        correctAnswers[quizMonth] += quiz.number_of_correct;
-        wrongAnswers[quizMonth] += quiz.number_of_wrong;
-    });
+
+        if (graphData || graphData.length > 0) { 
+            // Process quiz data and organize it by month
+            graphData.forEach(quiz => {
+                const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
+                correctAnswers[quizMonth] += quiz.number_of_correct;
+                wrongAnswers[quizMonth] += quiz.number_of_wrong;
+            }); 
+        }
+
+
 
         const data = {
             labels: labels,
@@ -256,17 +272,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function showQuizzesTakenGraph(graphData){
-        const ctx = document.getElementById("quizzesChart").getContext("2d");
+    const ctx = document.getElementById("quizzesChart").getContext("2d");
 
     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     const quizzesTaken = new Array(12).fill(0);
 
-
-    graphData.forEach(quiz => {
-        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
-        quizzesTaken[quizMonth]++; // Increment the count for that month
-    });
+    if (graphData || graphData.length > 0) { 
+        // Process quiz data and organize it by month
+        graphData.forEach(quiz => {
+            const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
+            quizzesTaken[quizMonth]++; // Increment the count for that month
+        });
+    }
 
 
     const data = {
