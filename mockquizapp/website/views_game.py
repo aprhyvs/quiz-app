@@ -1057,6 +1057,7 @@ def on_game_data_5050(request):
         
         random.shuffle(decoy_5050)
         quiz.game_data_5050 = { question: decoy_5050}
+        quiz.game_has_5050 = True
         quiz.save()
         
         return JsonResponse({'5050': quiz.game_data_5050}, status=200)
