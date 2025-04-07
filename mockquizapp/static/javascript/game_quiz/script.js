@@ -577,11 +577,15 @@ function displayPossibleAnswers(data5050){
         const choiceDElement = document.querySelector(".choice-D");
         const choices = [choiceAElement,choiceBElement,choiceCElement,choiceDElement];
 
-        for (let i = 0; i < choices.length; i++) {
-            for (let j = 0; j < data5050.length; j++) {
+        const letters = ["A","B","C","D"];
+        for (let i = 0; i < letters.length; i++) {
+            if (letters[i] in data5050){
                 
+            } else{
+                document.querySelector(`.choice-${letters[i]}`).style.opacity = .50;
             }
         }
+        
 
     }
 }
