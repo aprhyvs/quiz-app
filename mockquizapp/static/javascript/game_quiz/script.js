@@ -5,6 +5,7 @@ var userAnswer = [];
 let temporary_answer = null;
 var game_settings = [];
 var globalPowerUps = {};
+var availableChoices = ["A","B","C","D"];
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
 
@@ -165,6 +166,7 @@ function resizeTextOnOverflowAndWords(element, options = {}) {
   
 
 async function processChoice(choiceString){
+    
     async function evaluateChoice(choice) {
         const current_question = global_current_question;
         const quiz_id = sessionStorage.getItem('quiz_id');
@@ -237,6 +239,7 @@ async function nextQuestion(current_question){
     const questionData = await questionFetch(global_current_question);
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
+    choicesOpacityReset(current_question);
     displayQuestion(questionData);
     showQuestionWorth(global_current_question, questionData.worth);
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
@@ -266,6 +269,12 @@ function flashYellow(choiceElement){
 }
 
 function showConfirmationPrompt(choice) {
+    if (!availableChoices.includes(choice)) {
+        console.log(choice);
+        console.log("Dili pwede.");
+        return false;
+    }
+    
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
     
     // Remove the flash-yellow class from any previously selected SVGs
@@ -442,12 +451,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
+            const quiz = res.data;
+            const has5050 = quiz.game_has_5050;
+            console.log(quiz);
             const questions = res.data.questions;
             const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
             const question = await questionFetch(current_question);
             if (question) {
                 displayQuestion(question);
                 global_current_question = current_question;
+                if (has5050 == true) {
+                    console.log("Has 5050")
+                    activate5050();
+                }
+
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
                 showQuestionWorth(current_question, question.worth);
@@ -562,32 +579,49 @@ async function activate5050(){
     });
     if (res) {
         console.log(res);
+        data5050 = res["5050"];
         console.log("50-50 Power Up activated.");
+        displayPossibleAnswers(data5050);
         globalPowerUps.has_5050 = true;
         updatePowerUpElement(document.getElementById('50-50'), true);
     }
 }
 
 function displayPossibleAnswers(data5050){
-    if (data5050){
-        
-        const choiceAElement = document.querySelector(".choice-A");
-        const choiceBElement = document.querySelector(".choice-B");
-        const choiceCElement = document.querySelector(".choice-C");
-        const choiceDElement = document.querySelector(".choice-D");
-        const choices = [choiceAElement,choiceBElement,choiceCElement,choiceDElement];
-
-        const letters = ["A","B","C","D"];
-        for (let i = 0; i < letters.length; i++) {
-            if (letters[i] in data5050){
-                
-            } else{
-                document.querySelector(`.choice-${letters[i]}`).style.opacity = .50;
-            }
-        }
-        
-
+    if (!data5050[global_current_question]){
+        return;
     }
+    const possibleAnswers = data5050[global_current_question];
+        const letters = ["A","B","C","D"];
+        availableChoices = possibleAnswers;
+        for (let i = 0; i < letters.length; i++) {
+            if (!possibleAnswers.includes(letters[i])){
+                document.querySelector(`.svg-choice-${letters[i]}`).style.opacity = .10;
+                document.querySelector(`.svg-choice-${letters[i]}`).classList.remove('svg:hover');
+        }
+    }
+}
+
+async function choicesOpacityReset(current_question){
+    quiz_id = sessionStorage.getItem('quiz_id');
+    const letters = ["A","B","C","D"];
+    for (let i = 0; i < letters.length; i++) {
+        document.querySelector(`.svg-choice-${letters[i]}`).style.opacity = 1;
+        document.querySelector(`.svg-choice-${letters[i]}`).classList.add('svg:hover');
+    }
+    const powerUps = await getAvailablePowerUps(quiz_id);
+    if (powerUps){
+        const data5050 = powerUps["5050_data"]
+        const questions5050 = Object.keys(data5050);
+        const question5050 = questions5050[0];
+        if (current_question == question5050) { //If the current question is the 50-50 question...
+            availableChoices = letters; // Just reset the available choices to default. Used letters variable for convenience
+        }
+        console.log(question5050);
+        console.log(powerUps);
+    }
+    
+
 }
 
 //Settings
