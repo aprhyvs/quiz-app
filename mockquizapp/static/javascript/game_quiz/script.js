@@ -98,7 +98,71 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
     }
 }
 
+function resizeTextOnOverflowAndWords(element, options = {}) {
+    const p = element.querySelector('p');
+    if (!p) return;
+  
+    const minFontSize = options.min || 32;  // Minimum font size in px
+    const maxFontSize = options.max || 40;  // Maximum font size in px
+    const step = options.step || 1;         // Font size step for resizing
+    const wordThreshold = options.wordThreshold || 5;  // Word count threshold
+  
+    // Function to check if text overflows the container
+    function isOverflowing() {
+      return p.scrollHeight > p.clientHeight || p.scrollWidth > p.clientWidth;
+    }
+  
+    // Function to count words
+    function getWordCount() {
+      const text = p.textContent || "";
+      return text.trim().split(/\s+/).length;
+    }
+  
+    // Function to resize font size based on overflow and word count
+    function adjustFontSize() {
+      let fontSize = parseInt(window.getComputedStyle(p).fontSize);  //, 16 Get current font size
+  
+      const wordCount = getWordCount();
+  
+      // If there are fewer words than the threshold (wordCount < wordThreshold), increase the font size
+      if (wordCount <= wordThreshold && fontSize < maxFontSize) {
+        fontSize = Math.min(maxFontSize, fontSize + step);  // Increase font size but don't exceed max
+        p.style.fontSize = `${fontSize}px`;
+      }
+  
+      // If the text overflows, shrink the font size
+      while (isOverflowing() && fontSize > minFontSize) {
+        fontSize -= step;  // Reduce the font size in steps
+        p.style.fontSize = `${fontSize}px`;
+      }
+  
+      // If the text is not overflowing and word count is greater than the threshold, increase font size in small steps
+      while (!isOverflowing() && fontSize < maxFontSize && wordCount < wordThreshold) {
+        fontSize += step;  // Increase the font size incrementally
+        p.style.fontSize = `${fontSize}px`;
+      }
+  
+      // If word count is more than the threshold, adjust font size to maintain readability
+      if (wordCount >= wordThreshold && fontSize > minFontSize) {
+        fontSize -= step;  // Gradually reduce the font size
+        p.style.fontSize = `${fontSize}px`;
+      }
+    }
+  
+    // Initial adjustment when the script runs
+    adjustFontSize();
+  
+    // Optionally, listen for window resizing to adjust dynamically:
+    window.addEventListener('resize', adjustFontSize);
+  
+    // Observe changes to the child text node to handle dynamic changes to the content
+    const observer = new MutationObserver(() => {
+      adjustFontSize();
+    });
+    observer.observe(element, { childList: true, subtree: true });
+  }
 
+  
 
 async function processChoice(choiceString){
     async function evaluateChoice(choice) {
@@ -133,10 +197,8 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         'question': current_question
     });
     if (res) {
-        console.log(res);
         const question = res.question;
         const isCorrect = question.is_correct;
-        console.log('Player is ' +isCorrect);
         
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
@@ -149,7 +211,6 @@ async function showWrongAndCorrectAnswer(choice, current_question){
             flashRed(choiceElement);
             const answer = res.question.answer;
             const correct_answer = res.question.correct_answer;
-            console.log(`The correct answer is: ${correct_answer}`);
             const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
             flashGreen(correctAnswerElement);
         }
@@ -164,7 +225,6 @@ async function showAnswerEffects(choice, current_question) {
     // proceed to the next question
     const isLastQuestion = await checkQuizNumber(current_question);
     if (isLastQuestion == true) {
-        console.log("Is it the final question?")
         endGame();
     }else{
         
@@ -252,6 +312,7 @@ function displayQuestion(questionData){
       );
     questionElement.innerText = questionData.question;
     displayChoices(options);
+    resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
 }
 
 function displayChoices(options){
@@ -388,11 +449,107 @@ document.addEventListener("DOMContentLoaded", async function () {
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
                 showQuestionWorth(current_question, question.worth);
-                console.log(question);
+                displayAvailablePowerUps();
             }
         }
     }
 });
+
+
+
+//Choice Buttons ---------------------------------------------------
+
+document.querySelector(".choice-A").addEventListener('click', function() {
+    const choice = "A";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-B").addEventListener('click', function() {
+    const choice = "B";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-C").addEventListener('click', function() {
+    const choice = "C";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-D").addEventListener('click', function() {
+    const choice = "D";
+    showConfirmationPrompt(choice);
+});
+
+
+//Confirmation Prompt Buttons ---------------------------------------------------
+
+function closeConfirmationPrompt() {
+    document.getElementById("confirmation-form-pop").style.display = "none";
+    resetFlashYellowClass(); 
+}
+
+document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
+    processChoice(temporary_answer);
+    closeConfirmationPrompt();
+});
+document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
+    closeConfirmationPrompt();
+});
+
+// Background Wrapper
+
+function closeWorthSidenav(){
+    modal.style.display = "none";
+    
+}
+
+document.querySelector(".modal").addEventListener('click', function() {
+    closeWorthSidenav()
+});
+
+
+
+
+
+
+// Power Ups
+
+
+async function getAvailablePowerUps(quiz_id){
+    res = await getDataFromUrlWithParams(`/api/game/get/powerup`,{
+        'quiz_id': quiz_id
+    });
+    if (res) {
+         return res;
+    }
+}
+
+function updatePowerUpElement(element, state){
+    console.log(state);
+    if (state == false){
+        element.style.opacity = 50;
+    }else{
+        element.style.opacity = 100;
+    }
+}
+
+function displayAvailablePowerUps(){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    const powerUps = getAvailablePowerUps(quiz_id)
+
+    if (powerUps) {
+        const button5050 = document.getElementById('50-50');
+        const buttonAskAi = document.getElementById('ask-ai');
+        const buttonDoubleDip = document.getElementById('x2');
+        const buttonPass = document.getElementById('pass');
+
+        updatePowerUpElement(button5050, powerUps.has_5050);
+        updatePowerUpElement(buttonAskAi, powerUps.has_hint);
+        updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
+        updatePowerUpElement(buttonPass, powerUps.has_pass);
+    }
+
+}
+
 
 
 //50-50
@@ -464,53 +621,4 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
-});
-
-//Choice Buttons ---------------------------------------------------
-
-document.querySelector(".choice-A").addEventListener('click', function() {
-    const choice = "A";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-B").addEventListener('click', function() {
-    const choice = "B";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-C").addEventListener('click', function() {
-    const choice = "C";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-D").addEventListener('click', function() {
-    const choice = "D";
-    showConfirmationPrompt(choice);
-});
-
-
-//Confirmation Prompt Buttons ---------------------------------------------------
-
-function closeConfirmationPrompt() {
-    document.getElementById("confirmation-form-pop").style.display = "none";
-    resetFlashYellowClass(); 
-}
-
-document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
-    processChoice(temporary_answer);
-    closeConfirmationPrompt();
-});
-document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
-    closeConfirmationPrompt();
-});
-
-// Background Wrapper
-
-function closeWorthSidenav(){
-    modal.style.display = "none";
-    
-}
-
-document.querySelector(".modal").addEventListener('click', function() {
-    closeWorthSidenav()
 });
