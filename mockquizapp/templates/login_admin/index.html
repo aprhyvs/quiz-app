@@ -25,12 +25,21 @@
         <form id="loginForm">
             <h1>Administrator Login</h1>
             <label for="Username">Username</label>
-            <input type="text" id="username" name="username">
+            <input type="text" required id="username" name="username">
             <label for="Password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" required name="password" id="password">
             <button class="login">Login</button>
-        </form>
-        <p id="responseMessage" class="error"></p>
+        </form> 
+    </div>
+
+    <div class="pop-up" id="edit-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">An Error Accur!</h1>
+            <h6 class="raleway-regular" id="edit-text"></h6>
+            <div class="pop-up-but">
+                <button id="understand-but" >I Understand!</button> 
+            </div>
+        </div>
     </div>
 
 

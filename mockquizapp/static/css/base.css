@@ -170,3 +170,10 @@
   background: var(--dark-red);
   color: var(--background);
 }
+
+
+#understand-but {  
+  background: var(--cta-blue);
+  color: var(--background);
+  cursor: pointer;
+}
