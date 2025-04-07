@@ -199,21 +199,29 @@ def set_game_settings(request):
     if not request.user.is_staff:
         return JsonResponse({"error": "User not authorized to set game settings"}, status=403)
     if request.method == 'POST':
+        
+        
         game_settings = {}
         game_settings['leaderboard_reset'] = request.POST.get('leaderboard_reset')
-        if not game_settings['leaderboard_reset']:
+        if not game_settings['leaderboard_reset'] or game_settings['leaderboard_reset'] not in ['weekly', 'monthly']:
             return JsonResponse({"error": "Leaderboards reset must be weekly or monthly"}, status=400)
-        game_settings['timer_countdown'] = request.POST.get('timer_countdown')
-        if not game_settings['timer_countdown']:
+        game_settings['timer_countdown'] = request.POST.get('timer_countdown' , "")
+        print(game_settings['timer_countdown'])
+        if not game_settings['timer_countdown'] or not game_settings['timer_countdown'].isdigit() or game_settings['timer_countdown'] not in ["25", "30" , "40"]: 
             return JsonResponse({"error": "Timer countdown must be a number"}, status=400)
         game_settings['safe_level'] = request.POST.get('safe_level')
-        if not game_settings['safe_level']:
+        if not game_settings['safe_level'] or game_settings['safe_level'] not in ["3, 6, 9, 12, 15", "4, 8, 12, 16", "5, 10, 15" ]:
             return JsonResponse({"error": "Safe level must be a number"}, status=400)
 
         gameSettingsObject = AdminData.objects.first()
         gameSettingsObject.leaderboard_reset = game_settings['leaderboard_reset']
         gameSettingsObject.timer_countdown = game_settings['timer_countdown']
-        gameSettingsObject.safe_level = game_settings['safe_level']
+        if game_settings['safe_level'] == "3, 6, 9, 12, 15, 20":
+            gameSettingsObject.safe_level = "3,6,9,12,15,20"
+        elif game_settings['safe_level'] == "4, 8, 12, 16, 20":
+            gameSettingsObject.safe_level = "4,8,12,16,20"
+        elif game_settings['safe_level'] == "5, 10, 15, 20":
+            gameSettingsObject.safe_level = "5,10,15,20"
         gameSettingsObject.save()
         print("Successfully changed Settings")
         return JsonResponse({"message": "Game settings updated successfully"}, status=200)
