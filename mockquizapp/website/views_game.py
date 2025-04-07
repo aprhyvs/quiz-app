@@ -927,7 +927,9 @@ def on_game_data_answer(request):
                 
                 if question_to_int == 0:
                     break
-                
+        
+        if (quiz.number_of_correct + quiz.number_of_wrong ) == TOTAL_QUESTIONS:
+            quiz.is_answered = True 
         quiz.save()
         
         return JsonResponse({'status': 'success'}, status=200)
@@ -1330,3 +1332,37 @@ def on_game_is_complete(request):
         
         return JsonResponse({'message': 'Quiz is not completed.', 'is_completed': False , 'data': quiz.game_data()}, status=200)
 
+
+
+def on_game_check_power_up(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+         
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
+        
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        
+        
+        return JsonResponse({
+            'has_5050' : quiz.game_has_5050,
+            '5050_data' : quiz.game_data_5050,
+            'has_pass' : quiz.game_has_pass,
+            'has_hint' : quiz.game_has_ai_hint,
+            'hint_data' : quiz.game_data_ai_hint,
+            'has_2x' : quiz.game_has_times2,
+            'x2_data' : quiz.game_data_times2
+        }, status=200)
