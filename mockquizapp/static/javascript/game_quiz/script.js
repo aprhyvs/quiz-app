@@ -135,6 +135,24 @@ async function showWrongAndCorrectAnswer(choice, current_question){
     });
     if (res) {
         console.log(res);
+        const question = res.question;
+        const isCorrect = question.is_correct;
+        console.log('Player is ' +isCorrect);
+        if (isCorrect == true){
+            const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+            resetFlashYellowClass();
+            flashGreen(choiceElement);
+        }else{
+            const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+            resetFlashYellowClass();
+            flashRed(choiceElement);
+            const answer = res.question.answer;
+            const correct_answer = res.question.correct_answer;
+            console.log(`The correct answer is: ${correct_answer}`);
+            const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
+            flashGreen(correctAnswerElement);
+        }
+
     }
 }
 
@@ -145,7 +163,7 @@ async function showAnswerEffects(choice, current_question) {
     showWrongAndCorrectAnswer(choice, current_question);
 
 
-
+    
 
 
     // proceed to the next question
@@ -154,7 +172,7 @@ async function showAnswerEffects(choice, current_question) {
         console.log("Is it the final question?")
         endGame();
     }else{
-
+        
         nextQuestion(current_question);
     }
 }
@@ -162,6 +180,8 @@ async function showAnswerEffects(choice, current_question) {
 async function nextQuestion(current_question){
     global_current_question = current_question + 1;
     const questionData = await questionFetch(global_current_question);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    resetFlashes();
     displayQuestion(questionData);
 }
 
