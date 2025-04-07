@@ -556,14 +556,33 @@ async function activate5050(){
         console.log("50-50 Power Up not available.");
         return false;
     }
-    const res = await getDataFromUrlWithParams(`/api/game/powerup/5050`,{
-        'quiz_id': quiz_id
+    const res = await getDataFromUrlWithParams(`/api/game/5050`,{
+        'quiz_id': quiz_id,
+        'question': global_current_question
     });
     if (res) {
         console.log(res);
         console.log("50-50 Power Up activated.");
         globalPowerUps.has_5050 = true;
         updatePowerUpElement(document.getElementById('50-50'), true);
+    }
+}
+
+function displayPossibleAnswers(data5050){
+    if (data5050){
+        
+        const choiceAElement = document.querySelector(".choice-A");
+        const choiceBElement = document.querySelector(".choice-B");
+        const choiceCElement = document.querySelector(".choice-C");
+        const choiceDElement = document.querySelector(".choice-D");
+        const choices = [choiceAElement,choiceBElement,choiceCElement,choiceDElement];
+
+        for (let i = 0; i < choices.length; i++) {
+            for (let j = 0; j < data5050.length; j++) {
+                
+            }
+        }
+
     }
 }
 
