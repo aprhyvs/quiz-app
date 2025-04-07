@@ -51,7 +51,10 @@ function playAudio(audio){
 async function endGame() {
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
-        console.log("Finished Game, Nigga!!!");
+        console.log("Finished Game, proceeding to quiz complete");
+        console.log(quiz_status);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        window.location.href = `/quiz_complete`;
     }
 
 }
