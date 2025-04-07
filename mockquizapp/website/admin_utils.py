@@ -84,10 +84,12 @@ def get_monthly_rankings() -> list:
         rankings.append({
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
+            'profile_pic': student.profile_pic.url if student.profile_pic else None,
         })
     return rankings
  
 def get_yearly_rankings():
+    
     current_year = now().year
     
     # Filter QuizData for the current year
@@ -105,6 +107,7 @@ def get_yearly_rankings():
         rankings.append({
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
+            'profile_pic': student.profile_pic.url if student.profile_pic else None,
         })
     print(rankings)
     return rankings

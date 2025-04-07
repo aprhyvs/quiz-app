@@ -7,7 +7,7 @@ async function displayListOfStudents(){
         const lis_of_user_tag = document.querySelector(".list-of-users");
         for (const studentID in students) {
             if (students.hasOwnProperty(studentID)) {
-                const student = students[studentID];
+                const student = students[studentID]; 
                 lis_of_user_tag.insertAdjacentHTML("afterbegin",
                     `
                         <div class="user-card" id="${studentID}-card">
@@ -54,10 +54,11 @@ async function displayListOfStudents(){
 
 
 
-async function displayRankings(rankingsData) {
+function displayRankings(rankingsData) {
 
 
     function displayWeeklyRankings(weeklyRankings){
+        
         if (!weeklyRankings || weeklyRankings.length === 0) {
             console.error("No weekly rankings available!");
             return;
@@ -68,12 +69,13 @@ async function displayRankings(rankingsData) {
         const thirdRank = document.querySelector(".rank-weekly-third-name");
         const fourthRank = document.querySelector(".rank-weekly-fourth-name");
         const fifthRank = document.querySelector(".rank-weekly-fifth-name");
+
     
         // Ensure elements exist before modifying them
         if (firstRank) {
-            firstRank.textContent = weeklyRankings[0]?.student_name || "Vacant";
             if (weeklyRankings[0]?.profile_pic) {
-                const oldSvg = firstRank.querySelector('svg');
+                firstRank.textContent = weeklyRankings[0]?.student_name || "Vacant";
+                const oldSvg = firstRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
@@ -81,14 +83,14 @@ async function displayRankings(rankingsData) {
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
 
                     // Replace the SVG with the new img
-                    firstRank.replaceChild(newImg, oldSvg);
+                    firstRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (secondRank) {
-            secondRank.textContent = weeklyRankings[1]?.student_name || "Vacant";
-            if (weeklyRankings[1]?.profile_pic) {
-                const oldSvg = secondRank.querySelector('svg');
+            if (weeklyRankings.length > 1 && weeklyRankings[1]?.profile_pic) { 
+                secondRank.textContent = weeklyRankings[1]?.student_name || "Vacant";
+                const oldSvg = secondRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
@@ -96,61 +98,65 @@ async function displayRankings(rankingsData) {
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
 
                     // Replace the SVG with the new img
-                    secondRank.replaceChild(newImg, oldSvg);
+                    secondRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (thirdRank) {
-            thirdRank.textContent = weeklyRankings[2]?.student_name || "Vacant";
-            if (weeklyRankings[2]?.profile_pic) {
-                const oldSvg = thirdRank.querySelector('svg');
+            if (weeklyRankings.length > 2 && weeklyRankings[2]?.profile_pic) {
+                thirdRank.textContent = weeklyRankings[2]?.student_name || "Vacant";
+                 
+                const oldSvg = thirdRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', weeklyRankings[2]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    thirdRank.replaceChild(newImg, oldSvg);
+                    thirdRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (fourthRank) {
-            fourthRank.textContent = weeklyRankings[3]?.student_name || "Vacant";
-            if (weeklyRankings[3]?.profile_pic) {
-                const oldSvg = fourthRank.querySelector('svg');
+            if (weeklyRankings.length > 3 && weeklyRankings[3]?.profile_pic) {
+                fourthRank.textContent = weeklyRankings[3]?.student_name || "Vacant";
+                 
+                const oldSvg = fourthRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', weeklyRankings[3]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    fourthRank.replaceChild(newImg, oldSvg);
+                    fourthRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (fifthRank) {
-            fifthRank.textContent = weeklyRankings[4]?.student_name || "Vacant";
-            if (weeklyRankings[4]?.profile_pic) {
-                const oldSvg = fifthRank.querySelector('svg');
+            if (weeklyRankings.length > 4 && weeklyRankings[4]?.profile_pic) {
+                fifthRank.textContent = weeklyRankings[4]?.student_name || "Vacant";
+                 
+                const oldSvg = fifthRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', weeklyRankings[4]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    fifthRank.replaceChild(newImg, oldSvg);
+                    fifthRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
     }
     
-    function displayMonthlyRankings(monthlyRankings){
+    function displayMonthlyRankings(monthlyRankings){ 
+        console.log(monthlyRankings);
         if (!monthlyRankings || monthlyRankings.length === 0) {
             console.error("No monthly rankings available!");
             return;
         }
         // Select the ranking elements from the HTML
-        const firstRank = document.querySelector(".rank-monthly-first-name");
+        const firstRank = document.querySelector(".rank-monthly-first-name"); 
         const secondRank = document.querySelector(".rank-monthly-second-name");
         const thirdRank = document.querySelector(".rank-monthly-third-name");
         const fourthRank = document.querySelector(".rank-monthly-fourth-name");
@@ -158,72 +164,75 @@ async function displayRankings(rankingsData) {
     
         // Ensure elements exist before modifying them
         if (firstRank) {
-            firstRank.textContent = monthlyRankings[0]?.student_name || "Vacant";
-            if (monthlyRankings[0]?.profile_pic) {
-                const oldSvg = firstRank.querySelector('svg');
-                if (oldSvg) {
+            if ( monthlyRankings.length > 0 && monthlyRankings[0]?.profile_pic) {  
+                firstRank.textContent = monthlyRankings[0]?.student_name || "Vacant";
+                const oldSvg = firstRank.parentElement.querySelector('svg');
+                if (oldSvg) { 
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
-                    newImg.setAttribute('src', monthlyRankings[0]?.profile_pic); // Set the source of the new image
+                    newImg.src = monthlyRankings[0]?.profile_pic; // Set the source of the new image monthlyRankings[0]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    firstRank.replaceChild(newImg, oldSvg);
+                    firstRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (secondRank) {
-            secondRank.textContent = monthlyRankings[1]?.student_name || "Vacant";
-            if (monthlyRankings[1]?.profile_pic) {
-                const oldSvg = secondRank.querySelector('svg');
+            if (monthlyRankings.length > 1 && monthlyRankings[1]?.profile_pic) {
+                secondRank.textContent = monthlyRankings[1]?.student_name || "Vacant"; 
+                const oldSvg = secondRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', monthlyRankings[1]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    secondRank.replaceChild(newImg, oldSvg);
+                    secondRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (thirdRank) {
-            thirdRank.textContent = monthlyRankings[2]?.student_name || "Vacant";
-            if (monthlyRankings[2]?.profile_pic) {
-                const oldSvg = thirdRank.querySelector('svg');
+            if (monthlyRankings.length > 2 && monthlyRankings[2]?.profile_pic) {
+                    
+                thirdRank.textContent = monthlyRankings[2]?.student_name || "Vacant"; 
+                const oldSvg = thirdRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', monthlyRankings[2]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    thirdRank.replaceChild(newImg, oldSvg);
+                    thirdRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (fourthRank) {
-            fourthRank.textContent = monthlyRankings[3]?.student_name || "Vacant";
-            if (monthlyRankings[3]?.profile_pic) {
-                const oldSvg = fourthRank.querySelector('svg');
+            if (monthlyRankings.length > 3 && monthlyRankings[3]?.profile_pic) {
+                
+                fourthRank.textContent = monthlyRankings[3]?.student_name || "Vacant";
+                const oldSvg = fourthRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', monthlyRankings[3]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    fourthRank.replaceChild(newImg, oldSvg);
+                    fourthRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
         if (fifthRank) {
-            fifthRank.textContent = monthlyRankings[4]?.student_name || "Vacant";
-            if (monthlyRankings[4]?.profile_pic) {
-                const oldSvg = fifthRank.querySelector('svg');
+            if (monthlyRankings.length > 4 && monthlyRankings[4]?.profile_pic) {
+                    
+                fifthRank.textContent = monthlyRankings[4]?.student_name || "Vacant"; 
+                const oldSvg = fifthRank.parentElement.querySelector('svg');
                 if (oldSvg) {
                     // Replace the SVG with an img element
                     const newImg = document.createElement('img');
                     newImg.setAttribute('src', monthlyRankings[4]?.profile_pic); // Set the source of the new image
                     newImg.setAttribute('alt', 'New Image'); // Add an alt description for accessibility
                     // Replace the SVG with the new img
-                    fifthRank.replaceChild(newImg, oldSvg);
+                    fifthRank.parentElement.replaceChild(newImg, oldSvg);
                 }
             }
         }
@@ -458,14 +467,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("logout-form-pop").style.display = "none"; 
     });
 
-    getDataFromUrl("/api/admin/get/rankings") //Gets all Students
-    .then(rankings => {
-        if (!rankings) {
-            console.error("Waran Sulod!!!", data);
-            return;
-        }
-        displayRankings(rankings);
-    })
+
+    const ranking = await getDataFromUrl("/api/admin/get/rankings");
+    if (ranking) {
+        console.log(ranking);
+       displayRankings(ranking);
+    }
 
     document.getElementById("cancel-delete-but").addEventListener('click', function(){
         document.getElementById("delete-form-pop").style.display = "none";
