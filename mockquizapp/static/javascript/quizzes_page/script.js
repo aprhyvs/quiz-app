@@ -24,18 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-    getDataFromUrl("/api/student/alldata") //Gets all Student's data and stats
-    .then(data => {
-        if (!data || !data.studentData) {
-            console.error("Invalid data structure:", data);
-            return;
-        }
-        const studentDatas = data.studentData;
-        const studentData = studentDatas.studentData;
-        const studentStats = studentDatas.stats;
-    })
-
+ 
     getDataFromUrl("/api/student/quizzes") // Gets all quizzes
     .then(quizzes => {
         if (!quizzes) {
@@ -47,169 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error("Error fetching quizzes", error));
 
 
-    // Display Student Data in Dashboard
-    /*
-    function displayStudentData(studentData) {
-        const studentNameDiv = document.querySelector(".student-name");
-        studentNameDiv.innerHTML = `<h3 class="raleway-bold">Welcome, ${studentData.username}!</h3>`;
-    }*/
-    
-    function displayStudentStats(studentStats) {
-        function getPercentage(score, totalItems){
-            if (!score) return 0;
-            return Math.round((score / totalItems) * 100);
-        }
-
-        const quizzesTakenDiv = document.querySelector(".total-quizzes-taken-number");
-        quizzesTakenDiv.innerText = `${studentStats.total_quizzes}`;
-        
-
-        const totalItems = studentStats.total_correct_answers + studentStats.total_wrong_answers;
-
-        const correctAnswersPercentage = document.querySelector(".total-correct-answers-percentage");
-        const correctAnswersNumber = document.querySelector(".total-correct-answers-number");
-        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
-        correctAnswersPercentage.innerText = `${correctAnswerPercentage}%`;
-        correctAnswersNumber.innerText = `${studentStats.total_correct_answers}`;
 
 
-        const wrongAnswersPercentage = document.querySelector(".total-wrong-answers-percentage");
-        const wrongAnswersNumber = document.querySelector(".total-wrong-answers-number");
-        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
-        wrongAnswersPercentage.innerText = `${wrongAnswerPercentage}%`;
-        wrongAnswersNumber.innerText = `${studentStats.total_wrong_answers}`;
-        
-        
-    }
 
-    
-
-    function displayPassedAndFailedQuizzes(quizzes) {
-
-        function getPassedStatus(quiz){
-            if (quiz.is_answered == false) return None
-
-            const totalItems = quiz.number_of_correct + quiz.number_of_wrong;
-            const passingScore = Math.ceil(totalItems * 0.75);
-            if (quiz.number_of_correct > passingScore) {
-                passedQuizzes++;
-            } else {
-                failedQuizzes++;
-            }
-        }
-
-        // Display passed and failed quizzes in the dashboard
-        const passedQuizzesDiv = document.querySelector(".passed-quizzes-number");
-        const failedQuizzesDiv = document.querySelector(".failed-quizzes-number");
-        let failedQuizzes = 0;
-        let passedQuizzes = 0;
-
-        for (let i = 0; i < quizzes.length; i++) {
-            const quiz = quizzes[i];
-            getPassedStatus(quiz)
-        }
-
-        passedQuizzesDiv.innerText = passedQuizzes;
-        failedQuizzesDiv.innerText = failedQuizzes;
-
-    }
-
-    function showAnswersGraph(graphData) {
-        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-        // Initialize arrays to store correct and wrong answers per month
-        const correctAnswers = new Array(12).fill(0);
-        const wrongAnswers = new Array(12).fill(0);
-
-        // Process quiz data and organize it by month
-        graphData.forEach(quiz => {
-        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
-        correctAnswers[quizMonth] += quiz.number_of_correct;
-        wrongAnswers[quizMonth] += quiz.number_of_wrong;
-    });
-
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Correct Answers',
-                    data: correctAnswers,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Wrong Answers',
-                    data: wrongAnswers,
-                    fill: false,
-                    borderColor: 'rgb(255, 99, 132)',
-                    tension: 0.1
-                }
-            ]
-        };
-    
-        const config = {
-            type: 'line',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
-    
-        const ctx = document.getElementById('monthlyChart').getContext('2d');
-        new Chart(ctx, config);
-    }
-
-    function showQuizzesTakenGraph(graphData){
-        const ctx = document.getElementById("quizzesChart").getContext("2d");
-
-    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-    const quizzesTaken = new Array(12).fill(0);
-
-
-    graphData.forEach(quiz => {
-        const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
-        quizzesTaken[quizMonth]++; // Increment the count for that month
-    });
-
-
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Quizzes Taken',
-            data: quizzesTaken,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue bars
-            borderColor: 'rgb(54, 162, 235)',
-            borderWidth: 1
-        }]
-    };
-
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false, // Prevent unwanted stretching
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }
-            }
-        }
-    };
-
-    new Chart(ctx, config);
-    }
 });
 
 
@@ -330,6 +159,7 @@ function displayListOfQuizzes(quizzes) {
 
             testOptionsButton.addEventListener("click", function (event) {
                 // Action on clicking Play
+                document.getElementById("uploadQuizButton").click();
             });
 
             return;
@@ -339,16 +169,7 @@ function displayListOfQuizzes(quizzes) {
         displayOtherQuizzes(quizzes);
     }
 }
-
-
-
-// graph below
-// monthly correct and wrong answers
-
-
-// total quizzes taken per month
-
-// upload quiz modal
+ 
 
 function handleDraggedFile(file) {
     uploadFile(file);
@@ -454,6 +275,27 @@ generateQuiz.addEventListener("click", function() {
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
+
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+        console.log(document.getElementById("logout-form-pop"));
+        console.log("Logout Button Clicked")
+    });
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+        const res = await getDataFromUrl("/api/logout");
+        if (res){   
+            window.location.href = "../";
+        }
+    });
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+
 
     const modal = document.getElementById("uploadQuizModal");
     const uploadBox = document.getElementById("upload-box");
