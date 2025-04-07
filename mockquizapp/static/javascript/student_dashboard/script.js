@@ -167,12 +167,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isAnswered == false){ // Determine if the student has not finished the quiz.
             statusText = "INCOMPLETE"
             statusElement.innerText = statusText;
-            statusElement.style.color === "black";
+            statusElement.style.color === "var(--text)";
             testOptionsButton.innerText = "Resume";
         } else { // Determine if the student passed (assuming 75% passing rate)
             statusText = mostRecentQuiz.number_of_correct >= passingScore ? "PASSED" : "FAILED";
             statusElement.innerText = statusText;
-            statusElement.style.color = statusText === "PASSED" ? "#43ACAC" : "red";
+            statusElement.style.color = statusText === "PASSED" ? "var(--green)" : "var(--red)";
             testOptionsButton.innerText = "View";
         }
         //  Update "View" button with a link to view more quiz info

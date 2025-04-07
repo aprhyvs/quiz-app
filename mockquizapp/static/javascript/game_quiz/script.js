@@ -10,6 +10,7 @@ var game_settings = [];
 
 levelInfo.addEventListener("click", function () {
         modal.style.display = "flex"; 
+
 });
 
 //level-points-pop content
@@ -24,22 +25,16 @@ const points = [
 
 // list out level and its respective points
 for (let i = 0; i < points.length; i++) {
-    const levelPointDiv = document.createElement("div");
-    levelPointDiv.classList.add("level-point");
+    const level = i + 1;
+    const reversedIndex = points.length - 1 - i;
     
-    //level
-    const levelP = document.createElement("p");
-    levelP.textContent = 20 - i;
-    levelP.classList.add("level", "roboto-bold");
-    
-    //points
-    const pointP = document.createElement("p");
-    pointP.textContent = points[i]; 
-    pointP.classList.add("points", "roboto-light");
-
-    levelPointDiv.appendChild(levelP);
-    levelPointDiv.appendChild(pointP);
-    listContainer.appendChild(levelPointDiv);
+    listContainer.insertAdjacentHTML("afterbegin", 
+        `
+        <div class="level-point-${level} level-point">
+        <p class="level-${level} level roboto-bold">${level}</p>
+        <p class="points roboto-light">${points[reversedIndex]}</p>
+        </div>
+        `);
 }
 
 function playAudio(audio){
@@ -51,7 +46,10 @@ function playAudio(audio){
 async function endGame() {
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
-        console.log("Finished Game, Nigga!!!");
+        console.log("Finished Game, proceeding to quiz complete");
+        console.log(quiz_status);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        window.location.href = `/quiz_complete`;
     }
 
 }
@@ -86,6 +84,7 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
         console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
+            console.log(current_answered_questions);
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
                 return true;
@@ -138,8 +137,10 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         console.log('Player is ' +isCorrect);
+        
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+
             resetFlashYellowClass();
             flashGreen(choiceElement);
         }else{
@@ -152,20 +153,14 @@ async function showWrongAndCorrectAnswer(choice, current_question){
             const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
             flashGreen(correctAnswerElement);
         }
+        highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
     }
 }
 
 
 async function showAnswerEffects(choice, current_question) {
-    //TODO: Show the visual effects and play audio here.
-    //TODO: Mon patukdo man pano i change an kulay kay ipa green or red depending kun nano an tama na answer.
     showWrongAndCorrectAnswer(choice, current_question);
-
-
-    
-
-
     // proceed to the next question
     const isLastQuestion = await checkQuizNumber(current_question);
     if (isLastQuestion == true) {
@@ -183,6 +178,8 @@ async function nextQuestion(current_question){
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
     displayQuestion(questionData);
+    showQuestionWorth(global_current_question, questionData.worth);
+    highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
 }
 
 function flashRed(choiceElement){
@@ -284,6 +281,95 @@ async function questionFetch(current_question){
     }
     return null;
 }
+// ---------------- For highlighting worth --------------------------------
+async function getCorrectStatus(question_number){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
+        'quiz_id': quiz_id,
+        'question': question_number,
+    });
+    if (res) {
+        return res.question.is_correct;
+    }
+}
+
+function modalFlash(choiceElement, color){
+    if (choiceElement) {
+        if (color == "green"){
+            choiceElement.classList.add('modal-flash-green');
+        }
+        if (color == "red"){
+            choiceElement.classList.add('modal-flash-red');
+        }
+        if (color == "yellow"){
+            choiceElement.classList.add('modal-flash-yellow');
+        }
+    }
+}
+
+async function highlightQuestionWorth(worthElement, question_number){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    const isCorrect = await getCorrectStatus(question_number);
+    if (isCorrect == true){
+        console.log("Correct ");
+        console.log(worthElement);
+        modalFlash(worthElement, "green");
+    }else{
+        console.log("Wrong ");
+        modalFlash(worthElement, "red");
+    }
+}
+
+function highlightQuestionWorthRealtime(worthElement, isCorrect){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    if (isCorrect == true){
+        console.log("Correct ");
+        console.log(worthElement);
+        modalFlash(worthElement, "green");
+    }else{
+        console.log("Wrong ");
+        modalFlash(worthElement, "red");
+    }
+}
+
+function removeModalFlash(choiceElement, color){
+    if (choiceElement) {
+        if (color == "yellow"){
+            choiceElement.classList.remove('modal-flash-yellow');
+        }
+        if (color == "red"){
+            choiceElement.classList.remove('modal-flash-red');
+        }
+        if (color == "green"){
+            choiceElement.classList.remove('modal-flash-green');
+        }
+    }
+}
+
+function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    const previousWorthElement = document.querySelector(`.level-point-${global_current_question - 1}`);
+    removeModalFlash(previousWorthElement, "yellow");
+    modalFlash(worthElement, "yellow");
+}
+
+async function highlightAnsweredQuestionsWorth(questions){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    current_question = global_current_question;
+    questions.forEach(question => {
+        const worthElement = document.querySelector(`.level-point-${question.number}`); //TODO Make this flash green or red.
+        if (parseInt(question.number) < current_question){
+            console.log(question);
+            highlightQuestionWorth(worthElement, question.number);
+        }else{
+            return;
+        }   
+    });
+}
+
+function showQuestionWorth(number, worth){
+    const questionInfoElement = document.querySelector(`.q-level`);
+    const pointsElement = document.querySelector(`.points`)
+
+    questionInfoElement.innerText = "Q" + number;
+    pointsElement.innerText = "₱" + worth;
+}
 
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -293,11 +379,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
+            const questions = res.data.questions;
             const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
             const question = await questionFetch(current_question);
             if (question) {
                 displayQuestion(question);
                 global_current_question = current_question;
+                highlightAnsweredQuestionsWorth(questions);
+                highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
+                showQuestionWorth(current_question, question.worth);
+                console.log(question);
             }
         }
     }
