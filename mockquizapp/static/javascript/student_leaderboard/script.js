@@ -71,8 +71,26 @@ function displayRankings(rankings){
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Leaderboard Script Loaded")
+document.addEventListener("DOMContentLoaded", function () { 
+    
+    document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "flex"; 
+    });
+    document.getElementById("logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault(); 
+        document.getElementById("logout-form-pop").style.display = "none"; 
+        const res = await getDataFromUrl("/api/logout");
+        if (res){   
+            window.location.href = "../";
+        }
+    });
+    document.getElementById("cancel-logout-but").addEventListener("click", async function (event) { 
+        event.preventDefault();
+        document.getElementById("logout-form-pop").style.display = "none"; 
+    });
+
+
 
     getDataFromUrl("/api/student/leaderboards") //Gets student leaderboards.
     .then(leaderboard => {

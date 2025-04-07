@@ -9,10 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/quizzes_page/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/components/navbar_student.css' %}">
     <script> document.cookie = "csrftoken={{ csrf_token }}"; // Set CSRF token in cookies  </script>
-    <script defer src="{% static 'javascript/student_leaderboard/script.js' %}"></script>
-    <script defer src="{% static 'javascript/student_dashboard/script.js' %}"></script>
-    <script defer src="{% static 'javascript/quizzes_page/script.js' %}"></script>
-    
+    <script defer src="{% static 'javascript/student_leaderboard/script.js' %}"></script> 
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     
@@ -63,19 +60,21 @@
             </div><!--leaderboard-table-->
         </div><!--wrapper-leaderboard-->
 
-        <div class="pop-up" id="logout-form-pop" style="display: none;">
-            <div class="pop-up-content">
-                <h1 class="raleway-bold">Logout</h1>
-                <h6 class="raleway-regular">Are you sure you want to logout?</h6>
-                <div class="pop-up-but">
-                    <button id="cancel-logout-but">Cancel</button>
-                    <button id="logout-but" >Logout</button>
-                </div>
-            </div>
-        </div>
 
         </section>
     </main>
+
+    {% comment %} DON'T PUT IT INSIDE THE MAIN TAG! {% endcomment %}
+    <div class="pop-up" id="logout-form-pop" style="display: none;">
+        <div class="pop-up-content">
+            <h1 class="raleway-bold">Logout</h1>
+            <h6 class="raleway-regular">Are you sure you want to logout?</h6>
+            <div class="pop-up-but">
+                <button id="cancel-logout-but">Cancel</button>
+                <button id="logout-but" >Logout</button>
+            </div>
+        </div>
+    </div>
     
 {% endblock body_block %}
     

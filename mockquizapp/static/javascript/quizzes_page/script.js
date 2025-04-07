@@ -1,8 +1,7 @@
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Quizzes Page Loaded    ");
+document.addEventListener("DOMContentLoaded", function () { 
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
