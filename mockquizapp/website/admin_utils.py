@@ -63,6 +63,7 @@ def get_weekly_rankings() -> list:
             'rank': rank,
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
+            'profile_pic': student.profile_pic.url if student.profile_pic else None
         })
 
     return rankings
