@@ -10,6 +10,7 @@ var game_settings = [];
 
 levelInfo.addEventListener("click", function () {
         modal.style.display = "flex"; 
+
 });
 
 //level-points-pop content
@@ -24,22 +25,16 @@ const points = [
 
 // list out level and its respective points
 for (let i = 0; i < points.length; i++) {
-    const levelPointDiv = document.createElement("div");
-    levelPointDiv.classList.add("level-point");
+    const level = i + 1;
+    const reversedIndex = points.length - 1 - i;
     
-    //level
-    const levelP = document.createElement("p");
-    levelP.textContent = 20 - i;
-    levelP.classList.add("level", "roboto-bold");
-    
-    //points
-    const pointP = document.createElement("p");
-    pointP.textContent = points[i]; 
-    pointP.classList.add("points", "roboto-light");
-
-    levelPointDiv.appendChild(levelP);
-    levelPointDiv.appendChild(pointP);
-    listContainer.appendChild(levelPointDiv);
+    listContainer.insertAdjacentHTML("afterbegin", 
+        `
+        <div class="level-point-${level}">
+        <p class="level-${level} roboto-bold">${level}</p>
+        <p class="points roboto-light">${points[reversedIndex]}</p>
+        </div>
+        `);
 }
 
 function playAudio(audio){
@@ -89,6 +84,7 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
         console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
+            console.log(current_answered_questions);
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
                 return true;
@@ -287,6 +283,49 @@ async function questionFetch(current_question){
     }
     return null;
 }
+// ---------------- For highlighting worth --------------------------------
+async function getCorrectStatus(question_number){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
+        'quiz_id': quiz_id,
+        'question': question_number,
+    });
+    if (res) {
+        return res.question.is_correct;
+    }
+}
+
+async function highlightQuestionWorth(worthElement, question_number){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    const isCorrect = await getCorrectStatus(question_number);
+    if (isCorrect == true){
+        console.log("Correct ");
+        console.log(worthElement);
+        flashGreen(worthElement);
+    }else{
+        console.log("Wrong ");
+        flashRed(worthElement);
+    }
+}
+
+function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    worthElement.classList.add('flash-yellow');
+
+}
+
+async function highlightAnsweredQuestionsWorth(questions){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+    current_question = global_current_question;
+    questions.forEach(question => {
+        const worthElement = document.querySelector(`.level-point-${question.number}`); //TODO Make this flash green or red.
+        if (parseInt(question.number) < current_question){
+            console.log(question);
+            highlightQuestionWorth(worthElement, question.number);
+        }else{
+            return;
+        }   
+    });
+}
+
+
 
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -296,11 +335,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
+            const questions = res.data.questions;
             const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
             const question = await questionFetch(current_question);
             if (question) {
                 displayQuestion(question);
                 global_current_question = current_question;
+                highlightAnsweredQuestionsWorth(questions);
             }
         }
     }
