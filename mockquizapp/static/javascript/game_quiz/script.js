@@ -98,69 +98,50 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
     }
 }
 
-function resizeTextOnOverflowAndWords(element, options = {}) {
-    const p = element.querySelector('p');
-    if (!p) return;
-  
-    const minFontSize = options.min || 32;  // Minimum font size in px
-    const maxFontSize = options.max || 40;  // Maximum font size in px
-    const step = options.step || 1;         // Font size step for resizing
-    const wordThreshold = options.wordThreshold || 5;  // Word count threshold
-  
-    // Function to check if text overflows the container
-    function isOverflowing() {
-      return p.scrollHeight > p.clientHeight || p.scrollWidth > p.clientWidth;
-    }
-  
-    // Function to count words
+function resizeTextOnOverflowAndWords(element, { min, max, step, wordThreshold }) {
     function getWordCount() {
-      const text = p.textContent || "";
-      return text.trim().split(/\s+/).length;
+      return element.innerText.trim().split(/\s+/).length;
     }
-  
-    // Function to resize font size based on overflow and word count
+
+    function isOverflowing() {
+      return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+    }
+
     function adjustFontSize() {
-      let fontSize = parseInt(window.getComputedStyle(p).fontSize);  //, 16 Get current font size
-  
+      let fontSize = parseInt(window.getComputedStyle(element).fontSize);
       const wordCount = getWordCount();
-  
-      // If there are fewer words than the threshold (wordCount < wordThreshold), increase the font size
-      if (wordCount <= wordThreshold && fontSize < maxFontSize) {
-        fontSize = Math.min(maxFontSize, fontSize + step);  // Increase font size but don't exceed max
-        p.style.fontSize = `${fontSize}px`;
+
+      if (wordCount <= wordThreshold && fontSize < max) {
+        fontSize = Math.min(max, fontSize + step);
+        element.style.fontSize = ${fontSize}px;
       }
-  
-      // If the text overflows, shrink the font size
-      while (isOverflowing() && fontSize > minFontSize) {
-        fontSize -= step;  // Reduce the font size in steps
-        p.style.fontSize = `${fontSize}px`;
+
+      while (isOverflowing() && fontSize > min) {
+        fontSize -= step;
+        element.style.fontSize = ${fontSize}px;
       }
-  
-      // If the text is not overflowing and word count is greater than the threshold, increase font size in small steps
-      while (!isOverflowing() && fontSize < maxFontSize && wordCount < wordThreshold) {
-        fontSize += step;  // Increase the font size incrementally
-        p.style.fontSize = `${fontSize}px`;
+
+      while (!isOverflowing() && fontSize < max && wordCount < wordThreshold) {
+        fontSize += step;
+        element.style.fontSize = ${fontSize}px;
       }
-  
-      // If word count is more than the threshold, adjust font size to maintain readability
-      if (wordCount >= wordThreshold && fontSize > minFontSize) {
-        fontSize -= step;  // Gradually reduce the font size
-        p.style.fontSize = `${fontSize}px`;
+
+      if (wordCount >= wordThreshold && fontSize > min) {
+        fontSize -= step;
+        element.style.fontSize = ${fontSize}px;
       }
     }
-  
-    // Initial adjustment when the script runs
+
+    // Initial adjustment
     adjustFontSize();
-  
-    // Optionally, listen for window resizing to adjust dynamically:
+
+    // Respond to window resizing
     window.addEventListener('resize', adjustFontSize);
-  
-    // Observe changes to the child text node to handle dynamic changes to the content
-    const observer = new MutationObserver(() => {
-      adjustFontSize();
-    });
+
+    // Observe text changes
+    const observer = new MutationObserver(adjustFontSize);
     observer.observe(element, { childList: true, subtree: true });
-  }
+  } 
 
   
 
@@ -240,6 +221,7 @@ async function nextQuestion(current_question){
     displayQuestion(questionData);
     showQuestionWorth(global_current_question, questionData.worth);
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
+    
 }
 
 function flashRed(choiceElement){
@@ -313,6 +295,7 @@ function displayQuestion(questionData){
     questionElement.innerText = questionData.question;
     displayChoices(options);
     resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
+    displayAvailablePowerUps();
 }
 
 function displayChoices(options){
@@ -449,7 +432,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
                 showQuestionWorth(current_question, question.worth);
-                displayAvailablePowerUps();
             }
         }
     }
@@ -532,9 +514,9 @@ function updatePowerUpElement(element, state){
     }
 }
 
-function displayAvailablePowerUps(){
+async function displayAvailablePowerUps(){
     const quiz_id = sessionStorage.getItem('quiz_id');
-    const powerUps = getAvailablePowerUps(quiz_id)
+    const powerUps = await getAvailablePowerUps(quiz_id);
 
     if (powerUps) {
         const button5050 = document.getElementById('50-50');
