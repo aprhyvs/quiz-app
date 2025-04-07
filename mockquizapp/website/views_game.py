@@ -1061,6 +1061,7 @@ def on_game_data_5050(request):
         for decoy in decoy_sample: 
             if decoy != correct_answer:
                 decoy_5050.append(decoy)
+                break
         
         random.shuffle(decoy_5050)
         quiz.game_data_5050 = { question: decoy_5050}
