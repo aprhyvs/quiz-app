@@ -98,7 +98,51 @@ async function checkQuizNumber(current_question){ // Check if the number of corr
     }
 }
 
-
+function resizeTextOnOverflowAndWords(element, { min, max, step, wordThreshold }) {
+    function getWordCount() {
+      return element.innerText.trim().split(/\s+/).length;
+    }
+  
+    function isOverflowing() {
+      return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+    }
+  
+    function adjustFontSize() {
+      let fontSize = parseInt(window.getComputedStyle(element).fontSize);
+      const wordCount = getWordCount();
+  
+      if (wordCount <= wordThreshold && fontSize < max) {
+        fontSize = Math.min(max, fontSize + step);
+        element.style.fontSize = `${fontSize}px`;
+      }
+  
+      while (isOverflowing() && fontSize > min) {
+        fontSize -= step;
+        element.style.fontSize = `${fontSize}px`;
+      }
+  
+      while (!isOverflowing() && fontSize < max && wordCount < wordThreshold) {
+        fontSize += step;
+        element.style.fontSize = `${fontSize}px`;
+      }
+  
+      if (wordCount >= wordThreshold && fontSize > min) {
+        fontSize -= step;
+        element.style.fontSize = `${fontSize}px`;
+      }
+    }
+  
+    // Initial adjustment
+    adjustFontSize();
+  
+    // Respond to window resizing
+    window.addEventListener('resize', adjustFontSize);
+  
+    // Observe text changes
+    const observer = new MutationObserver(adjustFontSize);
+    observer.observe(element, { childList: true, subtree: true });
+  }
+  
 
 async function processChoice(choiceString){
     async function evaluateChoice(choice) {
@@ -133,10 +177,8 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         'question': current_question
     });
     if (res) {
-        console.log(res);
         const question = res.question;
         const isCorrect = question.is_correct;
-        console.log('Player is ' +isCorrect);
         
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
@@ -149,7 +191,6 @@ async function showWrongAndCorrectAnswer(choice, current_question){
             flashRed(choiceElement);
             const answer = res.question.answer;
             const correct_answer = res.question.correct_answer;
-            console.log(`The correct answer is: ${correct_answer}`);
             const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
             flashGreen(correctAnswerElement);
         }
@@ -164,7 +205,6 @@ async function showAnswerEffects(choice, current_question) {
     // proceed to the next question
     const isLastQuestion = await checkQuizNumber(current_question);
     if (isLastQuestion == true) {
-        console.log("Is it the final question?")
         endGame();
     }else{
         
@@ -252,6 +292,7 @@ function displayQuestion(questionData){
       );
     questionElement.innerText = questionData.question;
     displayChoices(options);
+    resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
 }
 
 function displayChoices(options){
@@ -388,11 +429,107 @@ document.addEventListener("DOMContentLoaded", async function () {
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
                 showQuestionWorth(current_question, question.worth);
-                console.log(question);
+                displayAvailablePowerUps();
             }
         }
     }
 });
+
+
+
+//Choice Buttons ---------------------------------------------------
+
+document.querySelector(".choice-A").addEventListener('click', function() {
+    const choice = "A";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-B").addEventListener('click', function() {
+    const choice = "B";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-C").addEventListener('click', function() {
+    const choice = "C";
+    showConfirmationPrompt(choice);
+});
+
+document.querySelector(".choice-D").addEventListener('click', function() {
+    const choice = "D";
+    showConfirmationPrompt(choice);
+});
+
+
+//Confirmation Prompt Buttons ---------------------------------------------------
+
+function closeConfirmationPrompt() {
+    document.getElementById("confirmation-form-pop").style.display = "none";
+    resetFlashYellowClass(); 
+}
+
+document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
+    processChoice(temporary_answer);
+    closeConfirmationPrompt();
+});
+document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
+    closeConfirmationPrompt();
+});
+
+// Background Wrapper
+
+function closeWorthSidenav(){
+    modal.style.display = "none";
+    
+}
+
+document.querySelector(".modal").addEventListener('click', function() {
+    closeWorthSidenav()
+});
+
+
+
+
+
+
+// Power Ups
+
+
+async function getAvailablePowerUps(quiz_id){
+    res = await getDataFromUrlWithParams(`/api/game/get/powerup`,{
+        'quiz_id': quiz_id
+    });
+    if (res) {
+         return res;
+    }
+}
+
+function updatePowerUpElement(element, state){
+    console.log(state);
+    if (state == false){
+        element.style.opacity = 50;
+    }else{
+        element.style.opacity = 100;
+    }
+}
+
+function displayAvailablePowerUps(){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    const powerUps = getAvailablePowerUps(quiz_id)
+
+    if (powerUps) {
+        const button5050 = document.getElementById('50-50');
+        const buttonAskAi = document.getElementById('ask-ai');
+        const buttonDoubleDip = document.getElementById('x2');
+        const buttonPass = document.getElementById('pass');
+
+        updatePowerUpElement(button5050, powerUps.has_5050);
+        updatePowerUpElement(buttonAskAi, powerUps.has_hint);
+        updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
+        updatePowerUpElement(buttonPass, powerUps.has_pass);
+    }
+
+}
+
 
 
 //50-50
@@ -464,53 +601,4 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
-});
-
-//Choice Buttons ---------------------------------------------------
-
-document.querySelector(".choice-A").addEventListener('click', function() {
-    const choice = "A";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-B").addEventListener('click', function() {
-    const choice = "B";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-C").addEventListener('click', function() {
-    const choice = "C";
-    showConfirmationPrompt(choice);
-});
-
-document.querySelector(".choice-D").addEventListener('click', function() {
-    const choice = "D";
-    showConfirmationPrompt(choice);
-});
-
-
-//Confirmation Prompt Buttons ---------------------------------------------------
-
-function closeConfirmationPrompt() {
-    document.getElementById("confirmation-form-pop").style.display = "none";
-    resetFlashYellowClass(); 
-}
-
-document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
-    processChoice(temporary_answer);
-    closeConfirmationPrompt();
-});
-document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
-    closeConfirmationPrompt();
-});
-
-// Background Wrapper
-
-function closeWorthSidenav(){
-    modal.style.display = "none";
-    
-}
-
-document.querySelector(".modal").addEventListener('click', function() {
-    closeWorthSidenav()
 });
