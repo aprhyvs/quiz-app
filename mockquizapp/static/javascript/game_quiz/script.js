@@ -667,12 +667,12 @@ async function choicesOpacityReset(current_question){
 document.getElementById("ask-ai").addEventListener("click", async function (event) { 
     console.log(global_current_question);
     console.log(globalPowerUps);
+    event.preventDefault(); 
     if (globalPowerUps.has_hint == true){ // If hint has been used...
         if ( checkHintNumber(globalPowerUps.hint_data) == true){ // If the hint question is the current question...
             displayAiHint(globalPowerUps.hint_data[global_current_question]);
         }
     }else{ // Hint has not been used before...
-        event.preventDefault(); 
         document.getElementById("ai-form-pop").style.display = "flex"; 
     }
 });
@@ -682,20 +682,22 @@ document.getElementById("cancel-ai-but").addEventListener('click', function() {
 });
 
 document.getElementById("confirm-ai-but").addEventListener('click', function() {
+    if (globalPowerUps.has_hint == false){ // If hint has been used...
+        activateAiHint();
+    }
     document.getElementById("ai-form-pop").style.display = "none";
-    activateAiHint();
 });
 
 function checkHintNumber(hint_data){
     console.log(hint_data);
     const current_question = global_current_question;
     const questionsHint = Object.keys(hint_data);
-    const questionHint = questionsHint[0];
+    const questionHint = questionsHint[0]
     if (current_question == questionHint) { //If the current question is the hint question...
         console.log("Current question is the hint question. " + current_question);
         return true;
     }else{
-        console.log("Not the hint question. " + current_question);
+        console.log("Not the hint question. " + questionHint + " != " + current_question);
         return false;
     }
 }
@@ -712,13 +714,20 @@ async function activateAiHint(){
     });
     if (res){
         console.log(res);
-        //displayAiHint(res);
+        globalPowerUps.hint_data = res;
+        displayAiHint(res[global_current_question]);
     }
 }
 
 function displayAiHint(hintContent){
     globalPowerUps.has_hint = true;
+    AiHintTextElement = document.querySelector('.ai-form-text');
+    AiHintTitleElement = document.querySelector('.ai-form-title');
+    AiHintTextElement.innerText = hintContent;
+    AiHintTitleElement.innerText = "AI Hint";
 
+    
+    document.getElementById("ai-form-pop").style.display = "flex"; 
 }
 
 //x2
