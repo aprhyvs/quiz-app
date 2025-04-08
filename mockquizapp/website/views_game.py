@@ -1411,7 +1411,13 @@ def on_game_check_power_up(request):
             'has_hint' : quiz.game_has_ai_hint,
             'hint_data' : quiz.game_data_ai_hint,
             'has_2x' : quiz.game_has_times2,
-            'x2_data' : quiz.game_data_times2
+            'x2_data' : quiz.game_data_times2,
+            'question_index' : {
+                '5050' : quiz.game_5050_question_index,
+                'pass' : quiz.game_pass_question_index,
+                'hint' : quiz.game_ai_hint_question_index,
+                '2x' : quiz.game_times2_question_index
+            }
         }, status=200)
         
         
