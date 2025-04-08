@@ -3,10 +3,11 @@ const levelInfo = document.querySelector(".level-info");
 var global_current_question = null;
 var userAnswer = [];
 let temporary_answer = null;
+let temporary_answers = [];
 var game_settings = [];
 var globalPowerUps = {};
 var availableChoices = ["A","B","C","D"];
-var x2isActive = false;
+var doubleDipIsActive = false;
 var disabledPowerUps = [];
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
@@ -224,7 +225,13 @@ async function showWrongAndCorrectAnswer(choice, current_question){
 
 
 async function showAnswerEffects(choice, current_question) {
-    showWrongAndCorrectAnswer(choice, current_question);
+    if (doubleDipIsActive == true){
+        showDoubleDipWrongAndCorrectAnswer(choice, current_question);
+        console.log("Sent to double dip wrong and correct answer function...")
+    }else{
+        showWrongAndCorrectAnswer(choice, current_question);
+    }
+    
     // proceed to the next question
     const isLastQuestion = await checkQuizNumber(current_question);
     if (isLastQuestion == true) {
@@ -270,13 +277,21 @@ function flashYellow(choiceElement){
 }
 
 function showConfirmationPrompt(choice) {
+    const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    if (doubleDipIsActive == true){
+        // double dip functionality here.
+        confirmationPromptElement.style.display = "flex";
+        return;
+    }
+
+
     if (!availableChoices.includes(choice)) {
         console.log(choice);
         console.log("Dili pwede.");
         return false;
     }
     
-    const confirmationPromptElement = document.getElementById('confirmation-form-pop');
+    
     
     // Remove the flash-yellow class from any previously selected SVGs
     const previouslySelectedElement = document.querySelector('.flash-yellow');
@@ -317,6 +332,7 @@ function resetFlashes() {
 }
 
 function displayQuestion(questionData){
+    
     const questionElement = document.querySelector(".question-text");
     const options = questionData.options.map(opt =>
         opt.replace(/^[A-D][\.\:\-\s]*\s*/, "")
@@ -326,6 +342,7 @@ function displayQuestion(questionData){
     resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
     displayAvailablePowerUps();
     disabledPowerUps = [];
+    
 }
 
 function displayChoices(options){
@@ -429,7 +446,6 @@ async function highlightAnsweredQuestionsWorth(questions){
     questions.forEach(question => {
         const worthElement = document.querySelector(`.level-point-${question.number}`); //TODO Make this flash green or red.
         if (parseInt(question.number) < current_question){
-            console.log(question);
             highlightQuestionWorth(worthElement, question.number);
         }else{
             return;
@@ -480,21 +496,62 @@ document.addEventListener("DOMContentLoaded", async function () {
 //Choice Buttons ---------------------------------------------------
 
 document.querySelector(".choice-A").addEventListener('click', function() {
+    if (doubleDipIsActive == true) {
+        if (temporary_answers.includes("A")){
+            console.log("You already chose this...");
+            return; 
+        }
+        temporary_answers.push("A");
+        checkTemporaryAnswers();
+        flashYellow(document.querySelector(`.svg-choice-A`));
+        return;
+    }
     const choice = "A";
     showConfirmationPrompt(choice);
 });
 
 document.querySelector(".choice-B").addEventListener('click', function() {
+    if (doubleDipIsActive == true) {
+        if (temporary_answers.includes("B")){
+            console.log("You already chose this...");
+            return; 
+        }
+        temporary_answers.push("B");
+        checkTemporaryAnswers();
+        flashYellow(document.querySelector(`.svg-choice-B`));
+        return;
+    }
+
     const choice = "B";
     showConfirmationPrompt(choice);
 });
 
 document.querySelector(".choice-C").addEventListener('click', function() {
+    if (doubleDipIsActive == true) {
+        if (temporary_answers.includes("C")){
+            console.log("You already chose this...");
+            return; 
+        }
+        temporary_answers.push("C");
+        checkTemporaryAnswers();
+        flashYellow(document.querySelector(`.svg-choice-C`));
+        return;
+    }
     const choice = "C";
     showConfirmationPrompt(choice);
 });
 
 document.querySelector(".choice-D").addEventListener('click', function() {
+    if (doubleDipIsActive == true) {
+        if (temporary_answers.includes("D")){
+            console.log("You already chose this...");
+            return; 
+        }
+        temporary_answers.push("D");
+        checkTemporaryAnswers();
+        flashYellow(document.querySelector(`.svg-choice-D`));
+        return;
+    }
     const choice = "D";
     showConfirmationPrompt(choice);
 });
@@ -503,11 +560,18 @@ document.querySelector(".choice-D").addEventListener('click', function() {
 //Confirmation Prompt Buttons ---------------------------------------------------
 
 function closeConfirmationPrompt() {
+    temporary_answers = [];
     document.getElementById("confirmation-form-pop").style.display = "none";
     resetFlashYellowClass(); 
 }
 
 document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
+    if (doubleDipIsActive == true) {
+        processDoubleChoice(temporary_answers);
+        console.log("sent " + temporary_answers);
+        closeConfirmationPrompt();
+        return;
+    }
     processChoice(temporary_answer);
     closeConfirmationPrompt();
 });
@@ -622,6 +686,7 @@ async function displayAvailablePowerUps(){
         updatePowerUpElement(button5050, powerUps.has_5050);
         updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
         updatePowerUpElement(buttonPass, powerUps.has_pass);
+        
         if (globalPowerUps.has_hint == true){ // If hint has been used...
             if ( checkHintNumber(globalPowerUps.hint_data) == false ){ // If the hint question is not the current question...
                 updatePowerUpElement(buttonAskAi, powerUps.has_hint);
@@ -629,10 +694,9 @@ async function displayAvailablePowerUps(){
                 disableOtherPowerUps("ask_ai");
                 console.log(disabledPowerUps);
             }
+        }else{
+            updatePowerUpElement(buttonAskAi, powerUps.has_hint);
         }
-
-
-        
     }
 }
 
@@ -684,19 +748,16 @@ async function activate5050(){
     if (res) {
         console.log(res);
         data5050 = res["5050"];
-        console.log("50-50 Power Up activated.");
-        displayPossibleAnswers(data5050);
         globalPowerUps.has_5050 = true;
-        updatePowerUpElement(document.getElementById('50-50'), true);
-        
         const questions5050 = Object.keys(data5050);
         const question5050 = questions5050[0];
+        const current_question = global_current_question;
         if (current_question == question5050) { //If the current question is the 50-50 question...
+            displayPossibleAnswers(data5050);
+            console.log("50-50 Power Up activated.");
             disableOtherPowerUps("50_50"); 
         }
-
-
-        
+        updatePowerUpElement(document.getElementById('50-50'), true);
     }
 }
 
@@ -739,8 +800,6 @@ async function choicesOpacityReset(current_question){
 
 //AI
 document.getElementById("ask-ai").addEventListener("click", async function (event) { 
-    console.log(global_current_question);
-    console.log(globalPowerUps);
     event.preventDefault(); 
     if (disabledPowerUps.includes("ask_ai") ){
         console.log("INC! DILI PWIDI!!")
@@ -749,8 +808,10 @@ document.getElementById("ask-ai").addEventListener("click", async function (even
     if (globalPowerUps.has_hint == true){ // If hint has been used...
         if ( checkHintNumber(globalPowerUps.hint_data) == true){ // If the hint question is the current question...
             displayAiHint(globalPowerUps.hint_data[global_current_question]);
+            event.preventDefault(); 
         }
     }else{ // Hint has not been used before...
+        event.preventDefault(); 
         document.getElementById("ai-form-pop").style.display = "flex"; 
     }
 });
@@ -761,13 +822,13 @@ document.getElementById("cancel-ai-but").addEventListener('click', function() {
 
 document.getElementById("confirm-ai-but").addEventListener('click', function() {
     if (globalPowerUps.has_hint == false){ // If hint has been used...
+        event.preventDefault(); 
         activateAiHint();
     }
     document.getElementById("ai-form-pop").style.display = "none";
 });
 
 function checkHintNumber(hint_data){
-    console.log(hint_data);
     const current_question = global_current_question;
     const questionsHint = Object.keys(hint_data);
     const questionHint = questionsHint[0]
@@ -794,6 +855,7 @@ async function activateAiHint(){
         console.log(res);
         globalPowerUps.hint_data = res;
         displayAiHint(res[global_current_question]);
+        disableOtherPowerUps("ask_ai");
     }
 }
 
@@ -823,8 +885,81 @@ document.getElementById("cancel-x2-but").addEventListener('click', function() {
 });
 
 document.getElementById("confirm-x2-but").addEventListener('click', function() {
+    const buttonDoubleDip = document.getElementById('x2');
+    updatePowerUpElement(buttonDoubleDip, true);
+    disableOtherPowerUps("x2");
+    doubleDipIsActive = true;
     document.getElementById("x2-form-pop").style.display = "none";
 });
+
+
+function glowChoice(choice) {
+    // Now add the flash-yellow class to the newly selected SVG element
+    const choiceElement = document.querySelector(`.svg-choice-${choice}`);
+    flashYellow(choiceElement);
+}
+
+function checkTemporaryAnswers(){
+    console.log(temporary_answers)
+    if (temporary_answers.length == 2){
+        showConfirmationPrompt(temporary_answers);
+    }
+}
+
+async function processDoubleChoice(final_choices){
+    async function evaluateChoice(choices) {
+        const quiz_id = sessionStorage.getItem('quiz_id');
+        if (quiz_id) {
+            res = await getDataFromUrlWithParams(`/api/game/x2`,{
+                'quiz_id': quiz_id,
+                'question' : current_question,
+                'answer_1' : choices[0],
+                'answer_2' : choices[1]
+            });
+                if (res) {
+                    return res;
+                }
+            }
+        }
+
+    const result = await evaluateChoice(final_choices);
+    if (result){
+        const current_question = global_current_question;
+        console.log(current_question);
+        showAnswerEffects(final_choices, current_question);
+    }
+
+      // Optionally reset the flash-yellow class manually
+      resetFlashYellowClass();
+}
+
+async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    console.log(current_question)
+    res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
+        'quiz_id': quiz_id,
+        'question': current_question
+    });
+    if (res) {
+        doubleDipIsActive = false;
+        const question = res.question;
+        const isCorrect = question.is_correct;
+        const correct_answer = res.question.correct_answer;
+        if (isCorrect == true){
+            const choiceElement = document.querySelector(`.svg-choice-${correct_answer}`);
+            resetFlashYellowClass();
+            flashGreen(choiceElement);
+        }else{
+            const choiceElement1 = document.querySelector(`.svg-choice-${choices[0]}`);
+            const choiceElement2 = document.querySelector(`.svg-choice-${choices[1]}`);
+            resetFlashYellowClass();
+            flashRed(choiceElement1);
+            flashRed(choiceElement2);
+            const answerElement = document.querySelector(`.svg-choice-${correct_answer}`);
+            flashGreen(answerElement);
+        }
+    }
+}
 
 //pass
 document.getElementById("pass").addEventListener("click", async function (event) { 
