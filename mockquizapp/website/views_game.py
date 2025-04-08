@@ -1115,7 +1115,7 @@ def on_game_data_answer_with_x2(request):
         if not quiz:
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
 
-        
+        # if quiz.game
         
         old_generated_questions : dict = quiz.questions if quiz.questions else {}
         selected_questions : dict = old_generated_questions.get(question , None)
@@ -1216,13 +1216,13 @@ def on_game_data_pass(request):
         if quiz.game_has_pass:
             return JsonResponse({'message': 'You have already passed this quiz.'}, status=400)
         
-        if question == quiz.game_game_5050_question_index:
+        if question == quiz.game_5050_question_index:
             return JsonResponse({'error': 'You have already used power up.'}, status=400)
         
-        if question == quiz.game_game_times2_question_index:
+        if question == quiz.game_times2_question_index:
             return JsonResponse({'error': 'You have already used power up.'}, status=400)
         
-        if question == quiz.game_game_ai_hint_question_index:
+        if question == quiz.game_ai_hint_question_index:
             return JsonResponse({'error': 'You have already used power up.'}, status=400)
 
         # This part is updating the question data    
