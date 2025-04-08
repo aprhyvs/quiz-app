@@ -7,6 +7,7 @@ var game_settings = [];
 var globalPowerUps = {};
 var availableChoices = ["A","B","C","D"];
 var x2isActive = false;
+var disabledPowerUps = [];
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
 
@@ -324,6 +325,7 @@ function displayQuestion(questionData){
     displayChoices(options);
     resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
     displayAvailablePowerUps();
+    disabledPowerUps = [];
 }
 
 function displayChoices(options){
@@ -464,10 +466,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                     console.log("Has 5050")
                     activate5050();
                 }
-
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
                 showQuestionWorth(current_question, question.worth);
+                
             }
         }
     }
@@ -531,15 +533,36 @@ document.querySelector(".modal").addEventListener('click', function() {
 
 // Power Ups
 
+function disableOtherPowerUps(usedPowerUp){
+    displayDisabledPowerUps(usedPowerUp);
 
-async function getAvailablePowerUps(quiz_id){
-    res = await getDataFromUrlWithParams(`/api/game/get/powerup`,{
-        'quiz_id': quiz_id
-    });
-    if (res) {
-         return res;
+    if (usedPowerUp == "50_50"){
+        disabledPowerUps.push("ask_ai");
+        disabledPowerUps.push("double_dip");
+        disabledPowerUps.push("pass");
+        return;
+    }
+    if (usedPowerUp == "ask_ai"){
+        disabledPowerUps.push("50_50");
+        disabledPowerUps.push("double_dip");
+        disabledPowerUps.push("pass");
+        return;
+    }
+    if (usedPowerUp == "x2"){
+        disabledPowerUps.push("50_50");
+        disabledPowerUps.push("ask_ai");
+        disabledPowerUps.push("pass");
+        return;
+    }
+    if (usedPowerUp == "pass"){
+        disabledPowerUps.push("50_50");
+        disabledPowerUps.push("ask_ai");
+        disabledPowerUps.push("double_dip");
+        return;
     }
 }
+
+
 
 function updatePowerUpElement(element, state){
     console.log(state);
@@ -547,6 +570,42 @@ function updatePowerUpElement(element, state){
         element.style.opacity = .50;
     }else{
         element.style.opacity = 1;
+    }
+}
+
+function displayDisabledPowerUps(usedPowerUp){
+    const button5050 = document.getElementById('50-50');
+    const buttonAskAi = document.getElementById('ask-ai');
+    const buttonDoubleDip = document.getElementById('x2');
+    const buttonPass = document.getElementById('pass');
+    if (usedPowerUp == "50_50"){
+        updatePowerUpElement(buttonAskAi, true);
+        updatePowerUpElement(buttonDoubleDip, true);
+        updatePowerUpElement(buttonPass, true);
+    }
+    if (usedPowerUp == "ask_ai"){
+        updatePowerUpElement(button5050, true);
+        updatePowerUpElement(buttonDoubleDip, true);
+        updatePowerUpElement(buttonPass, true);
+    }
+    if (usedPowerUp == "x2"){
+        updatePowerUpElement(button5050, true);
+        updatePowerUpElement(buttonAskAi, true);
+        updatePowerUpElement(buttonPass, true);
+    }
+    if (usedPowerUp == "pass"){
+        updatePowerUpElement(button5050, true);
+        updatePowerUpElement(buttonAskAi, true);
+        updatePowerUpElement(buttonDoubleDip, true);
+    }
+}
+
+async function getAvailablePowerUps(quiz_id){
+    res = await getDataFromUrlWithParams(`/api/game/get/powerup`,{
+        'quiz_id': quiz_id
+    });
+    if (res) {
+         return res;
     }
 }
 
@@ -561,13 +620,19 @@ async function displayAvailablePowerUps(){
         const buttonPass = document.getElementById('pass');
 
         updatePowerUpElement(button5050, powerUps.has_5050);
+        updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
+        updatePowerUpElement(buttonPass, powerUps.has_pass);
         if (globalPowerUps.has_hint == true){ // If hint has been used...
             if ( checkHintNumber(globalPowerUps.hint_data) == false ){ // If the hint question is not the current question...
                 updatePowerUpElement(buttonAskAi, powerUps.has_hint);
+            }else{
+                disableOtherPowerUps("ask_ai");
+                console.log(disabledPowerUps);
             }
         }
-        updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
-        updatePowerUpElement(buttonPass, powerUps.has_pass);
+
+
+        
     }
 }
 
@@ -589,7 +654,7 @@ document.getElementById("confirm-ingame-but").addEventListener('click', function
 //50-50
 document.getElementById("50-50").addEventListener("click", async function (event) { 
     event.preventDefault(); 
-    if (globalPowerUps.has_5050 == true){
+    if (globalPowerUps.has_5050 == true || disabledPowerUps.includes("50_50")){
         console.log("50-50 Power Up not available.");
         return false;
     }else {
@@ -623,6 +688,15 @@ async function activate5050(){
         displayPossibleAnswers(data5050);
         globalPowerUps.has_5050 = true;
         updatePowerUpElement(document.getElementById('50-50'), true);
+        
+        const questions5050 = Object.keys(data5050);
+        const question5050 = questions5050[0];
+        if (current_question == question5050) { //If the current question is the 50-50 question...
+            disableOtherPowerUps("50_50"); 
+        }
+
+
+        
     }
 }
 
@@ -668,6 +742,10 @@ document.getElementById("ask-ai").addEventListener("click", async function (even
     console.log(global_current_question);
     console.log(globalPowerUps);
     event.preventDefault(); 
+    if (disabledPowerUps.includes("ask_ai") ){
+        console.log("INC! DILI PWIDI!!")
+        return;
+    }
     if (globalPowerUps.has_hint == true){ // If hint has been used...
         if ( checkHintNumber(globalPowerUps.hint_data) == true){ // If the hint question is the current question...
             displayAiHint(globalPowerUps.hint_data[global_current_question]);
@@ -732,6 +810,10 @@ function displayAiHint(hintContent){
 
 //x2
 document.getElementById("x2").addEventListener("click", async function (event) { 
+    if (disabledPowerUps.includes("double_dip") ){
+        console.log("INC! DILI PWIDI!!")
+        return;
+    }
     event.preventDefault(); 
     document.getElementById("x2-form-pop").style.display = "flex"; 
 });
@@ -746,6 +828,11 @@ document.getElementById("confirm-x2-but").addEventListener('click', function() {
 
 //pass
 document.getElementById("pass").addEventListener("click", async function (event) { 
+    if (disabledPowerUps.includes("pass") ){
+        console.log("INC! DILI PWIDI!!")
+        console.log(disabledPowerUps);
+        return;
+    }
     event.preventDefault(); 
     document.getElementById("pass-form-pop").style.display = "flex"; 
 });
