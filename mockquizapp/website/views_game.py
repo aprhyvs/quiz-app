@@ -840,6 +840,7 @@ def on_game_data_ask_ai(request):
         hintData = {question : response_dict.get('hint')}
         quiz.game_data_ai_hint = hintData
         quiz.game_has_ai_hint = True
+        quiz.game_ai_hint_question_index = question
         quiz.save()
         return JsonResponse(hintData, status=200)
 
@@ -1087,6 +1088,7 @@ def on_game_data_5050(request):
         random.shuffle(decoy_5050)
         quiz.game_data_5050 = { question: decoy_5050}
         quiz.game_has_5050 = True
+        quiz.game_5050_question_index = question
         quiz.save()
         
         return JsonResponse({'5050': quiz.game_data_5050}, status=200)
@@ -1210,7 +1212,8 @@ def on_game_data_answer_with_x2(request):
                 
                 if question_to_int == 0:
                     break
-                
+        
+        quiz.game_times2_question_index = question
         quiz.save()
         
         return JsonResponse({'status': 'success'}, status=200)
