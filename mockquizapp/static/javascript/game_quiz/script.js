@@ -687,11 +687,15 @@ document.getElementById("confirm-ai-but").addEventListener('click', function() {
 });
 
 function checkHintNumber(hint_data){
+    console.log(hint_data);
+    const current_question = global_current_question;
     const questionsHint = Object.keys(hint_data);
     const questionHint = questionsHint[0];
     if (current_question == questionHint) { //If the current question is the hint question...
+        console.log("Current question is the hint question. " + current_question);
         return true;
     }else{
+        console.log("Not the hint question. " + current_question);
         return false;
     }
 }

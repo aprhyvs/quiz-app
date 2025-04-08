@@ -828,7 +828,7 @@ def on_game_data_ask_ai(request):
         if not response_dict:
             return JsonResponse({'error': 'Failed to generate hint.'}, status=500)
         hintData = {question : response_dict.get('hint')}
-        quiz.game_data_ai_hint = response_dict
+        quiz.game_data_ai_hint = hintData
         quiz.game_has_ai_hint = True
         quiz.save()
         return JsonResponse(hintData, status=200)
