@@ -101,10 +101,10 @@ class QuizData(models.Model):
     game_has_times2 = models.BooleanField(default=False)
     game_data_times2 = models.JSONField(default=dict, blank=True, null=True)
     game_has_pass = models.BooleanField(default=False)
-    game_5050_question_index = models.CharField(max_length=3 , default="")
-    game_times2_question_index = models.CharField(max_length=3 , default="")
-    game_pass_question_index = models.CharField(max_length=3 , default="")
-    game_ai_hint_question_index = models.CharField(max_length=3 , default="")
+    game_5050_question_index = models.CharField(max_length=3 , default="" , blank=True, null=True)
+    game_times2_question_index = models.CharField(max_length=3 , default="" , blank=True, null=True)
+    game_pass_question_index = models.CharField(max_length=3 , default="", blank=True, null=True)
+    game_ai_hint_question_index = models.CharField(max_length=3 , default="" , blank=True, null=True)
 
     """
         questions = {
