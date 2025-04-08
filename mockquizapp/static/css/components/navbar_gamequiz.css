@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.left, .right {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
 .left {
     display: flex;
     align-items: center;
@@ -29,9 +34,18 @@
 .right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .right svg {
     cursor: pointer;
     color: #FCFCFC;
+}
+
+/* timer */
+.timer {
+    color: #FCFCFC;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
 }
