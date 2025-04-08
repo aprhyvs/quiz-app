@@ -6,6 +6,7 @@ let temporary_answer = null;
 var game_settings = [];
 var globalPowerUps = {};
 var availableChoices = ["A","B","C","D"];
+var x2isActive = false;
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
 
@@ -53,7 +54,6 @@ async function endGame() {
         await new Promise(resolve => setTimeout(resolve, 2000));
         window.location.href = `/quiz_complete`;
     }
-
 }
 
 async function getAnsweredQuestions(quiz_id){
@@ -379,7 +379,7 @@ function modalFlash(choiceElement, color){
     }
 }
 
-async function highlightQuestionWorth(worthElement, question_number){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+async function highlightQuestionWorth(worthElement, question_number){ 
     const isCorrect = await getCorrectStatus(question_number);
     if (isCorrect == true){
         console.log("Correct ");
@@ -391,7 +391,7 @@ async function highlightQuestionWorth(worthElement, question_number){ //TODO: Ma
     }
 }
 
-function highlightQuestionWorthRealtime(worthElement, isCorrect){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+function highlightQuestionWorthRealtime(worthElement, isCorrect){ 
     if (isCorrect == true){
         console.log("Correct ");
         console.log(worthElement);
@@ -416,13 +416,13 @@ function removeModalFlash(choiceElement, color){
     }
 }
 
-function highlightCurrentQuestionWorth(worthElement){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+function highlightCurrentQuestionWorth(worthElement){ 
     const previousWorthElement = document.querySelector(`.level-point-${global_current_question - 1}`);
     removeModalFlash(previousWorthElement, "yellow");
     modalFlash(worthElement, "yellow");
 }
 
-async function highlightAnsweredQuestionsWorth(questions){ //TODO: Make the worths flash using these. It needs to be done by Mon first.
+async function highlightAnsweredQuestionsWorth(questions){ 
     current_question = global_current_question;
     questions.forEach(question => {
         const worthElement = document.querySelector(`.level-point-${question.number}`); //TODO Make this flash green or red.
@@ -561,11 +561,50 @@ async function displayAvailablePowerUps(){
         const buttonPass = document.getElementById('pass');
 
         updatePowerUpElement(button5050, powerUps.has_5050);
-        updatePowerUpElement(buttonAskAi, powerUps.has_hint);
+        if (globalPowerUps.has_hint == true){ // If hint has been used...
+            if ( checkHintNumber(globalPowerUps.hint_data) == false ){ // If the hint question is not the current question...
+                updatePowerUpElement(buttonAskAi, powerUps.has_hint);
+            }
+        }
         updatePowerUpElement(buttonDoubleDip, powerUps.has_2x);
         updatePowerUpElement(buttonPass, powerUps.has_pass);
     }
 }
+
+
+//Settings
+document.getElementById("ingame-settings-button").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    document.getElementById("ingame-settings").style.display = "flex"; 
+});
+
+document.getElementById("cancel-ingame-but").addEventListener('click', function() {
+    document.getElementById("ingame-settings").style.display = "none";
+});
+
+document.getElementById("confirm-ingame-but").addEventListener('click', function() {
+    document.getElementById("ingame-settings").style.display = "none";
+});
+
+//50-50
+document.getElementById("50-50").addEventListener("click", async function (event) { 
+    event.preventDefault(); 
+    if (globalPowerUps.has_5050 == true){
+        console.log("50-50 Power Up not available.");
+        return false;
+    }else {
+        document.getElementById("50-form-pop").style.display = "flex"; 
+    }
+});
+
+document.getElementById("cancel-50-but").addEventListener('click', function() {
+    document.getElementById("50-form-pop").style.display = "none";
+});
+
+document.getElementById("confirm-50-but").addEventListener('click', function() {
+    document.getElementById("50-form-pop").style.display = "none";
+    activate5050();
+});
 
 async function activate5050(){
     const quiz_id = sessionStorage.getItem('quiz_id');
@@ -624,44 +663,18 @@ async function choicesOpacityReset(current_question){
 
 }
 
-//Settings
-document.getElementById("ingame-settings-button").addEventListener("click", async function (event) { 
-    event.preventDefault(); 
-    document.getElementById("ingame-settings").style.display = "flex"; 
-});
-
-document.getElementById("cancel-ingame-but").addEventListener('click', function() {
-    document.getElementById("ingame-settings").style.display = "none";
-});
-
-document.getElementById("confirm-ingame-but").addEventListener('click', function() {
-    document.getElementById("ingame-settings").style.display = "none";
-});
-
-//50-50
-document.getElementById("50-50").addEventListener("click", async function (event) { 
-    event.preventDefault(); 
-    if (globalPowerUps.has_5050 == true){
-        console.log("50-50 Power Up not available.");
-        return false;
-    }else {
-        document.getElementById("50-form-pop").style.display = "flex"; 
-    }
-});
-
-document.getElementById("cancel-50-but").addEventListener('click', function() {
-    document.getElementById("50-form-pop").style.display = "none";
-});
-
-document.getElementById("confirm-50-but").addEventListener('click', function() {
-    document.getElementById("50-form-pop").style.display = "none";
-    activate5050();
-});
-
 //AI
 document.getElementById("ask-ai").addEventListener("click", async function (event) { 
-    event.preventDefault(); 
-    document.getElementById("ai-form-pop").style.display = "flex"; 
+    console.log(global_current_question);
+    console.log(globalPowerUps);
+    if (globalPowerUps.has_hint == true){ // If hint has been used...
+        if ( checkHintNumber(globalPowerUps.hint_data) == true){ // If the hint question is the current question...
+            displayAiHint(globalPowerUps.hint_data[global_current_question]);
+        }
+    }else{ // Hint has not been used before...
+        event.preventDefault(); 
+        document.getElementById("ai-form-pop").style.display = "flex"; 
+    }
 });
 
 document.getElementById("cancel-ai-but").addEventListener('click', function() {
@@ -670,8 +683,39 @@ document.getElementById("cancel-ai-but").addEventListener('click', function() {
 
 document.getElementById("confirm-ai-but").addEventListener('click', function() {
     document.getElementById("ai-form-pop").style.display = "none";
+    activateAiHint();
 });
 
+function checkHintNumber(hint_data){
+    const questionsHint = Object.keys(hint_data);
+    const questionHint = questionsHint[0];
+    if (current_question == questionHint) { //If the current question is the hint question...
+        return true;
+    }else{
+        return false;
+    }
+}
+
+async function activateAiHint(){
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    if (globalPowerUps.has_hint == true){ // If hint has been used...
+        console.log("Hint already used.");
+        return; // stop function
+    }
+    const res = await getDataFromUrlWithParams(`/api/game/generate/hints`,{
+        'quiz_id': quiz_id,
+        'question': global_current_question
+    });
+    if (res){
+        console.log(res);
+        //displayAiHint(res);
+    }
+}
+
+function displayAiHint(hintContent){
+    globalPowerUps.has_hint = true;
+
+}
 
 //x2
 document.getElementById("x2").addEventListener("click", async function (event) { 

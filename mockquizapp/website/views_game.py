@@ -793,7 +793,7 @@ def on_game_data_ask_ai(request):
         
         # Check if the selected question has already been generated
         if 'hint' in quiz.game_data_ai_hint:
-            return JsonResponse({'hint': quiz.game_data_ai_hint}, status=200)
+            return JsonResponse({question: quiz.game_data_ai_hint}, status=200)
         
         # Check if the student has already been used the ai hint
         if quiz.game_has_ai_hint:
@@ -827,10 +827,11 @@ def on_game_data_ask_ai(request):
             time.sleep(1)
         if not response_dict:
             return JsonResponse({'error': 'Failed to generate hint.'}, status=500)
+        hintData = {question : response_dict.get('hint')}
         quiz.game_data_ai_hint = response_dict
         quiz.game_has_ai_hint = True
         quiz.save()
-        return JsonResponse(response_dict, status=200)
+        return JsonResponse(hintData, status=200)
 
 
 def on_game_data_answer(request):
