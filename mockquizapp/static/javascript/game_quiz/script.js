@@ -990,6 +990,8 @@ async function processPass(){
     });
     if (res){
         console.log(res);
-        //displayQuestion(questionData);
+        const questionData = res.question;
+        displayQuestion(questionData);
+        updatePowerUpElement(buttonPass, true);
     }
 }

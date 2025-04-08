@@ -1229,24 +1229,22 @@ def on_game_data_pass(request):
         print("generated questions")
         # If has not selected questions then generate it
         converted_questions = None
-        if not selected_questions:
-            converted_questions = None
-            for _ in range(3):
-                selected_questions_pass = get_index_content(index="21" , questions=quiz.raw_generated_questions)
-                if selected_questions_pass:
-                    converted_questions = text_to_dictionary(selected_questions_pass)
-                    if converted_questions:
-                        is_valid = is_index_correct_format(converted_questions , "21")
-                        if is_valid:
-                            break
-                time.sleep(1)
-            if not converted_questions:
-                return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
+        for _ in range(3):
+            selected_questions_pass = get_index_content(index="21" , questions=quiz.raw_generated_questions)
+            if selected_questions_pass:
+                converted_questions = text_to_dictionary(selected_questions_pass)
+                if converted_questions:
+                    is_valid = is_index_correct_format(converted_questions , "21")
+                    if is_valid:
+                        break
+            time.sleep(1)
+        if not converted_questions:
+            return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
             
-            print("converted questions : ", converted_questions)
+        print("converted questions : ", converted_questions)
             
         
-        selected_data = converted_questions.get(21, None)
+        selected_data = converted_questions.get("21", None)
         if selected_data is None:
             selected_data = converted_questions
             
