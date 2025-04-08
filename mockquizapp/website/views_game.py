@@ -786,6 +786,16 @@ def on_game_data_ask_ai(request):
         if quiz.game_has_ai_hint:
             return JsonResponse({'hint': 'You have already asked the AI for a hint.'}, status=200)
         
+        if question == quiz.game_5050_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_times2_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_pass_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        
         old_generated_questions = quiz.questions if quiz.questions else {}
         selected_questions = old_generated_questions.get(question , None)
         if not selected_questions:
@@ -1040,7 +1050,17 @@ def on_game_data_5050(request):
         
         if len(quiz.game_data_5050) > 0:
             return JsonResponse({'5050': quiz.game_data_5050}, status=200)
+          
+        if question == quiz.game_ai_hint_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
         
+        if question == quiz.game_pass_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_times2_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+         
+
         old_generated_questions = quiz.questions if quiz.questions else {}
         selected_questions = old_generated_questions.get(question , None)
         if not selected_questions:
@@ -1115,7 +1135,15 @@ def on_game_data_answer_with_x2(request):
         if not quiz:
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
 
-        # if quiz.game
+        if question == quiz.game_5050_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+         
+        if question == quiz.game_ai_hint_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_pass_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400) 
+ 
         
         old_generated_questions : dict = quiz.questions if quiz.questions else {}
         selected_questions : dict = old_generated_questions.get(question , None)
