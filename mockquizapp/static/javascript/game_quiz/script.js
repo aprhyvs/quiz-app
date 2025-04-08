@@ -907,6 +907,7 @@ function checkTemporaryAnswers(){
 }
 
 async function processDoubleChoice(final_choices){
+    const current_question = global_current_question;
     async function evaluateChoice(choices) {
         const quiz_id = sessionStorage.getItem('quiz_id');
         if (quiz_id) {
@@ -924,7 +925,6 @@ async function processDoubleChoice(final_choices){
 
     const result = await evaluateChoice(final_choices);
     if (result){
-        const current_question = global_current_question;
         console.log(current_question);
         showAnswerEffects(final_choices, current_question);
     }
