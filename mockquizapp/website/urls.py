@@ -64,6 +64,7 @@ urlpatterns = [
     path('api/game/5050', view=on_game_data_5050),
     path('api/game/x2', view=on_game_data_answer_with_x2),
     path('api/game/finish', view=on_game_is_complete),
+    path('api/game/pass', view=on_game_data_pass),
     path('api/game/get/powerup', view=on_game_check_power_up),
     
     path('api/generate/voice', view=on_game_data_generate_voice),

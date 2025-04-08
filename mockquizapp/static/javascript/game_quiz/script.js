@@ -978,4 +978,18 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
+    processPass();
 });
+
+async function processPass(){
+    const current_question = global_current_question;
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    res = await getDataFromUrlWithParams(`/api/game/pass`,{
+        'quiz_id': quiz_id,
+        'question': current_question
+    });
+    if (res){
+        console.log(res);
+        //displayQuestion(questionData);
+    }
+}
