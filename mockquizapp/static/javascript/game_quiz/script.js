@@ -968,6 +968,12 @@ document.getElementById("pass").addEventListener("click", async function (event)
         console.log(disabledPowerUps);
         return;
     }
+
+    if (globalPowerUps.has_pass == true){ // If pass has been used...
+        console.log("Pass already used.");
+        return; // stop function
+    }
+
     event.preventDefault(); 
     document.getElementById("pass-form-pop").style.display = "flex"; 
 });
@@ -992,6 +998,8 @@ async function processPass(){
         console.log(res);
         const questionData = res.question;
         displayQuestion(questionData);
+        const buttonPass = document.getElementById('pass');
         updatePowerUpElement(buttonPass, true);
+        globalPowerUps.has_pass = true;
     }
 }
