@@ -214,4 +214,5 @@ def get_verified_status(user):
     student = StudentData.objects.filter(username = user.username).first()
     if student:
         return student.is_verified
-    
+
+

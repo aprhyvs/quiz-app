@@ -1114,6 +1114,8 @@ def on_game_data_answer_with_x2(request):
         quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
         if not quiz:
             return JsonResponse({'error': 'Quiz not found.'}, status=404)
+
+        
         
         old_generated_questions : dict = quiz.questions if quiz.questions else {}
         selected_questions : dict = old_generated_questions.get(question , None)
@@ -1214,9 +1216,18 @@ def on_game_data_pass(request):
         if quiz.game_has_pass:
             return JsonResponse({'message': 'You have already passed this quiz.'}, status=400)
         
+        if question == quiz.game_game_5050_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_game_times2_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+        
+        if question == quiz.game_game_ai_hint_question_index:
+            return JsonResponse({'error': 'You have already used power up.'}, status=400)
+
         # This part is updating the question data    
         old_generated_questions = quiz.questions if quiz.questions else {}
-        selected_questions = old_generated_questions.get(question , None)
+        selected_questions = old_generated_questions.get(question , {})
         
         print("generated questions")
         # If has not selected questions then generate it
@@ -1224,19 +1235,19 @@ def on_game_data_pass(request):
         if not selected_questions:
             converted_questions = None
             for _ in range(3):
-                selected_questions = get_index_content(index="21" , questions=quiz.raw_generated_questions)
-                if selected_questions:
-                    converted_questions = text_to_dictionary(selected_questions)
+                selected_questions_pass = get_index_content(index="21" , questions=quiz.raw_generated_questions)
+                if selected_questions_pass:
+                    converted_questions = text_to_dictionary(selected_questions_pass)
                     if converted_questions:
-                        break
+                        is_valid = is_index_correct_format(converted_questions , "21")
+                        if is_valid:
+                            break
                 time.sleep(1)
             if not converted_questions:
                 return JsonResponse({'error': 'Failed to convert questions to dictionary.'}, status=500)
             
             print("converted questions : ", converted_questions)
-            is_valid = is_index_correct_format(converted_questions , "21")
-            if not is_valid:
-                return JsonResponse({'error': 'Failed to extract questions from generated text.'}, status=500)
+            
         
         selected_data = converted_questions.get(21, None)
         if selected_data is None:
@@ -1260,10 +1271,11 @@ def on_game_data_pass(request):
         selected_data["answered"] = False
         selected_data["answer"] = None
         selected_data["worth"] = 0
-        selected_questions["is_correct"] = False
+        selected_data["is_correct"] = False
         old_generated_questions[question] = selected_data
         quiz.questions = old_generated_questions
         quiz.game_has_pass = True
+        quiz.game_pass_question_index = question
         quiz.save()
         selected_data['correct_answer'] = None
         return JsonResponse({'question': selected_data}, status=200)

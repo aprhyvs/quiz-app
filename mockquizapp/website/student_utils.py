@@ -152,7 +152,7 @@ def get_weekly_rankings_student() -> list:
         created_at__date__lte=end_of_week
     ).values('student_id').annotate(
         total_score=Sum('total_worth')  # Sum up the correct answers
-    ).order_by('-total_score')[:5]  # Limit to top 5 students
+    ).order_by('-total_score')#[:5]  # Limit to top 5 students
 
     # Add student details to the rankings
     rankings = []
@@ -181,7 +181,7 @@ def get_monthly_rankings_student() -> list:
         created_at__month=current_month
     ).values('student_id').annotate(
         total_score=Sum('total_worth')
-    ).order_by('-total_score')[:5]  # Order by highest score
+    ).order_by('-total_score')#[:5]  # Order by highest score
     # Add student details to the rankings
     rankings = []
     for data in monthly_data:
