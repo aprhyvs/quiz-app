@@ -9,23 +9,6 @@ g4f_client = None
 cohere_client = None
 
 
-
-try:
-    # Error: unsupported operand type(s) for |: 'type' and 'type'
-    # Don't panic it is working fine
-    import pathlib
-    from typing import Union
-    PathLike = Union[str, pathlib.Path]
-
-    from g4f.client import Client
-    from g4f.Provider import RetryProvider, Free2GPT , Pizzagpt 
-    g4f_client = Client(
-        provider=RetryProvider([Pizzagpt , Free2GPT], shuffle=False)
-    )
-except Exception as e:
-    print(f"Error: {e}")
-
-
 try:
     import cohere
     cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
@@ -87,23 +70,6 @@ def generate_response_cohere(command : str , system : str):
                         if main_content:
                             return main_content
         return None
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
-
-def generate_response_g4f( command : str ):
-    global g4f_client
-    if g4f_client is None:
-        print("G4F client not initialized")
-        return None
-    try:
-        response = g4f_client.chat.completions.create(
-            model="",
-            messages=[
-                {"role": "user", "content": command}
-            ],
-        ) 
-        return response.choices[0].message.content
     except Exception as e:
         print(f"Error: {e}")
         return None
