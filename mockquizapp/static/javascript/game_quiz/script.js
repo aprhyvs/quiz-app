@@ -9,8 +9,19 @@ var globalPowerUps = {};
 var availableChoices = ["A","B","C","D"];
 var doubleDipIsActive = false;
 var disabledPowerUps = [];
+let safeLevels = [];
+let playerTotalWorth = 0;
+
+let timer = 30;
+
 //TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
 //TODO          - Make the questions progress upon answering, Implement powerups.
+
+
+
+function resetTimer(
+    timer = 30;
+)
 
 
 levelInfo.addEventListener("click", function () {
@@ -37,7 +48,7 @@ for (let i = 0; i < points.length; i++) {
         `
         <div class="level-point-${level} level-point">
         <p class="level-${level} level roboto-bold">${level}</p>
-        <p class="points roboto-light">${points[reversedIndex]}</p>
+        <p class="points points-${level} roboto-light">${points[reversedIndex]}</p>
         </div>
         `);
 }
@@ -220,6 +231,17 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         }
         highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
+
+        const quiz_id = sessionStorage.getItem('quiz_id');
+    if (quiz_id) {
+        res2 = await getDataFromUrlWithParams(`/api/game/get/quiz`,{
+            'quiz_id': quiz_id
+        });
+        if (res2){
+            const points = res2.data.total_worth
+            showTotalWorth(points);
+        }
+    }
     }
 }
 
@@ -249,9 +271,9 @@ async function nextQuestion(current_question){
     resetFlashes();
     choicesOpacityReset(current_question);
     displayQuestion(questionData);
-    showQuestionWorth(global_current_question, questionData.worth);
+    showQuestionNumber(global_current_question);
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
-    
+    displaySafeLevels();
 }
 
 function flashRed(choiceElement){
@@ -398,6 +420,38 @@ function modalFlash(choiceElement, color){
     }
 }
 
+
+function displaySafeLevelText(safeLevelElement, safeLevelPointsElement){
+    safeLevelElement.classList.add("safe-level-text-indicator")
+    safeLevelPointsElement.classList.add("safe-level-text-indicator")
+}
+
+function removeSafeLevelText(safeLevelElement, safeLevelPointsElement){
+    safeLevelElement.classList.remove("safe-level-text-indicator")
+    safeLevelPointsElement.classList.remove("safe-level-text-indicator")
+}
+
+function displaySafeLevels(){
+    const current_question = global_current_question;
+    for (let i = 0; i < safeLevels.length; i++) {
+        safeLevelInteger = parseInt(safeLevels[i]);
+        console.log(safeLevelInteger);
+        console.log(current_question);
+        if ( safeLevelInteger != current_question){
+            console.log("level-"+safeLevelInteger);
+            const safeLevelElement = document.querySelector(`.level-${safeLevelInteger}`);
+            const safeLevelPointsElement = document.querySelector(`.points-${safeLevelInteger}`);
+            displaySafeLevelText(safeLevelElement, safeLevelPointsElement);
+        }else{
+            const safeLevelElement = document.querySelector(`.level-${safeLevelInteger}`);
+            const safeLevelPointsElement = document.querySelector(`.points-${safeLevelInteger}`);
+            removeSafeLevelText(safeLevelElement, safeLevelPointsElement);
+            console.log("Current Question cannot display yellow or else..");
+        }
+}
+
+}
+
 async function highlightQuestionWorth(worthElement, question_number){ 
     const isCorrect = await getCorrectStatus(question_number);
     if (isCorrect == true){
@@ -453,12 +507,16 @@ async function highlightAnsweredQuestionsWorth(questions){
     });
 }
 
-function showQuestionWorth(number, worth){
-    const questionInfoElement = document.querySelector(`.q-level`);
-    const pointsElement = document.querySelector(`.points`)
+function showTotalWorth(worth){
+    const pointsElement = document.querySelector(`.total-points`)
+    const worthFormatted = worth.toLocaleString();
+    pointsElement.innerText = "₱" + worthFormatted;
+    console.log(worth);
+}
 
+function showQuestionNumber(number){
+    const questionInfoElement = document.querySelector(`.q-level`);
     questionInfoElement.innerText = "Q" + number;
-    pointsElement.innerText = "₱" + worth;
 }
 
 
@@ -475,6 +533,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             const questions = res.data.questions;
             const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
             const question = await questionFetch(current_question);
+            playerTotalWorth = quiz.total_worth;
+            const safeLevelsStr = quiz.safe_level
+            safeLevels = safeLevelsStr.split(",");
             if (question) {
                 displayQuestion(question);
                 global_current_question = current_question;
@@ -484,7 +545,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
                 highlightAnsweredQuestionsWorth(questions);
                 highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
-                showQuestionWorth(current_question, question.worth);
+                showQuestionNumber(current_question);
+                showTotalWorth(playerTotalWorth);
+                displaySafeLevels();
                 
             }
         }

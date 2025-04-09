@@ -96,6 +96,15 @@ html, body {
     transition: 0.3s ease;
 }
 
+.flash-gradient {
+    background: linear-gradient(#0A4DA4, #002157);
+    transition: 0.3s ease;
+} 
+
+.safe-level-text-indicator{
+    color: var(--gold);
+}
+
 /* SEE COLORS BELOW */
 /* .choices svg:hover path
    fill: var(--green); - CORRECT
@@ -188,7 +197,17 @@ html, body {
 .points {
     min-width: 160px;
     text-align: right;
+
+}
+
+
+.total-points {
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
     color: #FCFCFC;
+    min-width: 160px;
+    text-align: right;
+
 }
 
 /* modal */
