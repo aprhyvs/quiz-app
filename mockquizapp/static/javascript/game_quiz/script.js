@@ -14,12 +14,17 @@ let playerTotalWorth = 0;
 let timer = 30;
 let timeStop = false;
 var initialQuizData = {};
-
+var isUsingVoice = false;
+let voiceCooldownTimer = 5;
+var cannotAnswer = false;
+var currentAudio = null;
+let timerDelay;
 //Timer
 function resetTimer(){
     timer = 30;
     sessionStorage.setItem("timer", timer);
 }
+
 
 function stopTimer(state){
     if (state == true) {
@@ -60,6 +65,7 @@ function operateTimer(){
 }
 
 function startTimer(){
+    clearTimeout(timerDelay);
     timerSession = sessionStorage.getItem("timer");
     if (timerSession){
         timer = timerSession;
@@ -73,7 +79,8 @@ function startTimer(){
         //Fail
         timeOutMistake();
     }else{
-        setTimeout(operateTimer, 3000);
+        isUsingVoice = false;
+        timerDelay = setTimeout(operateTimer, 10000);
     }
 }
 
@@ -275,6 +282,7 @@ async function processChoice(choiceString){
 }
 
 async function showWrongAndCorrectAnswer(choice, current_question){
+    cannotAnswer = true;
     const quiz_id = sessionStorage.getItem('quiz_id');
     res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
         'quiz_id': quiz_id,
@@ -338,6 +346,7 @@ async function showAnswerEffects(choice, current_question) {
     }else{
         
         nextQuestion(current_question);
+        
     }
 }
 
@@ -377,11 +386,75 @@ function flashYellow(choiceElement){
     }
 }
 
+function notUsingVoice(){
+    if (isUsingVoice == false){
+        return;
+    }
+    const voiceCooldownInterval = setInterval(() => {
+        if (voiceCooldownTimer > 0) {
+            voiceCooldownTimer--;
+        } else {
+            clearInterval(voiceCooldownInterval);
+            isUsingVoice = false;
+            voiceCooldownTimer = 5;
+        }
+    }, 1000);
+}
+
+async function generateVoiceMessageGame(textMessage){
+    const formData = new FormData();
+    formData.append('text', textMessage);
+    fetch('/api/generate/voice',
+    {
+        method: 'POST',
+        headers: { 
+            "X-CSRFToken": csrf_token,
+        },
+        body: formData,
+    }
+    )
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        return response.blob(); // Get the file as a Blob
+    })
+    .then(blob => {
+        // Create a URL for the Blob and play the audio
+        if (currentAudio){
+            currentAudio.pause();
+        }
+        const audioURL = URL.createObjectURL(blob);
+        currentAudio = new Audio(audioURL);
+        currentAudio.play(); // Play the audio
+    })
+    .catch(error => {
+        console.error('Error fetching the audio file:', error);
+    });
+}
+
+
+async function voiceOutMessage(message) {
+    console.log(isUsingVoice);
+    if (isUsingVoice == true) {
+        console.log("BAWAL!");
+        return;
+    }else{
+        generateVoiceMessageGame(message);
+    }
+}
+
 function showConfirmationPrompt(choice) {
+    if (cannotAnswer == true){
+        console.log("This shouldn't happen!");
+        return;
+    }
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
     if (doubleDipIsActive == true){
         // double dip functionality here.
         confirmationPromptElement.style.display = "flex";
+        voiceOutMessage("Is that your final answer?");
+        isUsingVoice = true;
         return;
     }
 
@@ -404,7 +477,9 @@ function showConfirmationPrompt(choice) {
 
     // Show the confirmation prompt
     confirmationPromptElement.style.display = "flex";
-
+    
+    voiceOutMessage("Is that your final answer?");
+    isUsingVoice = true;
     // Store the temporary answer (if needed)
     temporary_answer = choice;
 }
@@ -438,13 +513,21 @@ function displayQuestion(questionData){
       );
     questionElement.innerText = questionData.question;
     displayChoices(options);
+    textifiedQuestionAndChoices = textifyQuestionPlusChoices(questionData.question, options);
+    isUsingVoice = false;
+    voiceOutQuestion(textifiedQuestionAndChoices);
     resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
     displayAvailablePowerUps();
     disabledPowerUps = [];
     stopTimer(false);
     startTimer();
+    cannotAnswer = false;
+}
 
-    
+function textifyQuestionPlusChoices(question, choices){
+    const textifiedChoices = "A, " + choices[0] + ". B, " + choices[1] + ".C, " + choices[2] + ". or D, " + choices[3] + ".";
+    const textifiedQuestionAndChoices = question + " " + textifiedChoices;
+    return textifiedQuestionAndChoices;
 }
 
 function displayChoices(options){
@@ -459,6 +542,11 @@ function displayChoices(options){
     choiceDElement.innerText = options[3];
 
 
+}
+
+function voiceOutQuestion(textifiedQuestionAndChoices){
+    voiceOutMessage(textifiedQuestionAndChoices);
+    isUsingVoice = true;
 }
 
 async function questionFetch(current_question){
@@ -650,6 +738,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 //Choice Buttons ---------------------------------------------------
 
 document.querySelector(".choice-A").addEventListener('click', function() {
+    if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("A")){
             console.log("You already chose this...");
@@ -665,6 +754,7 @@ document.querySelector(".choice-A").addEventListener('click', function() {
 });
 
 document.querySelector(".choice-B").addEventListener('click', function() {
+    if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("B")){
             console.log("You already chose this...");
@@ -681,6 +771,7 @@ document.querySelector(".choice-B").addEventListener('click', function() {
 });
 
 document.querySelector(".choice-C").addEventListener('click', function() {
+    if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("C")){
             console.log("You already chose this...");
@@ -696,6 +787,7 @@ document.querySelector(".choice-C").addEventListener('click', function() {
 });
 
 document.querySelector(".choice-D").addEventListener('click', function() {
+    if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("D")){
             console.log("You already chose this...");
@@ -733,6 +825,7 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
 });
 document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
     closeConfirmationPrompt();
+    notUsingVoice();
 });
 
 // Background Wrapper
