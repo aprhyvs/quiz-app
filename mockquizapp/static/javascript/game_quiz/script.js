@@ -11,17 +11,87 @@ var doubleDipIsActive = false;
 var disabledPowerUps = [];
 let safeLevels = [];
 let playerTotalWorth = 0;
-
 let timer = 30;
+let timeStop = false;
+var initialQuizData = {};
 
-//TODO 4 5 2025 - Make the choice flash yellow in the confirmation screen, make the choices flash red or green after selecting an answer and confirming, 
-//TODO          - Make the questions progress upon answering, Implement powerups.
-
-
-
-function resetTimer(
+//Timer
+function resetTimer(){
     timer = 30;
-)
+    sessionStorage.setItem("timer", timer);
+}
+
+function stopTimer(state){
+    if (state == true) {
+        timeStop = true;
+    }else{
+        timeStop = false;
+    }
+}
+
+function saveTimerToSession(){
+    sessionStorage.setItem("timer", timer);
+}
+
+function tickDownTimer(){
+    timer--;
+    saveTimerToSession(timer);
+    timerElement = document.getElementById('timer-text');
+    timerElement.textContent = timer;
+}
+
+function operateTimer(){
+    const timerCounter = setInterval(() => {
+        if (timeStop == false){
+            tickDownTimer();
+            if (timer < 0) {
+                clearInterval(timerCounter);
+                // Fail
+                timeOutMistake();
+                timerElement = document.getElementById('timer-text');
+                timerElement.textContent = 0;
+                timer = 0;
+            }
+
+        }else{
+            clearInterval(timerCounter);
+        }
+      }, 1000); // 1000ms = 1 second
+}
+
+function startTimer(){
+    timerSession = sessionStorage.getItem("timer");
+    if (timerSession){
+        timer = timerSession;
+        timerElement = document.getElementById('timer-text');
+        timerElement.textContent = timer;
+    }
+    if (timer < 0) {
+        timerElement = document.getElementById('timer-text');
+        timerElement.textContent = 0;
+        timer = 0;
+        //Fail
+        timeOutMistake();
+    }else{
+        setTimeout(operateTimer, 3000);
+    }
+}
+
+async function timeOutMistake(){
+    const current_question = global_current_question;
+    const quiz_id = sessionStorage.getItem('quiz_id');
+    if (!quiz_id) {
+        return null;
+    }
+    res = await getDataFromUrlWithParams(`/api/game/timeout`,{
+        'quiz_id': quiz_id,
+        'question': current_question
+    });
+    if (res) {
+        showAnswerEffects(null, current_question);
+        return res;
+    }
+}
 
 
 levelInfo.addEventListener("click", function () {
@@ -60,6 +130,7 @@ function playAudio(audio){
 }
 
 async function endGame() {
+    sessionStorage.removeItem('timer');
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
         console.log("Finished Game, proceeding to quiz complete");
@@ -94,12 +165,10 @@ async function getQuizStatus(quiz_id){
 }
 
 async function checkQuizNumber(current_question){ // Check if the number of correct answers and wrong answers total to 20, if it is, return true and go to end screen.
-    console.log("Checking last question... ", current_question);
     if (parseInt(current_question) > 19){
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
         console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
-            console.log(current_answered_questions);
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
                 return true;
@@ -221,13 +290,22 @@ async function showWrongAndCorrectAnswer(choice, current_question){
             resetFlashYellowClass();
             flashGreen(choiceElement);
         }else{
-            const choiceElement = document.querySelector(`.svg-choice-${choice}`);
-            resetFlashYellowClass();
-            flashRed(choiceElement);
-            const answer = res.question.answer;
-            const correct_answer = res.question.correct_answer;
-            const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
-            flashGreen(correctAnswerElement);
+            let choiceElement
+            if (choice){ // If the choice is wrong, flash the choice red.
+                
+                choiceElement = document.querySelector(`.svg-choice-${choice}`);
+                flashRed(choiceElement);
+                resetFlashYellowClass();
+                const correct_answer = res.question.correct_answer;
+                const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
+                flashGreen(correctAnswerElement); // Flash the correct answer
+            }else{
+                resetFlashYellowClass();
+                const correct_answer = res.question.correct_answer;
+                const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
+                flashRed(correctAnswerElement); // Flash the correct answer
+            }
+            
         }
         highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
@@ -249,7 +327,6 @@ async function showWrongAndCorrectAnswer(choice, current_question){
 async function showAnswerEffects(choice, current_question) {
     if (doubleDipIsActive == true){
         showDoubleDipWrongAndCorrectAnswer(choice, current_question);
-        console.log("Sent to double dip wrong and correct answer function...")
     }else{
         showWrongAndCorrectAnswer(choice, current_question);
     }
@@ -269,9 +346,11 @@ async function nextQuestion(current_question){
     const questionData = await questionFetch(global_current_question);
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
+    resetTimer();
     choicesOpacityReset(current_question);
     displayQuestion(questionData);
     showQuestionNumber(global_current_question);
+    showQuestionWorth(questionData.worth);
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
     displaySafeLevels();
 }
@@ -308,8 +387,6 @@ function showConfirmationPrompt(choice) {
 
 
     if (!availableChoices.includes(choice)) {
-        console.log(choice);
-        console.log("Dili pwede.");
         return false;
     }
     
@@ -364,6 +441,9 @@ function displayQuestion(questionData){
     resizeTextOnOverflowAndWords(questionElement, { min: 32, max: 40, step: 8, wordThreshold: 30 });
     displayAvailablePowerUps();
     disabledPowerUps = [];
+    stopTimer(false);
+    startTimer();
+
     
 }
 
@@ -435,10 +515,7 @@ function displaySafeLevels(){
     const current_question = global_current_question;
     for (let i = 0; i < safeLevels.length; i++) {
         safeLevelInteger = parseInt(safeLevels[i]);
-        console.log(safeLevelInteger);
-        console.log(current_question);
         if ( safeLevelInteger != current_question){
-            console.log("level-"+safeLevelInteger);
             const safeLevelElement = document.querySelector(`.level-${safeLevelInteger}`);
             const safeLevelPointsElement = document.querySelector(`.points-${safeLevelInteger}`);
             displaySafeLevelText(safeLevelElement, safeLevelPointsElement);
@@ -446,7 +523,6 @@ function displaySafeLevels(){
             const safeLevelElement = document.querySelector(`.level-${safeLevelInteger}`);
             const safeLevelPointsElement = document.querySelector(`.points-${safeLevelInteger}`);
             removeSafeLevelText(safeLevelElement, safeLevelPointsElement);
-            console.log("Current Question cannot display yellow or else..");
         }
 }
 
@@ -455,22 +531,16 @@ function displaySafeLevels(){
 async function highlightQuestionWorth(worthElement, question_number){ 
     const isCorrect = await getCorrectStatus(question_number);
     if (isCorrect == true){
-        console.log("Correct ");
-        console.log(worthElement);
         modalFlash(worthElement, "green");
     }else{
-        console.log("Wrong ");
         modalFlash(worthElement, "red");
     }
 }
 
 function highlightQuestionWorthRealtime(worthElement, isCorrect){ 
     if (isCorrect == true){
-        console.log("Correct ");
-        console.log(worthElement);
         modalFlash(worthElement, "green");
     }else{
-        console.log("Wrong ");
         modalFlash(worthElement, "red");
     }
 }
@@ -510,8 +580,7 @@ async function highlightAnsweredQuestionsWorth(questions){
 function showTotalWorth(worth){
     const pointsElement = document.querySelector(`.total-points`)
     const worthFormatted = worth.toLocaleString();
-    pointsElement.innerText = "₱" + worthFormatted;
-    console.log(worth);
+    pointsElement.innerText = "TOTAL: ₱" + worthFormatted;
 }
 
 function showQuestionNumber(number){
@@ -519,6 +588,42 @@ function showQuestionNumber(number){
     questionInfoElement.innerText = "Q" + number;
 }
 
+function showQuestionWorth(worth){
+    const questionWorthElement = document.querySelector(`.q-worth`);
+    const worthFormatted = worth.toLocaleString();
+    questionWorthElement.innerText = "₱" + worthFormatted;
+}
+
+
+async function startGame(quizData){
+    const questions = quizData.questions;
+    const current_question = quizData.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
+    const question = await questionFetch(current_question);
+    playerTotalWorth = quizData.total_worth;
+    const safeLevelsStr = quizData.safe_level
+    const has5050 = quizData.game_has_5050;
+    safeLevels = safeLevelsStr.split(",");
+        if (question) {
+            global_current_question = current_question;
+            displayQuestion(question);
+            if (has5050 == true) {
+                console.log("Has 5050")
+                activate5050();
+            }
+            highlightAnsweredQuestionsWorth(questions);
+            highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
+            showQuestionNumber(current_question);
+            showQuestionWorth(question.worth);
+            showTotalWorth(playerTotalWorth);
+            displaySafeLevels();
+                
+        }
+    
+}
+
+function showMainMenu(){
+    const mainMenuElement = document.querySelector(`.main-menu`);
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     const quiz_id = sessionStorage.getItem('quiz_id');
@@ -528,28 +633,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         if (res) {
             const quiz = res.data;
-            const has5050 = quiz.game_has_5050;
             console.log(quiz);
-            const questions = res.data.questions;
-            const current_question = res.data.currently_answered_question + 1; // adds 1 upon entering to get the actual question instead of 0
-            const question = await questionFetch(current_question);
-            playerTotalWorth = quiz.total_worth;
-            const safeLevelsStr = quiz.safe_level
-            safeLevels = safeLevelsStr.split(",");
-            if (question) {
-                displayQuestion(question);
-                global_current_question = current_question;
-                if (has5050 == true) {
-                    console.log("Has 5050")
-                    activate5050();
-                }
-                highlightAnsweredQuestionsWorth(questions);
-                highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
-                showQuestionNumber(current_question);
-                showTotalWorth(playerTotalWorth);
-                displaySafeLevels();
-                
+            if (quiz.is_answered == true) { // Check if the quiz is already done
+                console.log("This quiz has been answered. Going to end game...");
+                endGame();
+                return;
             }
+            initialQuizData = quiz;
         }
     }
 });
@@ -636,6 +726,8 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
         return;
     }
     processChoice(temporary_answer);
+    resetTimer();
+    stopTimer(true);
     closeConfirmationPrompt();
 });
 document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
