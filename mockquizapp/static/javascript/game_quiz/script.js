@@ -639,7 +639,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 endGame();
                 return;
             }
-            initialQuizData = quiz;
+            initialQuizData = quiz; // Ayusa nala ini pag may main menu na didi isingit.
+            startGame(initialQuizData);
         }
     }
 });
