@@ -29,6 +29,10 @@ import string
 
 #============================== Views Webpages Pages ===============================
 def home(request): 
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('admin-dashboard')
+        return redirect('student-dashboard')
     return render(request, "home/index.html")
 
 def login_page(request):
