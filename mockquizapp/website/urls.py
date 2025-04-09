@@ -66,6 +66,7 @@ urlpatterns = [
     path('api/game/finish', view=on_game_is_complete),
     path('api/game/pass', view=on_game_data_pass),
     path('api/game/get/powerup', view=on_game_check_power_up),
+    path('api/game/timeout', view=on_game_data_timeout),
     
     path('api/generate/voice', view=on_game_data_generate_voice),
 
