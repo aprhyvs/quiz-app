@@ -1386,7 +1386,97 @@ def on_game_check_power_up(request):
                 '2x' : quiz.game_times2_question_index
             }
         }, status=200)
+
+
+def on_game_data_timeout(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+    
+    if request.method == 'POST':
+          
+        question = request.POST.get('question', None)
+        if not question:
+            return JsonResponse({'error': 'No question provided.'}, status=400)
         
         
+        student = StudentData.objects.filter(account_id=request.user.pk).first()
+        if not student:
+            return JsonResponse({'error': 'Student not found.'}, status=404)
         
+        quiz_id = request.POST.get('quiz_id', None)
+        if not quiz_id:
+            return JsonResponse({'error': 'No quiz ID provided.'}, status=400)
+        
+        if not str(quiz_id).isdigit():
+            return JsonResponse({'error': 'Invalid quiz ID.'}, status=400)
+        
+        quiz = QuizData.objects.filter(id = int(quiz_id) , student_id = student.pk).first()
+        if not quiz:
+            return JsonResponse({'error': 'Quiz not found.'}, status=404)
+        
+        old_generated_questions : dict = quiz.questions if quiz.questions else {}
+        selected_questions : dict = old_generated_questions.get(question , None)
+        if selected_questions is None or not selected_questions:
+            return JsonResponse({'error': 'Question not found.'}, status=404)
+        """
+        questions = {
+                "1": {
+                    "question": "What is the capital of France?",
+                    "options": ["London", "Paris", "Berlin", "Madrid"],
+                    "correct_answer": "Paris",
+                    "answered": False,
+                    "answer": None,
+                    "worth" : 100,
+                    "is_correct" : False
+                },
+                ...
+            }
+        
+        """
+        is_answer = selected_questions.get("answered" , False)
+        if is_answer:
+            return JsonResponse({'error': 'Question has already been answered.'}, status=400)
+        
+        # This part is updating the question data
+        user_answer = "Timeout"
+        selected_questions["answered"] = True
+        selected_questions["answer"] = user_answer 
+        selected_questions["worth"] = quiz.worth_sequence[question]  
+        quiz.number_of_wrong += 1
+        selected_questions["is_correct"] = False
+        quiz.questions[question] = selected_questions
+        quiz.save()
+        
+        # This part is checking the safe level
+        safe_level = quiz.safe_level.split(',')
+        if question in safe_level:
+            question_to_int = int(question)
+            while True:
+                print("Checking safe level for question", question_to_int)
+                
+                safe_level_selected_question = quiz.questions.get(str(question_to_int), None)
+                print("safe_level_selected_question :", safe_level_selected_question)
+                if not safe_level_selected_question or safe_level_selected_question is None:
+                    continue
+                
+                correct_answer = safe_level_selected_question["correct_answer"]
+                user_answer = safe_level_selected_question["answer"]
+                
+                if user_answer.lower() in correct_answer.lower() or user_answer == correct_answer: 
+                    worth_assign = quiz.worth_sequence.get(str(question_to_int))
+                    quiz.total_worth = quiz.total_worth + worth_assign
+                    print("Total worth", quiz.total_worth)
+                
+                question_to_int = question_to_int - 1
+                if str(question_to_int) in safe_level:
+                    break
+                
+                if question_to_int == 0:
+                    break
+        
+        if (quiz.number_of_correct + quiz.number_of_wrong ) == TOTAL_QUESTIONS:
+            quiz.is_answered = True 
+        quiz.save()
+        
+        return JsonResponse({'status': 'success'}, status=200)
         
