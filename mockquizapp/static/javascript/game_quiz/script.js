@@ -23,7 +23,7 @@ let previousQuiz;
 let mainMenuActive = false;
 let currentMusic;
 let gameSettings = {};
-
+let longSound;
 function setGameSettings(gameSettingsInput){
     gameSettings = gameSettingsInput;
     console.log("Saving Game Settings")
@@ -33,8 +33,15 @@ function setGameSettings(gameSettingsInput){
             currentAudio.pause();
         }
     }
-
-
+    if (gameSettings.sound == false){
+        if (longSound){
+            stopAudio(longSound); // Stop the long sound (Timer in this case)
+        }
+    }else{
+        if (longSound){
+            playAudio(longSound); // Play the long sound (Timer in this case)
+        }
+    }
     if (gameSettings.music == false){
         toggleMusic(false);
     }else{
@@ -124,9 +131,12 @@ elementsToObserve.forEach(id => {
 });
 
 //Sound Related
-function playSound(sound){
-
+function playTimerSound(){
+    const timerSound = new Audio("/static/sounds/sfx/clock-ticking.mp3");
+    longSound = timerSound;
+    playAudio(timerSound);
 }
+
 function getAbsoluteMediaURL(relativePath) {
     return new URL(relativePath, window.location.origin).href;
 }
@@ -170,8 +180,22 @@ function operateTimer(){
     const timerCounter = setInterval(() => {
         if (timeStop == false){
             tickDownTimer();
+            if (timer == 10) {
+                if (longSound){
+                    stopAudio(longSound); // Stop the long sound (Timer in this case)
+                    longSound = null;// Reset the longsound variable
+                    playTimerSound();
+                }else{
+                    playTimerSound(); // Play the timer sound
+                }
+            }
             displayTimer(true);
             if (timer < 0) {
+                if (longSound){
+                    stopAudio(longSound); // Stop the long sound (Timer in this case)
+                    longSound = null;// Reset the longsound variable
+                }
+
                 clearInterval(timerCounter);
                 // Fail
                 timeOutMistake();
@@ -274,6 +298,12 @@ function playAudio(audio){
     if (gameSettings.sound == false){ return; }
     if (audio){
         audio.play();
+    }
+}
+
+function stopAudio(audio){
+    if (audio){
+        audio.pause();
     }
 }
 
