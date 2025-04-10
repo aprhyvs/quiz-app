@@ -47,6 +47,7 @@ html, body {
     margin: 0 auto;
     padding: 1em;
     min-height: 250px;
+    max-width: 880px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,7 +141,37 @@ html, body {
 }
 
 .answer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
     color: #FCFCFC;
+    width: 100%;
+}
+
+/* text scroll */
+.choice-text {
+    display: inline-block; /* Make sure the text inside is inline and doesn't stretch */
+    white-space: nowrap;
+}
+
+@keyframes scrollText {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-60%);
+    }
+    
+}
+
+.no-scroll {
+    animation: none; /* Remove animation when text is short */
+}
+
+.scroll-text:hover .choice-text {
+    animation: scrollText 7s linear 2 alternate; /* Infinite, alternating forward and reverse */
+    will-change: transform; /* Optimize performance */
 }
 
 /* stats panel */
