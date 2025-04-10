@@ -21,6 +21,12 @@ var currentAudio = null;
 let timerDelay;
 let previousQuiz;
 
+//Timer
+function resetTimer(){
+    timer = initialQuizData.timer_countdown;
+    sessionStorage.setItem("timer", timer);
+}
+
 function stopTimer(state){
     if (state == true) {
         timeStop = true;
@@ -303,11 +309,15 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         
+        const correctSound = new Audio("{% static 'sounds/sfx/correct-sfx.mp3' %}");
+        const wrongSound = new Audio("{% static 'sounds/sfx/wrong-sfx.mp3' %}");
+
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
 
             resetFlashYellowClass();
             flashGreen(choiceElement);
+            correctSound.play();
         }else{
             let choiceElement
             if (choice){ // If the choice is wrong, flash the choice red.
@@ -324,7 +334,7 @@ async function showWrongAndCorrectAnswer(choice, current_question){
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashRed(correctAnswerElement); // Flash the correct answer
             }
-            
+            wrongSound.play();
         }
         highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
