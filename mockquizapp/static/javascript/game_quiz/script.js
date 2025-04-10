@@ -20,11 +20,58 @@ var cannotAnswer = false;
 var currentAudio = null;
 let timerDelay;
 let previousQuiz;
+let mainMenuActive = false;
+
+let gameSettings = {};
+
+function setGameSettings(gameSettingsInput){
+    gameSettings = gameSettingsInput;
+    console.log("Saving Game Settings")
+    localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
+}
+
+function getSessionGameSettings(){
+    console.log("Gettomg Game Settings")
+    gameSettings = JSON.parse(localStorage.getItem('gameSettings'));
+    return gameSettings;
+}
+
+function getCurrentGameGameSettings(){
+    const gameSettings = {
+        music: document.querySelector('input[name="music"]').checked,
+        sound: document.querySelector('input[name="sound"]').checked,
+        voice: document.querySelector('input[name="voice"]').checked
+      };
+      return gameSettings;
+}
+
+function displayGameSettingOptions(){
+    document.querySelector('input[name="music"]').checked = gameSettings.music;
+    document.querySelector('input[name="sound"]').checked = gameSettings.sound;
+    document.querySelector('input[name="voice"]').checked = gameSettings.voice;
+}
+
+function displayIngameSettings(state){
+    if (state == true){
+        document.getElementById("ingame-settings").style.display = "flex"; 
+    }else{
+        document.getElementById("ingame-settings").style.display = "none"; 
+    }
+    
+}
 
 //Timer
 function resetTimer(){
     timer = initialQuizData.timer_countdown;
     sessionStorage.setItem("timer", timer);
+}
+
+function displayTimer(state){
+    if (state == true){
+        document.querySelector(".timer").style.display = "flex";
+    }else{
+        document.querySelector(".timer").style.display = "none";
+    }
 }
 
 function stopTimer(state){
@@ -47,6 +94,7 @@ function tickDownTimer(){
 }
 
 function operateTimer(){
+    displayTimer(true);
     const timerCounter = setInterval(() => {
         if (timeStop == false){
             tickDownTimer();
@@ -94,6 +142,7 @@ function startTimer(){
         timeOutMistake();
     }else{
         isUsingVoice = false;
+        
         timerDelay = setTimeout(operateTimer, 10000);
     }
 }
@@ -365,7 +414,7 @@ async function showAnswerEffects(choice, current_question) {
     if (isLastQuestion == true) {
         endGame();
     }else{
-        
+        displayTimer(false);
         nextQuestion(current_question);
         
     }
@@ -712,10 +761,17 @@ async function startGame(quizData){
     const safeLevelsStr = quizData.safe_level
     const has5050 = quizData.game_has_5050;
     safeLevels = safeLevelsStr.split(",");
+
+    mainMenuActive = false;
+    
         if (question) {
             global_current_question = current_question;
             timer = quizData.timer;
+
             displayQuestion(question);
+            displayChoicesButtons();
+            showPowerUpButtons();
+
             if (has5050 == true) {
                 console.log("Has 5050")
                 activate5050();
@@ -731,9 +787,66 @@ async function startGame(quizData){
     
 }
 
-function showMainMenu(){
-    const mainMenuElement = document.querySelector(`.main-menu`);
+function displayMainMenu(quizData){
+    mainMenuActive = true;
+    const mainMenuElement = document.querySelector(".question-text");
+    const mainMenuText = quizData.quiz_title;
+    mainMenuElement.innerText = mainMenuText;
+    displayTimer(false);
+    hideChoices();
+    displayMenuButtons();
+    hidePowerUpButtons();
 }
+
+function hidePowerUpButtons(){
+document.getElementById("50-50").style.display = "none";
+document.getElementById("x2").style.display = "none";
+document.getElementById("ask-ai").style.display = "none";
+document.getElementById("pass").style.display = "none";
+}
+
+function showPowerUpButtons(){
+    document.getElementById("50-50").style.display = "flex";
+    document.getElementById("x2").style.display = "flex";
+    document.getElementById("ask-ai").style.display = "flex";
+    document.getElementById("pass").style.display = "flex";
+}
+
+function displayMenuButtons(){
+    const menuButtonStart = document.querySelector(".svg-choice-A");
+    const menuButtonQuit = document.querySelector(".svg-choice-B");
+    menuButtonStart.style.display = "flex";
+    menuButtonQuit.style.display = "flex";
+
+    const menuButtonStartText = document.getElementById("choice-A");
+    const menuButtonQuitText = document.getElementById("choice-B");
+    menuButtonStartText.textContent = "Start Quiz";
+    menuButtonQuitText.textContent = "Quit Game";
+    
+}
+
+function displayChoicesButtons(){
+    const choiceA = document.querySelector(".svg-choice-A");
+    const choiceB = document.querySelector(".svg-choice-B");
+    const choiceC = document.querySelector(".svg-choice-C");
+    const choiceD = document.querySelector(".svg-choice-D");
+    choiceA.style.display = "flex";
+    choiceB.style.display = "flex";
+    choiceC.style.display = "flex";
+    choiceD.style.display = "flex";
+}
+
+function hideChoices(){
+    const choiceA = document.querySelector(".svg-choice-A");
+    const choiceB = document.querySelector(".svg-choice-B");
+    const choiceC = document.querySelector(".svg-choice-C");
+    const choiceD = document.querySelector(".svg-choice-D");
+    choiceA.style.display = "none";
+    choiceB.style.display = "none";
+    choiceC.style.display = "none";
+    choiceD.style.display = "none";
+}
+
 
 document.addEventListener("DOMContentLoaded", async function () {
     const quiz_id = sessionStorage.getItem('quiz_id');
@@ -749,8 +862,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                 endGame();
                 return;
             }
+            const sessionGameSettings = getSessionGameSettings();
+            if (sessionGameSettings){
+                setGameSettings(sessionGameSettings);
+            }else{
+                gameSettings = {
+                    music: true,
+                    sound: true,
+                    voice: true,
+                }
+                setGameSettings(gameSettings);
+            }
+            console.log(sessionGameSettings);
             initialQuizData = quiz; // Ayusa nala ini pag may main menu na didi isingit.
-            startGame(initialQuizData);
+            displayMainMenu(quiz);
         }
     }
 });
@@ -760,6 +885,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 //Choice Buttons ---------------------------------------------------
 
 document.querySelector(".choice-A").addEventListener('click', function() {
+    if (mainMenuActive == true) {
+        startGame(initialQuizData);
+        return;
+    }
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("A")){
@@ -776,6 +905,10 @@ document.querySelector(".choice-A").addEventListener('click', function() {
 });
 
 document.querySelector(".choice-B").addEventListener('click', function() {
+    if (mainMenuActive == true) {
+        window.location.href = `/student_quizzespage`;
+        return;
+    }
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("B")){
@@ -849,6 +982,7 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
             processChoice(temporary_answer);
             resetTimer();
             stopTimer(true);
+            
         }
         closeConfirmationPrompt();
         return;
@@ -990,18 +1124,23 @@ async function displayAvailablePowerUps(){
 //Settings
 document.getElementById("ingame-settings-button").addEventListener("click", async function (event) { 
     event.preventDefault(); 
-    document.getElementById("ingame-settings").style.display = "flex"; 
+    displayIngameSettings(true);
+    displayGameSettingOptions();
 });
 
 document.getElementById("cancel-ingame-but").addEventListener('click', function() {
-    document.getElementById("ingame-settings").style.display = "none";
+    displayIngameSettings(false);
 });
 
 document.getElementById("confirm-ingame-but").addEventListener('click', function() {
     document.getElementById("ingame-settings").style.display = "none";
+    const playerGameSettings = getCurrentGameGameSettings();
+    setGameSettings(playerGameSettings);
 });
 
 //50-50
+
+
 document.getElementById("50-50").addEventListener("click", async function (event) { 
     event.preventDefault(); 
     if (globalPowerUps.has_5050 == true || disabledPowerUps.includes("50_50")){
@@ -1272,6 +1411,7 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
 }
 
 //pass
+
 document.getElementById("pass").addEventListener("click", async function (event) { 
     if (disabledPowerUps.includes("pass") ){
         console.log("INC! DILI PWIDI!!")
