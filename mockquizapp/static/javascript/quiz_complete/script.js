@@ -18,7 +18,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 document.getElementById("status").innerText = "FAILED";
                 document.getElementById("status").style.color = "red";
             }
-            document.getElementById("total_points").innerText = `TOTAL POINTS : ₱${res.data.total_worth}`;
+
+            const worthFormatted = res.data.total_worth.toLocaleString();
+
+
+            document.getElementById("total_points").innerText = `TOTAL POINTS : ₱${worthFormatted}`;
             
         }
     } else {

@@ -126,6 +126,14 @@ document.getElementById("save-but").addEventListener("click", async function (){
         return;
     }
 
+    const phoneRegex = /^(0\d{9,10}|\+63\d{10})$/;
+    if (!phoneRegex.test(phone.value)) {
+    alert("Invalid phone number format. Use 09 XXXXXXXXX or +639 XXXXXXXXX.");
+    document.getElementById("save-but").disabled = false;
+    return;
+    }
+
+
     // Trigger the form submit event
     const form = document.querySelector("#registerForm");  // Replace with the actual form ID
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
