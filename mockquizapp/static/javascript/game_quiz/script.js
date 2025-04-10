@@ -255,8 +255,7 @@ async function timeOutMistake(){
         'question': current_question
     });
     if (res) {
-        temporary_answers = [];
-        doubleDipIsActive = false;
+        resetDoubleDip();
         closeConfirmationPrompts();
         showAnswerEffects(null, current_question);
         return res;
@@ -530,8 +529,7 @@ async function showAnswerEffects(choice, current_question) {
 
 async function nextQuestion(current_question){
     global_current_question = current_question + 1;
-    temporary_answers = [];
-    doubleDipIsActive = false;
+    resetDoubleDip();
     const questionData = await questionFetch(global_current_question);
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
@@ -1443,7 +1441,11 @@ document.getElementById("confirm-x2-but").addEventListener('click', function() {
     document.getElementById("x2-form-pop").style.display = "none";
 });
 
-
+function resetDoubleDip(){
+    doubleDipIsActive = false;
+    temporary_answers = [];
+    temporary_answer = [];
+}
 function glowChoice(choice) {
     // Now add the flash-yellow class to the newly selected SVG element
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
@@ -1473,7 +1475,7 @@ async function processDoubleChoice(final_choices){
                 }
             }
         }
-        temporary_answers = [];
+        resetDoubleDip();
 
     const result = await evaluateChoice(final_choices);
     if (result){
