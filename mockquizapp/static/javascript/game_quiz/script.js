@@ -21,13 +21,44 @@ var currentAudio = null;
 let timerDelay;
 let previousQuiz;
 let mainMenuActive = false;
-
+let currentMusic;
 let gameSettings = {};
 
 function setGameSettings(gameSettingsInput){
     gameSettings = gameSettingsInput;
     console.log("Saving Game Settings")
     localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
+    if (gameSettings.voice == false){
+        if (currentAudio){
+            currentAudio.pause();
+        }
+    }
+
+
+    if (gameSettings.music == false){
+        toggleMusic(false);
+    }else{
+        toggleMusic(true);
+    }
+}
+
+function toggleMusic(state){
+    if (state == true){
+        if (currentMusic){
+            currentMusic.play();
+        }
+    }else{
+        if (currentMusic){
+            currentMusic.pause();
+        }
+    }
+}
+
+function startBGM(music){
+    if (gameSettings.music == true){
+        currentMusic = music;
+        currentMusic.play();
+    }
 }
 
 function getSessionGameSettings(){
@@ -92,6 +123,16 @@ elementsToObserve.forEach(id => {
     }
 });
 
+//Sound Related
+function playSound(sound){
+
+}
+function getAbsoluteMediaURL(relativePath) {
+    return new URL(relativePath, window.location.origin).href;
+}
+
+
+
 //Timer
 function resetTimer(){
     timer = initialQuizData.timer_countdown;
@@ -126,10 +167,10 @@ function tickDownTimer(){
 }
 
 function operateTimer(){
-    displayTimer(true);
     const timerCounter = setInterval(() => {
         if (timeStop == false){
             tickDownTimer();
+            displayTimer(true);
             if (timer < 0) {
                 clearInterval(timerCounter);
                 // Fail
@@ -213,6 +254,7 @@ const points = [
     "₱3,000", "₱1,500", "₱800", "₱400", "₱200",
     "₱100", "₱50", "₱30", "₱20", "₱10"
 ];
+const reversedPoints = [...points].reverse();
 
 // list out level and its respective points
 for (let i = 0; i < points.length; i++) {
@@ -229,9 +271,10 @@ for (let i = 0; i < points.length; i++) {
 }
 
 function playAudio(audio){
-    const audioElement = document.createElement('audio');
-    audioElement.src = audio;
-    audioElement.play();
+    if (gameSettings.sound == false){ return; }
+    if (audio){
+        audio.play();
+    }
 }
 
 async function endGame() {
@@ -390,15 +433,16 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         
-        const correctSound = new Audio("{% static 'sounds/sfx/correct-sfx.mp3' %}");
-        const wrongSound = new Audio("{% static 'sounds/sfx/wrong-sfx.mp3' %}");
+        const correctSound = new Audio("/static/sounds/sfx/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/sfx/wrong-sfx.mp3");
+        
 
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
 
             resetFlashYellowClass();
             flashGreen(choiceElement);
-            correctSound.play();
+            playAudio(correctSound);
         }else{
             let choiceElement
             if (choice){ // If the choice is wrong, flash the choice red.
@@ -415,7 +459,7 @@ async function showWrongAndCorrectAnswer(choice, current_question){
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashRed(correctAnswerElement); // Flash the correct answer
             }
-            wrongSound.play();
+            playAudio(wrongSound);
         }
         highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
@@ -447,7 +491,9 @@ async function showAnswerEffects(choice, current_question) {
         endGame();
     }else{
         displayTimer(false);
+        resetTimer();
         nextQuestion(current_question);
+
         
     }
 }
@@ -459,9 +505,12 @@ async function nextQuestion(current_question){
     resetFlashes();
     resetTimer();
     choicesOpacityReset(current_question);
-    displayQuestion(questionData);
-    showQuestionNumber(global_current_question);
-    showQuestionWorth(questionData.worth);
+    if (questionData){
+        displayQuestion(questionData);
+        showQuestionNumber(global_current_question);
+        const questionWorth = reversedPoints[current_question];
+        showQuestionWorth(questionWorth);
+    }
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
     displaySafeLevels();
 }
@@ -528,7 +577,9 @@ async function generateVoiceMessageGame(textMessage){
         }
         const audioURL = URL.createObjectURL(blob);
         currentAudio = new Audio(audioURL);
-        currentAudio.play(); // Play the audio
+        if (gameSettings.voice == true){
+            currentAudio.play(); // Play the audio
+        }
     })
     .catch(error => {
         console.error('Error fetching the audio file:', error);
@@ -780,8 +831,9 @@ function showQuestionNumber(number){
 
 function showQuestionWorth(worth){
     const questionWorthElement = document.querySelector(`.q-worth`);
-    const worthFormatted = worth.toLocaleString();
-    questionWorthElement.innerText = "₱" + worthFormatted;
+    //const worthFormatted = worth.toLocaleString();
+    console.log("showing worth... " + worth);
+    questionWorthElement.innerText = worth;//formatted;
 }
 
 
@@ -793,9 +845,10 @@ async function startGame(quizData){
     const safeLevelsStr = quizData.safe_level
     const has5050 = quizData.game_has_5050;
     safeLevels = safeLevelsStr.split(",");
-
+    const BGM = new Audio("/static/sounds/BGM/bgm.mp3");
+    BGM.volume = 0.12;
+    startBGM(BGM);
     mainMenuActive = false;
-    
         if (question) {
             global_current_question = current_question;
             timer = quizData.timer;
@@ -811,7 +864,8 @@ async function startGame(quizData){
             highlightAnsweredQuestionsWorth(questions);
             highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
             showQuestionNumber(current_question);
-            showQuestionWorth(question.worth);
+            const questionWorth = reversedPoints[current_question - 1];
+            showQuestionWorth(questionWorth);
             showTotalWorth(playerTotalWorth);
             displaySafeLevels();
                 
@@ -1407,10 +1461,16 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         const correct_answer = res.question.correct_answer;
+
+        const correctSound = new Audio("/static/sounds/sfx/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/sfx/wrong-sfx.mp3");
+
         if (isCorrect == true){
+            
             const choiceElement = document.querySelector(`.svg-choice-${correct_answer}`);
             resetFlashYellowClass();
             flashGreen(choiceElement);
+            playAudio(correctSound);
         }else{
             resetFlashYellowClass();
             let choiceElement1
@@ -1434,7 +1494,7 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashGreen(correctAnswerElement); // Flash the correct answer
             }
-            
+            playAudio(wrongSound);
             
         }
         temporary_answers = [];
@@ -1466,12 +1526,14 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
-    if (cannotAnswer == true){
+    if (cannotAnswer == false){
         processPass();
     }
 });
 
 async function processPass(){
+    console.log("Pass fired.")
+    stopTimer(true);
     const current_question = global_current_question;
     const quiz_id = sessionStorage.getItem('quiz_id');
     res = await getDataFromUrlWithParams(`/api/game/pass`,{
