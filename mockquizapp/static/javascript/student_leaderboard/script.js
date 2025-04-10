@@ -27,6 +27,7 @@ function displayRankings(rankings){
             const student = rankings[rank];
             const totalItems = student.total_wrong_answers + student.total_correct_answers
             const rankNumber = (Number(rank) + 1).toString();   
+            const scoreFormatted = student.total_score.toLocaleString();
                 lis_of_user_tag.insertAdjacentHTML("beforeend",
                     `
                     <div class="leaderboard-table-card">
@@ -46,7 +47,7 @@ function displayRankings(rankings){
                             <p>${student.student_name}</p>
                         </div>
                         <div>
-                            <p>${student.total_score}</p>
+                            <p>${scoreFormatted}</p>
                         </div>
                         <div>
                             <p>${student.total_quizzes}</p>
