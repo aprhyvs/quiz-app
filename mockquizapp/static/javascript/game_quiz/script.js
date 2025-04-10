@@ -19,6 +19,7 @@ let voiceCooldownTimer = 5;
 var cannotAnswer = false;
 var currentAudio = null;
 let timerDelay;
+let previousQuiz;
 //Timer
 function resetTimer(){
     timer = initialQuizData.timer_countdown;
@@ -66,12 +67,25 @@ function operateTimer(){
 
 function startTimer(){
     clearTimeout(timerDelay);
-    timerSession = sessionStorage.getItem("timer");
-    if (timerSession){
-        timer = timerSession;
-        timerElement = document.getElementById('timer-text');
-        timerElement.textContent = timer;
+    const timerSession = sessionStorage.getItem("timer");
+    previousQuiz = sessionStorage.getItem("previous_quiz_id");
+    if (previousQuiz == sessionStorage.getItem("quiz_id")){
+        console.log("Continuing Quiz.")
+        if (timerSession){
+            timer = timerSession;
+            timerElement = document.getElementById('timer-text');
+            timerElement.textContent = timer;
+        }else{
+            console.log("Timer not found, restarting timer.")
+            timer = initialQuizData.timer_countdown;
+        }
+    }else{
+        previousQuiz = sessionStorage.setItem("previous_quiz_id", sessionStorage.getItem("quiz_id"));
+        console.log("New Quiz...")
+        console.log("Timer not found, restarting timer.")
+        timer = initialQuizData.timer_countdown;
     }
+    
     if (timer < 0) {
         timerElement = document.getElementById('timer-text');
         timerElement.textContent = 0;
@@ -95,6 +109,9 @@ async function timeOutMistake(){
         'question': current_question
     });
     if (res) {
+        temporary_answers = [];
+        doubleDipIsActive = false;
+        closeConfirmationPrompts();
         showAnswerEffects(null, current_question);
         return res;
     }
@@ -806,6 +823,14 @@ document.querySelector(".choice-D").addEventListener('click', function() {
 
 //Confirmation Prompt Buttons ---------------------------------------------------
 
+function closeConfirmationPrompts(){
+    closeConfirmationPrompt(); // Close main confirmation prompt
+    document.getElementById("50-form-pop").style.display = "none"; //close 50-50 powerup prompt
+    document.getElementById("x2-form-pop").style.display = "none"; //Close double dip prompt
+    document.getElementById("ai-form-pop").style.display = "none"; //close ai prompt
+    document.getElementById("pass-form-pop").style.display = "none"; //close pass prompt
+}
+
 function closeConfirmationPrompt() {
     temporary_answers = [];
     document.getElementById("confirmation-form-pop").style.display = "none";
@@ -989,7 +1014,9 @@ document.getElementById("cancel-50-but").addEventListener('click', function() {
 
 document.getElementById("confirm-50-but").addEventListener('click', function() {
     document.getElementById("50-form-pop").style.display = "none";
-    activate5050();
+    if (cannotAnswer == false){
+        activate5050();
+    }
 });
 
 async function activate5050(){
@@ -1078,7 +1105,7 @@ document.getElementById("cancel-ai-but").addEventListener('click', function() {
 });
 
 document.getElementById("confirm-ai-but").addEventListener('click', function() {
-    if (globalPowerUps.has_hint == false){ // If hint has been used...
+    if (globalPowerUps.has_hint == false && cannotAnswer == false){ // If hint has been used...
         event.preventDefault(); 
         activateAiHint();
     }
@@ -1142,10 +1169,12 @@ document.getElementById("cancel-x2-but").addEventListener('click', function() {
 });
 
 document.getElementById("confirm-x2-but").addEventListener('click', function() {
-    const buttonDoubleDip = document.getElementById('x2');
-    updatePowerUpElement(buttonDoubleDip, true);
-    disableOtherPowerUps("x2");
-    doubleDipIsActive = true;
+    if (cannotAnswer == false){
+        const buttonDoubleDip = document.getElementById('x2');
+        updatePowerUpElement(buttonDoubleDip, true);
+        disableOtherPowerUps("x2");
+        doubleDipIsActive = true;
+    }
     document.getElementById("x2-form-pop").style.display = "none";
 });
 
@@ -1179,6 +1208,7 @@ async function processDoubleChoice(final_choices){
                 }
             }
         }
+        temporary_answers = [];
 
     const result = await evaluateChoice(final_choices);
     if (result){
@@ -1207,14 +1237,33 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
             resetFlashYellowClass();
             flashGreen(choiceElement);
         }else{
-            const choiceElement1 = document.querySelector(`.svg-choice-${choices[0]}`);
-            const choiceElement2 = document.querySelector(`.svg-choice-${choices[1]}`);
             resetFlashYellowClass();
-            flashRed(choiceElement1);
-            flashRed(choiceElement2);
-            const answerElement = document.querySelector(`.svg-choice-${correct_answer}`);
-            flashGreen(answerElement);
+            let choiceElement1
+            let choiceElement2
+            
+            if (!choices){ 
+                console.log("Did not make a choice... Timeouted??")
+                const correct_answer = res.question.correct_answer;
+                const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
+                flashRed(correctAnswerElement); // Flash the correct answer
+            }else{ // If player made a choice..
+                if (choices[0]){ // If the player made a choice but is wrong, flash the choice red.
+                    choiceElement1 = document.querySelector(`.svg-choice-${choices[0]}`);
+                    flashRed(choiceElement1);
+                }
+                if (choices[1]){
+                    choiceElement2 = document.querySelector(`.svg-choice-${choices[1]}`);
+                    flashRed(choiceElement2);
+                }
+                const correct_answer = res.question.correct_answer;
+                const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
+                flashGreen(correctAnswerElement); // Flash the correct answer
+            }
+            
+            
         }
+        temporary_answers = [];
+        highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
     }
 }
 
@@ -1241,7 +1290,9 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
-    processPass();
+    if (cannotAnswer == true){
+        processPass();
+    }
 });
 
 async function processPass(){
