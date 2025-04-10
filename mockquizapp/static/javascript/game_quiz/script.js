@@ -694,7 +694,11 @@ function displayQuestion(questionData){
     const options = questionData.options.map(opt =>
         opt.replace(/^[A-D][\.\:\-\s]*\s*/, "")
       );
-    questionElement.innerText = questionData.question;
+    questionElement.innerHTML = `
+                                    <p>
+                                    ${questionData.question}
+                                    </p>
+                                `
     displayChoices(options);
     textifiedQuestionAndChoices = textifyQuestionPlusChoices(questionData.question, options);
     isUsingVoice = false;
