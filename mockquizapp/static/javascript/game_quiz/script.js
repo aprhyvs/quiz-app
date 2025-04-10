@@ -530,6 +530,8 @@ async function showAnswerEffects(choice, current_question) {
 
 async function nextQuestion(current_question){
     global_current_question = current_question + 1;
+    temporary_answers = [];
+    doubleDipIsActive = false;
     const questionData = await questionFetch(global_current_question);
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
