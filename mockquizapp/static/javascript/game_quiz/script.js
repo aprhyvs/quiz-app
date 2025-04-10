@@ -11,7 +11,7 @@ var doubleDipIsActive = false;
 var disabledPowerUps = [];
 let safeLevels = [];
 let playerTotalWorth = 0;
-let timer = 30;
+let timer = null;
 let timeStop = false;
 var initialQuizData = {};
 var isUsingVoice = false;
@@ -21,7 +21,7 @@ var currentAudio = null;
 let timerDelay;
 //Timer
 function resetTimer(){
-    timer = 30;
+    timer = initialQuizData.timer_countdown;
     sessionStorage.setItem("timer", timer);
 }
 
@@ -693,6 +693,7 @@ async function startGame(quizData){
     safeLevels = safeLevelsStr.split(",");
         if (question) {
             global_current_question = current_question;
+            timer = quizData.timer;
             displayQuestion(question);
             if (has5050 == true) {
                 console.log("Has 5050")
@@ -813,14 +814,21 @@ function closeConfirmationPrompt() {
 
 document.getElementById("confirm-confirmation-but").addEventListener('click', function() {
     if (doubleDipIsActive == true) {
-        processDoubleChoice(temporary_answers);
-        console.log("sent " + temporary_answers);
+        if (cannotAnswer == false){
+            processDoubleChoice(temporary_answers);
+            console.log("sent " + temporary_answers);
+            processChoice(temporary_answer);
+            resetTimer();
+            stopTimer(true);
+        }
         closeConfirmationPrompt();
         return;
     }
-    processChoice(temporary_answer);
-    resetTimer();
-    stopTimer(true);
+    if (cannotAnswer == false){
+        processChoice(temporary_answer);
+        resetTimer();
+        stopTimer(true);
+    }
     closeConfirmationPrompt();
 });
 document.getElementById("cancel-confirmation-but").addEventListener('click', function() {
