@@ -63,6 +63,15 @@
             video.addEventListener("play", function () {
                 preloadNextVideo();
             });
+
+              // Pause the video when it reaches 80% of its duration
+            video.addEventListener("timeupdate", function () {
+                const percentage = (video.currentTime / video.duration) * 100;
+                
+                if (percentage >= 80) {
+                    video.pause(); // Pause the video when it reaches 80%
+                }
+            });
         </script>
 
         <div class="question-wrapper">
