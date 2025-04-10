@@ -20,12 +20,6 @@ var cannotAnswer = false;
 var currentAudio = null;
 let timerDelay;
 let previousQuiz;
-//Timer
-function resetTimer(){
-    timer = initialQuizData.timer_countdown;
-    sessionStorage.setItem("timer", timer);
-}
-
 
 function stopTimer(state){
     if (state == true) {

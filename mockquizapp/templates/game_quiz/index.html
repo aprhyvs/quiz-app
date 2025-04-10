@@ -19,9 +19,52 @@
     <div class="background-wrapper">
         {% include 'components/navbar_gamequiz.html' %}
 
-        <video autoplay loop muted plays-inline class="background-webm">
-        <source src="{% static 'css/game_quiz/wwtbam_01.webm' %}" type="video/webm">
+        <video id="backgroundVideo" autoplay muted playsinline class="background-webm">
+            <source id="videoSource" src="{% static 'css/game_quiz/wwtbam_01.webm' %}" type="video/webm">
+            Your browser does not support the video tag.
         </video>
+
+        <script>
+            // {% static %} tag is not processed inside JavaScript strings. 
+            const video = document.getElementById("backgroundVideo");
+            const source = document.getElementById("videoSource");
+
+            const videos = [
+                "{% static 'css/game_quiz/wwtbam_01.webm' %}",
+                "{% static 'css/game_quiz/wwtbam_02.webm' %}",
+                "{% static 'css/game_quiz/wwtbam_03.webm' %}",
+                "{% static 'css/game_quiz/wwtbam_04.webm' %}"
+            ];
+
+            let currentVideo = 0;
+
+            // Preload the next video while the current one is playing
+            function preloadNextVideo() {
+                const nextVideo = new Video();
+                nextVideo.src = videos[(currentVideo + 1) % videos.length];
+                nextVideo.load();
+            }
+
+            // Play the next video when the current one ends
+            video.addEventListener("ended", function () {
+                currentVideo++;
+
+                if (currentVideo >= videos.length) {
+                    currentVideo = 0; // loop
+                }
+
+                source.src = videos[currentVideo];
+                video.load();
+                video.play();
+
+                preloadNextVideo();
+            });
+
+            // Preload the second video when the first video starts
+            video.addEventListener("play", function () {
+                preloadNextVideo();
+            });
+        </script>
 
         <div class="question-wrapper">
             <div class="question">        
