@@ -132,7 +132,7 @@ elementsToObserve.forEach(id => {
 
 //Sound Related
 function playTimerSound(){
-    const timerSound = new Audio("/static/sounds/sfx/clock-ticking.mp3");
+    const timerSound = new Audio("/static/sounds/SFX/clock-ticking.mp3");
     longSound = timerSound;
     playAudio(timerSound);
 }
@@ -462,8 +462,8 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         
-        const correctSound = new Audio("/static/sounds/sfx/correct-sfx.mp3");
-        const wrongSound = new Audio("/static/sounds/sfx/wrong-sfx.mp3");
+        const correctSound = new Audio("/static/sounds/SFX/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/SFX/wrong-sfx.mp3");
         
 
         if (isCorrect == true){
@@ -1500,8 +1500,8 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
         const isCorrect = question.is_correct;
         const correct_answer = res.question.correct_answer;
 
-        const correctSound = new Audio("/static/sounds/sfx/correct-sfx.mp3");
-        const wrongSound = new Audio("/static/sounds/sfx/wrong-sfx.mp3");
+        const correctSound = new Audio("/static/sounds/SFX/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/SFX/wrong-sfx.mp3");
 
         if (isCorrect == true){
             
