@@ -337,6 +337,17 @@ async function getGameSettings(){
     return gameSettings
 }
 
+function convertToReadableText(numbersString){
+    let formatted = numbersString.replace(/,/g, ", ");
+    console.log(formatted);  // Output: "3, 6, 9, 12, 15, 20"
+    return formatted;
+}
+
+function convertToNumbersString(readableText){
+    let compact = readableText.replace(/,\s*/g, ",");
+    return compact;
+}
+
 function refreshGameSettingsForm(settings) {
 
     document.querySelectorAll('input[name="timer"]').forEach(input => {
@@ -352,7 +363,7 @@ function refreshGameSettingsForm(settings) {
     });
 
     document.querySelectorAll('input[name="safe-level"]').forEach(input => {
-        if (input.nextElementSibling.textContent.trim() === settings.safe_level) {
+        if (input.nextElementSibling.textContent.trim() === convertToReadableText(settings.safe_level)) {
             input.checked = true;
         }
     });
@@ -372,7 +383,7 @@ function resetGameSettingsForm(){
     });
 
     document.querySelectorAll('input[name="safe-level"]').forEach(input => {
-        if (input.nextElementSibling.textContent.trim() === "3, 6, 9, 12, 15") {
+        if (input.nextElementSibling.textContent.trim() === "3, 6, 9, 12, 15, 20") {
             input.checked = true;
         }
     });
@@ -397,8 +408,10 @@ function collectFormData() {
     // Get selected Safe Level
     const safeLevelSelected = document.querySelector('input[name="safe-level"]:checked');
     if (safeLevelSelected) {
-        formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
+        let convertedReadableText = convertToNumbersString(safeLevelSelected.nextElementSibling.textContent.trim());
+        formData.safe_level = convertedReadableText;
     }
+    console.log(formData);
     return formData;
 }
 

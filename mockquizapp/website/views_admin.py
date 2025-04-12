@@ -210,7 +210,7 @@ def set_game_settings(request):
         if not game_settings['timer_countdown'] or not game_settings['timer_countdown'].isdigit() or game_settings['timer_countdown'] not in ["25", "30" , "40"]: 
             return JsonResponse({"error": "Timer countdown must be a number"}, status=400)
         game_settings['safe_level'] = request.POST.get('safe_level')
-        if not game_settings['safe_level'] or game_settings['safe_level'] not in ["3, 6, 9, 12, 15", "4, 8, 12, 16", "5, 10, 15" ]:
+        if not game_settings['safe_level'] or game_settings['safe_level'] not in ["3, 6, 9, 12, 15, 20", "4, 8, 12, 16, 20", "5, 10, 15, 20" ]:
             return JsonResponse({"error": "Safe level must be a number"}, status=400)
 
         gameSettingsObject = AdminData.objects.first()
