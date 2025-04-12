@@ -80,17 +80,17 @@ html, body {
 }
 
 .flash-yellow path {
-    fill: var(--gold); /* or any color you want to use, such as #FFD700 */
+    fill: var(--gold); 
     transition: fill 0.3s ease;
 }
 
 .flash-red path {
-    fill: var(--red); /* or any color you want to use, such as #FFD700 */
+    fill: var(--red); 
     transition: fill 0.3s ease;
 }
 
 .flash-green path {
-    fill: var(--green); /* or any color you want to use, such as #FFD700 */
+    fill: var(--green);
     transition: fill 0.3s ease;
 }
 
@@ -118,24 +118,7 @@ html, body {
     color: var(--gold);
 }
 
-/* SEE COLORS BELOW */
-/* .choices svg:hover path
-   fill: var(--green); - CORRECT
-   fill: var(--red); - WRONG
-   fill: var(--gold); - CHOICE
 
-   50 : 50
-.choices svg:hover path {
-   fill: #425b7750;
-   stroke: #5f8cdf50; 
-}
-
-.choices svg:hover .letter,
-.choices svg:hover .answer,
-.choices svg:hover p {
-    color: transparent; 
-}
-*/
 
 .multiple-choice {
     display: flex;
@@ -286,7 +269,7 @@ html, body {
 .ingame-settings-content {
     background-color: #0F0A0A;
     padding: 2em 0;
-    max-width: 800px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -297,11 +280,6 @@ html, body {
 .ingame-settings-content h1 {
     margin-bottom: 0.75em;
 }
-
-/*
-.ingame-settings-content form {
-    border: 2px solid green;  
-}*/
 
 /* The switch container */
 .switch-wrapper {
@@ -392,15 +370,34 @@ input:checked + .slider::before {
     border: none;
     border-radius: 1em;
     padding: 1em 4em;
-    margin-bottom: 1em;
 }
 
 #cancel-ingame-but {
     background-color: #E55977;
+    cursor: pointer;
 }
 
 #confirm-ingame-but {
     background-color: #43ACAC;
+    cursor: pointer;
+}
+
+/* about-game */
+
+.about-game {
+    background-color: #0F0A0A;
+    text-align: center;
+    padding: 0 2em;
+}
+
+.about-game p,
+.about-game h2 {
+    color: #FCFCFC;
+    margin-bottom: 1em;
+}
+
+.about-game p {
+    padding: 0 2em;
 }
 
 /* modal */
