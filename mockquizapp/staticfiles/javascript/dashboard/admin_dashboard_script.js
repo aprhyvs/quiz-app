@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Admin Dashboard Loaded");
+    //console.log("Admin Dashboard Loaded");
 
     // CSRF Token Retrieval
     function getCSRFToken() {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
             const students = data;
 
-            console.log(students)
+            //console.log(students)
             displayStudents(students);
 
         } catch (error) {

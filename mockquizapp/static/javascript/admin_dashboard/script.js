@@ -339,7 +339,7 @@ async function getGameSettings(){
 
 function convertToReadableText(numbersString){
     let formatted = numbersString.replace(/,/g, ", ");
-    console.log(formatted);  // Output: "3, 6, 9, 12, 15, 20"
+    //console.log(formatted);  // Output: "3, 6, 9, 12, 15, 20"
     return formatted;
 }
 
@@ -410,7 +410,7 @@ function collectFormData() {
     if (safeLevelSelected) {
         formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
     }
-    console.log(formData);
+    //console.log(formData);
     return formData;
 }
 
@@ -419,7 +419,7 @@ async function setGameSettings(){
     formData = collectFormData();
     const res = await getDataFromUrlWithParams('/api/admin/update/gamesettings', formData);
     if (res){   
-        console.log("Game settings updated successfully");
+        //console.log("Game settings updated successfully");
     }
 }
 
@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const ranking = await getDataFromUrl("/api/admin/get/rankings");
     if (ranking) {
-        console.log(ranking);
+        //console.log(ranking);
        displayRankings(ranking);
     }
 
@@ -548,7 +548,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const searchBox = document.getElementById('search-box'); 
     const handleInput = async (event) => {
-        console.log(`Searching for: ${event.target.value}`);
+        //console.log(`Searching for: ${event.target.value}`);
         // Add your logic for handling the input here, like sending a search request.
         const students = await getDataFromUrlWithParams('/api/admin/search/students' , {
             'search_term' : event.target.value

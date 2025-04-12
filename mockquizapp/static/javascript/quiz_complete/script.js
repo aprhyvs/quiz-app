@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
-            console.log(res);
+            //console.log(res);
             document.getElementById('quiz_title').innerText = res.data.quiz_title;
             document.getElementById("score").innerText = `${res.data.number_of_correct} / 20` ;
             if (res.data.number_of_correct >= 15) {

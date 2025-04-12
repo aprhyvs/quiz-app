@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         const studentQuizzes = res2;
         if (studentDatas) {
-            console.log(studentDatas);
+            //console.log(studentDatas);
             initiateStudentQuizzes(studentQuizzes);
         }
     }
@@ -25,14 +25,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         const studentData = studentDatas.studentData;
         const studentStats = studentDatas.stats;
-        console.log(studentDatas)
+        //console.log(studentDatas)
         displayStudentData(studentData);
         displayStudentStats(studentStats);
     }
 
     function initiateStudentQuizzes(studentQuizzes){
         const quizData = studentQuizzes;
-        console.log(quizData)
+        //console.log(quizData)
         displayMostRecentQuiz(quizData.quizzes[0]);
         displayPassedAndFailedQuizzes(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function displayMostRecentQuiz(mostRecentQuiz) {
         if (!mostRecentQuiz) {
-            console.log("No more quiz yet");
+            //console.log("No more quiz yet");
             let statusText = "NONE";
             const statusElement = document.getElementById("quiz-status");
             const statusParent = document.querySelector(".quiz-status-parent")

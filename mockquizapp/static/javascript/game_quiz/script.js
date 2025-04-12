@@ -26,7 +26,7 @@ let gameSettings = {};
 let longSound;
 function setGameSettings(gameSettingsInput){
     gameSettings = gameSettingsInput;
-    console.log("Saving Game Settings")
+    //console.log("Saving Game Settings")
     localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
     if (gameSettings.voice == false){
         if (currentAudio){
@@ -69,7 +69,7 @@ function startBGM(music){
 }
 
 function getSessionGameSettings(){
-    console.log("Gettomg Game Settings")
+    //console.log("Getting Game Settings")
     gameSettings = JSON.parse(localStorage.getItem('gameSettings'));
     return gameSettings;
 }
@@ -215,19 +215,19 @@ function startTimer(){
     const timerSession = sessionStorage.getItem("timer");
     previousQuiz = sessionStorage.getItem("previous_quiz_id");
     if (previousQuiz == sessionStorage.getItem("quiz_id")){
-        console.log("Continuing Quiz.")
+        //console.log("Continuing Quiz.")
         if (timerSession){
             timer = timerSession;
             timerElement = document.getElementById('timer-text');
             timerElement.textContent = timer;
         }else{
-            console.log("Timer not found, restarting timer.")
+            //console.log("Timer not found, restarting timer.")
             timer = initialQuizData.timer_countdown;
         }
     }else{
         previousQuiz = sessionStorage.setItem("previous_quiz_id", sessionStorage.getItem("quiz_id"));
-        console.log("New Quiz...")
-        console.log("Timer not found, restarting timer.")
+        //console.log("New Quiz...")
+        //console.log("Timer not found, restarting timer.")
         timer = initialQuizData.timer_countdown;
     }
     
@@ -310,8 +310,8 @@ async function endGame() {
     sessionStorage.removeItem('timer');
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
-        console.log("Finished Game, proceeding to quiz complete");
-        console.log(quiz_status);
+        //console.log("Finished Game, proceeding to quiz complete");
+        //console.log(quiz_status);
         await new Promise(resolve => setTimeout(resolve, 2000));
         window.location.href = `/quiz_complete`;
     }
@@ -344,7 +344,7 @@ async function getQuizStatus(quiz_id){
 async function checkQuizNumber(current_question){ // Check if the number of correct answers and wrong answers total to 20, if it is, return true and go to end screen.
     if (parseInt(current_question) > 19){
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
-        console.log("More than 19 questions have been answered!");
+        //console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
@@ -618,9 +618,8 @@ async function generateVoiceMessageGame(textMessage){
 
 
 async function voiceOutMessage(message) {
-    console.log(isUsingVoice);
+    //console.log(isUsingVoice);
     if (isUsingVoice == true) {
-        console.log("BAWAL!");
         return;
     }else{
         generateVoiceMessageGame(message);
@@ -629,7 +628,7 @@ async function voiceOutMessage(message) {
 
 function showConfirmationPrompt(choice) {
     if (cannotAnswer == true){
-        console.log("This shouldn't happen!");
+        //console.log("This shouldn't happen!");
         return;
     }
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
@@ -866,7 +865,7 @@ function showQuestionNumber(number){
 function showQuestionWorth(worth){
     const questionWorthElement = document.querySelector(`.q-worth`);
     //const worthFormatted = worth.toLocaleString();
-    console.log("showing worth... " + worth);
+    //console.log("showing worth... " + worth);
     questionWorthElement.innerText = worth;//formatted;
 }
 
@@ -892,7 +891,7 @@ async function startGame(quizData){
             showPowerUpButtons();
 
             if (has5050 == true) {
-                console.log("Has 5050")
+                //console.log("Has 5050")
                 activate5050();
             }
             highlightAnsweredQuestionsWorth(questions);
@@ -976,9 +975,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         if (res) {
             const quiz = res.data;
-            console.log(quiz);
+            //console.log(quiz);
             if (quiz.is_answered == true) { // Check if the quiz is already done
-                console.log("This quiz has been answered. Going to end game...");
+                //console.log("This quiz has been answered. Going to end game...");
                 endGame();
                 return;
             }
@@ -993,7 +992,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
                 setGameSettings(gameSettings);
             }
-            console.log(sessionGameSettings);
+            //console.log(sessionGameSettings);
             initialQuizData = quiz; // Ayusa nala ini pag may main menu na didi isingit.
             displayMainMenu(quiz);
         }
@@ -1012,7 +1011,7 @@ document.querySelector(".choice-A").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("A")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("A");
@@ -1032,7 +1031,7 @@ document.querySelector(".choice-B").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("B")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("B");
@@ -1049,7 +1048,7 @@ document.querySelector(".choice-C").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("C")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("C");
@@ -1065,7 +1064,7 @@ document.querySelector(".choice-D").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("D")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("D");
@@ -1098,7 +1097,7 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
     if (doubleDipIsActive == true) {
         if (cannotAnswer == false){
             processDoubleChoice(temporary_answers);
-            console.log("sent " + temporary_answers);
+            //console.log("sent " + temporary_answers);
             processChoice(temporary_answer);
             resetTimer();
             stopTimer(true);
@@ -1169,7 +1168,7 @@ function disableOtherPowerUps(usedPowerUp){
 
 
 function updatePowerUpElement(element, state){
-    console.log(state);
+    //console.log(state);
     if (state == true){
         element.style.opacity = .50;
     }else{
@@ -1232,7 +1231,7 @@ async function displayAvailablePowerUps(){
                 updatePowerUpElement(buttonAskAi, powerUps.has_hint);
             }else{
                 disableOtherPowerUps("ask_ai");
-                console.log(disabledPowerUps);
+                //console.log(disabledPowerUps);
             }
         }else{
             updatePowerUpElement(buttonAskAi, powerUps.has_hint);
@@ -1264,7 +1263,7 @@ document.getElementById("confirm-ingame-but").addEventListener('click', function
 document.getElementById("50-50").addEventListener("click", async function (event) { 
     event.preventDefault(); 
     if (globalPowerUps.has_5050 == true || disabledPowerUps.includes("50_50")){
-        console.log("50-50 Power Up not available.");
+        //console.log("50-50 Power Up not available.");
         return false;
     }else {
         document.getElementById("50-form-pop").style.display = "flex"; 
@@ -1285,7 +1284,7 @@ document.getElementById("confirm-50-but").addEventListener('click', function() {
 async function activate5050(){
     const quiz_id = sessionStorage.getItem('quiz_id');
     if (globalPowerUps.has_5050 == true){
-        console.log("50-50 Power Up not available.");
+        //console.log("50-50 Power Up not available.");
         return false;
     }
     const res = await getDataFromUrlWithParams(`/api/game/5050`,{
@@ -1293,7 +1292,7 @@ async function activate5050(){
         'question': global_current_question
     });
     if (res) {
-        console.log(res);
+        //console.log(res);
         data5050 = res["5050"];
         globalPowerUps.has_5050 = true;
         const questions5050 = Object.keys(data5050);
@@ -1301,7 +1300,7 @@ async function activate5050(){
         const current_question = global_current_question;
         if (current_question == question5050) { //If the current question is the 50-50 question...
             displayPossibleAnswers(data5050);
-            console.log("50-50 Power Up activated.");
+            //console.log("50-50 Power Up activated.");
             disableOtherPowerUps("50_50"); 
         }
         updatePowerUpElement(document.getElementById('50-50'), true);
@@ -1338,8 +1337,8 @@ async function choicesOpacityReset(current_question){
         if (current_question == question5050) { //If the current question is the 50-50 question...
             availableChoices = letters; // Just reset the available choices to default. Used letters variable for convenience
         }
-        console.log(question5050);
-        console.log(powerUps);
+        //console.log(question5050);
+        //console.log(powerUps);
     }
     
 
@@ -1349,7 +1348,6 @@ async function choicesOpacityReset(current_question){
 document.getElementById("ask-ai").addEventListener("click", async function (event) { 
     event.preventDefault(); 
     if (disabledPowerUps.includes("ask_ai") ){
-        console.log("INC! DILI PWIDI!!")
         return;
     }
     if (globalPowerUps.has_hint == true){ // If hint has been used...
@@ -1380,10 +1378,10 @@ function checkHintNumber(hint_data){
     const questionsHint = Object.keys(hint_data);
     const questionHint = questionsHint[0]
     if (current_question == questionHint) { //If the current question is the hint question...
-        console.log("Current question is the hint question. " + current_question);
+        //console.log("Current question is the hint question. " + current_question);
         return true;
     }else{
-        console.log("Not the hint question. " + questionHint + " != " + current_question);
+        //console.log("Not the hint question. " + questionHint + " != " + current_question);
         return false;
     }
 }
@@ -1391,7 +1389,7 @@ function checkHintNumber(hint_data){
 async function activateAiHint(){
     const quiz_id = sessionStorage.getItem('quiz_id');
     if (globalPowerUps.has_hint == true){ // If hint has been used...
-        console.log("Hint already used.");
+        //console.log("Hint already used.");
         return; // stop function
     }
     const res = await getDataFromUrlWithParams(`/api/game/generate/hints`,{
@@ -1399,7 +1397,7 @@ async function activateAiHint(){
         'question': global_current_question
     });
     if (res){
-        console.log(res);
+        //console.log(res);
         globalPowerUps.hint_data = res;
         displayAiHint(res[global_current_question]);
         disableOtherPowerUps("ask_ai");
@@ -1420,7 +1418,6 @@ function displayAiHint(hintContent){
 //x2
 document.getElementById("x2").addEventListener("click", async function (event) { 
     if (disabledPowerUps.includes("double_dip") ){
-        console.log("INC! DILI PWIDI!!")
         return;
     }
     event.preventDefault(); 
@@ -1453,7 +1450,7 @@ function glowChoice(choice) {
 }
 
 function checkTemporaryAnswers(){
-    console.log(temporary_answers)
+    //console.log(temporary_answers)
     if (temporary_answers.length == 2){
         showConfirmationPrompt(temporary_answers);
     }
@@ -1479,7 +1476,7 @@ async function processDoubleChoice(final_choices){
 
     const result = await evaluateChoice(final_choices);
     if (result){
-        console.log(current_question);
+        //console.log(current_question);
         showAnswerEffects(final_choices, current_question);
     }
 
@@ -1489,7 +1486,7 @@ async function processDoubleChoice(final_choices){
 
 async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
     const quiz_id = sessionStorage.getItem('quiz_id');
-    console.log(current_question)
+    //console.log(current_question)
     res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
         'quiz_id': quiz_id,
         'question': current_question
@@ -1515,7 +1512,7 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
             let choiceElement2
             
             if (!choices){ 
-                console.log("Did not make a choice... Timeouted??")
+                //console.log("Did not make a choice... Timeouted??")
                 const correct_answer = res.question.correct_answer;
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashRed(correctAnswerElement); // Flash the correct answer
@@ -1544,13 +1541,12 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
 
 document.getElementById("pass").addEventListener("click", async function (event) { 
     if (disabledPowerUps.includes("pass") ){
-        console.log("INC! DILI PWIDI!!")
-        console.log(disabledPowerUps);
+        //console.log(disabledPowerUps);
         return;
     }
 
     if (globalPowerUps.has_pass == true){ // If pass has been used...
-        console.log("Pass already used.");
+        //console.log("Pass already used.");
         return; // stop function
     }
 
@@ -1570,7 +1566,7 @@ document.getElementById("confirm-pass-but").addEventListener('click', function()
 });
 
 async function processPass(){
-    console.log("Pass fired.")
+    //console.log("Pass fired.")
     stopTimer(true);
     const current_question = global_current_question;
     const quiz_id = sessionStorage.getItem('quiz_id');
@@ -1579,7 +1575,7 @@ async function processPass(){
         'question': current_question
     });
     if (res){
-        console.log(res);
+        //console.log(res);
         const questionData = res.question;
         displayQuestion(questionData);
         const buttonPass = document.getElementById('pass');

@@ -22,7 +22,7 @@ function displayRank(stats){ //Backend already takes care of rank type (weekly/m
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Dashboard Loaded");
+    //console.log("Student Dashboard Loaded");
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 

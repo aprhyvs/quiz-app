@@ -1,5 +1,5 @@
 async function initiateRankings(leaderboard){
-    console.log(leaderboard);
+    //console.log(leaderboard);
     const leaderboardTypeElement = document.getElementById('leaderboards-type');
     if (leaderboard.type === 'weekly'){
         leaderboardTypeElement.innerText = "Leaderboards (Weekly)";
@@ -65,7 +65,7 @@ function displayRankings(rankings){
 
 
     }
-    console.log("No Rankings found.")
+    //console.log("No Rankings found.")
 }
 
 
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Waran Sulod!!!", data);
             return;
         }
-        console.log(leaderboard.leaderboard);
+        //console.log(leaderboard.leaderboard);
         initiateRankings(leaderboard.leaderboard);
     })
 
