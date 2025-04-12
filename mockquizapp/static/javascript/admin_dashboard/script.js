@@ -408,8 +408,7 @@ function collectFormData() {
     // Get selected Safe Level
     const safeLevelSelected = document.querySelector('input[name="safe-level"]:checked');
     if (safeLevelSelected) {
-        let convertedReadableText = convertToNumbersString(safeLevelSelected.nextElementSibling.textContent.trim());
-        formData.safe_level = convertedReadableText;
+        formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
     }
     console.log(formData);
     return formData;
