@@ -21,17 +21,55 @@ var currentAudio = null;
 let timerDelay;
 let previousQuiz;
 let mainMenuActive = false;
-
+let currentMusic;
 let gameSettings = {};
-
+let longSound;
 function setGameSettings(gameSettingsInput){
     gameSettings = gameSettingsInput;
-    console.log("Saving Game Settings")
+    //console.log("Saving Game Settings")
     localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
+    if (gameSettings.voice == false){
+        if (currentAudio){
+            currentAudio.pause();
+        }
+    }
+    if (gameSettings.sound == false){
+        if (longSound){
+            stopAudio(longSound); // Stop the long sound (Timer in this case)
+        }
+    }else{
+        if (longSound){
+            playAudio(longSound); // Play the long sound (Timer in this case)
+        }
+    }
+    if (gameSettings.music == false){
+        toggleMusic(false);
+    }else{
+        toggleMusic(true);
+    }
+}
+
+function toggleMusic(state){
+    if (state == true){
+        if (currentMusic){
+            currentMusic.play();
+        }
+    }else{
+        if (currentMusic){
+            currentMusic.pause();
+        }
+    }
+}
+
+function startBGM(music){
+    if (gameSettings.music == true){
+        currentMusic = music;
+        currentMusic.play();
+    }
 }
 
 function getSessionGameSettings(){
-    console.log("Gettomg Game Settings")
+    //console.log("Getting Game Settings")
     gameSettings = JSON.parse(localStorage.getItem('gameSettings'));
     return gameSettings;
 }
@@ -92,6 +130,19 @@ elementsToObserve.forEach(id => {
     }
 });
 
+//Sound Related
+function playTimerSound(){
+    const timerSound = new Audio("/static/sounds/SFX/clock-ticking.mp3");
+    longSound = timerSound;
+    playAudio(timerSound);
+}
+
+function getAbsoluteMediaURL(relativePath) {
+    return new URL(relativePath, window.location.origin).href;
+}
+
+
+
 //Timer
 function resetTimer(){
     timer = initialQuizData.timer_countdown;
@@ -126,11 +177,25 @@ function tickDownTimer(){
 }
 
 function operateTimer(){
-    displayTimer(true);
     const timerCounter = setInterval(() => {
         if (timeStop == false){
             tickDownTimer();
+            if (timer == 10) {
+                if (longSound){
+                    stopAudio(longSound); // Stop the long sound (Timer in this case)
+                    longSound = null;// Reset the longsound variable
+                    playTimerSound();
+                }else{
+                    playTimerSound(); // Play the timer sound
+                }
+            }
+            displayTimer(true);
             if (timer < 0) {
+                if (longSound){
+                    stopAudio(longSound); // Stop the long sound (Timer in this case)
+                    longSound = null;// Reset the longsound variable
+                }
+
                 clearInterval(timerCounter);
                 // Fail
                 timeOutMistake();
@@ -150,19 +215,19 @@ function startTimer(){
     const timerSession = sessionStorage.getItem("timer");
     previousQuiz = sessionStorage.getItem("previous_quiz_id");
     if (previousQuiz == sessionStorage.getItem("quiz_id")){
-        console.log("Continuing Quiz.")
+        //console.log("Continuing Quiz.")
         if (timerSession){
             timer = timerSession;
             timerElement = document.getElementById('timer-text');
             timerElement.textContent = timer;
         }else{
-            console.log("Timer not found, restarting timer.")
+            //console.log("Timer not found, restarting timer.")
             timer = initialQuizData.timer_countdown;
         }
     }else{
         previousQuiz = sessionStorage.setItem("previous_quiz_id", sessionStorage.getItem("quiz_id"));
-        console.log("New Quiz...")
-        console.log("Timer not found, restarting timer.")
+        //console.log("New Quiz...")
+        //console.log("Timer not found, restarting timer.")
         timer = initialQuizData.timer_countdown;
     }
     
@@ -190,8 +255,7 @@ async function timeOutMistake(){
         'question': current_question
     });
     if (res) {
-        temporary_answers = [];
-        doubleDipIsActive = false;
+        resetDoubleDip();
         closeConfirmationPrompts();
         showAnswerEffects(null, current_question);
         return res;
@@ -213,6 +277,7 @@ const points = [
     "₱3,000", "₱1,500", "₱800", "₱400", "₱200",
     "₱100", "₱50", "₱30", "₱20", "₱10"
 ];
+const reversedPoints = [...points].reverse();
 
 // list out level and its respective points
 for (let i = 0; i < points.length; i++) {
@@ -229,17 +294,24 @@ for (let i = 0; i < points.length; i++) {
 }
 
 function playAudio(audio){
-    const audioElement = document.createElement('audio');
-    audioElement.src = audio;
-    audioElement.play();
+    if (gameSettings.sound == false){ return; }
+    if (audio){
+        audio.play();
+    }
+}
+
+function stopAudio(audio){
+    if (audio){
+        audio.pause();
+    }
 }
 
 async function endGame() {
     sessionStorage.removeItem('timer');
     const quiz_status = await getQuizStatus(sessionStorage.getItem('quiz_id'));
     if (quiz_status) {
-        console.log("Finished Game, proceeding to quiz complete");
-        console.log(quiz_status);
+        //console.log("Finished Game, proceeding to quiz complete");
+        //console.log(quiz_status);
         await new Promise(resolve => setTimeout(resolve, 2000));
         window.location.href = `/quiz_complete`;
     }
@@ -272,7 +344,7 @@ async function getQuizStatus(quiz_id){
 async function checkQuizNumber(current_question){ // Check if the number of correct answers and wrong answers total to 20, if it is, return true and go to end screen.
     if (parseInt(current_question) > 19){
         const current_answered_questions = await getAnsweredQuestions(sessionStorage.getItem('quiz_id'));
-        console.log("More than 19 questions have been answered!");
+        //console.log("More than 19 questions have been answered!");
         if (current_answered_questions) {
             const quizData = current_answered_questions.data;
             if (quizData.currently_answered_question == 20) {
@@ -390,15 +462,16 @@ async function showWrongAndCorrectAnswer(choice, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         
-        const correctSound = new Audio("{% static 'sounds/sfx/correct-sfx.mp3' %}");
-        const wrongSound = new Audio("{% static 'sounds/sfx/wrong-sfx.mp3' %}");
+        const correctSound = new Audio("/static/sounds/SFX/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/SFX/wrong-sfx.mp3");
+        
 
         if (isCorrect == true){
             const choiceElement = document.querySelector(`.svg-choice-${choice}`);
 
             resetFlashYellowClass();
             flashGreen(choiceElement);
-            correctSound.play();
+            playAudio(correctSound);
         }else{
             let choiceElement
             if (choice){ // If the choice is wrong, flash the choice red.
@@ -415,7 +488,7 @@ async function showWrongAndCorrectAnswer(choice, current_question){
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashRed(correctAnswerElement); // Flash the correct answer
             }
-            wrongSound.play();
+            playAudio(wrongSound);
         }
         highlightQuestionWorthRealtime(document.querySelector(`.level-point-${global_current_question - 1}`), isCorrect);
 
@@ -447,21 +520,27 @@ async function showAnswerEffects(choice, current_question) {
         endGame();
     }else{
         displayTimer(false);
+        resetTimer();
         nextQuestion(current_question);
+
         
     }
 }
 
 async function nextQuestion(current_question){
     global_current_question = current_question + 1;
+    resetDoubleDip();
     const questionData = await questionFetch(global_current_question);
     await new Promise(resolve => setTimeout(resolve, 3000));
     resetFlashes();
     resetTimer();
     choicesOpacityReset(current_question);
-    displayQuestion(questionData);
-    showQuestionNumber(global_current_question);
-    showQuestionWorth(questionData.worth);
+    if (questionData){
+        displayQuestion(questionData);
+        showQuestionNumber(global_current_question);
+        const questionWorth = reversedPoints[current_question];
+        showQuestionWorth(questionWorth);
+    }
     highlightCurrentQuestionWorth(document.querySelector(`.level-point-${global_current_question}`));
     displaySafeLevels();
 }
@@ -528,7 +607,9 @@ async function generateVoiceMessageGame(textMessage){
         }
         const audioURL = URL.createObjectURL(blob);
         currentAudio = new Audio(audioURL);
-        currentAudio.play(); // Play the audio
+        if (gameSettings.voice == true){
+            currentAudio.play(); // Play the audio
+        }
     })
     .catch(error => {
         console.error('Error fetching the audio file:', error);
@@ -537,9 +618,8 @@ async function generateVoiceMessageGame(textMessage){
 
 
 async function voiceOutMessage(message) {
-    console.log(isUsingVoice);
+    //console.log(isUsingVoice);
     if (isUsingVoice == true) {
-        console.log("BAWAL!");
         return;
     }else{
         generateVoiceMessageGame(message);
@@ -548,7 +628,7 @@ async function voiceOutMessage(message) {
 
 function showConfirmationPrompt(choice) {
     if (cannotAnswer == true){
-        console.log("This shouldn't happen!");
+        //console.log("This shouldn't happen!");
         return;
     }
     const confirmationPromptElement = document.getElementById('confirmation-form-pop');
@@ -613,7 +693,11 @@ function displayQuestion(questionData){
     const options = questionData.options.map(opt =>
         opt.replace(/^[A-D][\.\:\-\s]*\s*/, "")
       );
-    questionElement.innerText = questionData.question;
+    questionElement.innerHTML = `
+                                    <p>
+                                    ${questionData.question}
+                                    </p>
+                                `
     displayChoices(options);
     textifiedQuestionAndChoices = textifyQuestionPlusChoices(questionData.question, options);
     isUsingVoice = false;
@@ -780,8 +864,9 @@ function showQuestionNumber(number){
 
 function showQuestionWorth(worth){
     const questionWorthElement = document.querySelector(`.q-worth`);
-    const worthFormatted = worth.toLocaleString();
-    questionWorthElement.innerText = "₱" + worthFormatted;
+    //const worthFormatted = worth.toLocaleString();
+    //console.log("showing worth... " + worth);
+    questionWorthElement.innerText = worth;//formatted;
 }
 
 
@@ -793,9 +878,10 @@ async function startGame(quizData){
     const safeLevelsStr = quizData.safe_level
     const has5050 = quizData.game_has_5050;
     safeLevels = safeLevelsStr.split(",");
-
+    const BGM = new Audio("/static/sounds/BGM/bgm.mp3");
+    BGM.volume = 0.12;
+    startBGM(BGM);
     mainMenuActive = false;
-    
         if (question) {
             global_current_question = current_question;
             timer = quizData.timer;
@@ -805,13 +891,14 @@ async function startGame(quizData){
             showPowerUpButtons();
 
             if (has5050 == true) {
-                console.log("Has 5050")
+                //console.log("Has 5050")
                 activate5050();
             }
             highlightAnsweredQuestionsWorth(questions);
             highlightCurrentQuestionWorth(document.querySelector(`.level-point-${current_question}`));
             showQuestionNumber(current_question);
-            showQuestionWorth(question.worth);
+            const questionWorth = reversedPoints[current_question - 1];
+            showQuestionWorth(questionWorth);
             showTotalWorth(playerTotalWorth);
             displaySafeLevels();
                 
@@ -888,9 +975,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         if (res) {
             const quiz = res.data;
-            console.log(quiz);
+            //console.log(quiz);
             if (quiz.is_answered == true) { // Check if the quiz is already done
-                console.log("This quiz has been answered. Going to end game...");
+                //console.log("This quiz has been answered. Going to end game...");
                 endGame();
                 return;
             }
@@ -905,7 +992,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
                 setGameSettings(gameSettings);
             }
-            console.log(sessionGameSettings);
+            //console.log(sessionGameSettings);
             initialQuizData = quiz; // Ayusa nala ini pag may main menu na didi isingit.
             displayMainMenu(quiz);
         }
@@ -924,7 +1011,7 @@ document.querySelector(".choice-A").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("A")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("A");
@@ -944,7 +1031,7 @@ document.querySelector(".choice-B").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("B")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("B");
@@ -961,7 +1048,7 @@ document.querySelector(".choice-C").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("C")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("C");
@@ -977,7 +1064,7 @@ document.querySelector(".choice-D").addEventListener('click', function() {
     if (cannotAnswer == true ){ return; }
     if (doubleDipIsActive == true) {
         if (temporary_answers.includes("D")){
-            console.log("You already chose this...");
+            //console.log("You already chose this...");
             return; 
         }
         temporary_answers.push("D");
@@ -1010,7 +1097,7 @@ document.getElementById("confirm-confirmation-but").addEventListener('click', fu
     if (doubleDipIsActive == true) {
         if (cannotAnswer == false){
             processDoubleChoice(temporary_answers);
-            console.log("sent " + temporary_answers);
+            //console.log("sent " + temporary_answers);
             processChoice(temporary_answer);
             resetTimer();
             stopTimer(true);
@@ -1081,7 +1168,7 @@ function disableOtherPowerUps(usedPowerUp){
 
 
 function updatePowerUpElement(element, state){
-    console.log(state);
+    //console.log(state);
     if (state == true){
         element.style.opacity = .50;
     }else{
@@ -1144,7 +1231,7 @@ async function displayAvailablePowerUps(){
                 updatePowerUpElement(buttonAskAi, powerUps.has_hint);
             }else{
                 disableOtherPowerUps("ask_ai");
-                console.log(disabledPowerUps);
+                //console.log(disabledPowerUps);
             }
         }else{
             updatePowerUpElement(buttonAskAi, powerUps.has_hint);
@@ -1176,7 +1263,7 @@ document.getElementById("confirm-ingame-but").addEventListener('click', function
 document.getElementById("50-50").addEventListener("click", async function (event) { 
     event.preventDefault(); 
     if (globalPowerUps.has_5050 == true || disabledPowerUps.includes("50_50")){
-        console.log("50-50 Power Up not available.");
+        //console.log("50-50 Power Up not available.");
         return false;
     }else {
         document.getElementById("50-form-pop").style.display = "flex"; 
@@ -1197,7 +1284,7 @@ document.getElementById("confirm-50-but").addEventListener('click', function() {
 async function activate5050(){
     const quiz_id = sessionStorage.getItem('quiz_id');
     if (globalPowerUps.has_5050 == true){
-        console.log("50-50 Power Up not available.");
+        //console.log("50-50 Power Up not available.");
         return false;
     }
     const res = await getDataFromUrlWithParams(`/api/game/5050`,{
@@ -1205,7 +1292,7 @@ async function activate5050(){
         'question': global_current_question
     });
     if (res) {
-        console.log(res);
+        //console.log(res);
         data5050 = res["5050"];
         globalPowerUps.has_5050 = true;
         const questions5050 = Object.keys(data5050);
@@ -1213,7 +1300,7 @@ async function activate5050(){
         const current_question = global_current_question;
         if (current_question == question5050) { //If the current question is the 50-50 question...
             displayPossibleAnswers(data5050);
-            console.log("50-50 Power Up activated.");
+            //console.log("50-50 Power Up activated.");
             disableOtherPowerUps("50_50"); 
         }
         updatePowerUpElement(document.getElementById('50-50'), true);
@@ -1250,8 +1337,8 @@ async function choicesOpacityReset(current_question){
         if (current_question == question5050) { //If the current question is the 50-50 question...
             availableChoices = letters; // Just reset the available choices to default. Used letters variable for convenience
         }
-        console.log(question5050);
-        console.log(powerUps);
+        //console.log(question5050);
+        //console.log(powerUps);
     }
     
 
@@ -1261,7 +1348,6 @@ async function choicesOpacityReset(current_question){
 document.getElementById("ask-ai").addEventListener("click", async function (event) { 
     event.preventDefault(); 
     if (disabledPowerUps.includes("ask_ai") ){
-        console.log("INC! DILI PWIDI!!")
         return;
     }
     if (globalPowerUps.has_hint == true){ // If hint has been used...
@@ -1292,10 +1378,10 @@ function checkHintNumber(hint_data){
     const questionsHint = Object.keys(hint_data);
     const questionHint = questionsHint[0]
     if (current_question == questionHint) { //If the current question is the hint question...
-        console.log("Current question is the hint question. " + current_question);
+        //console.log("Current question is the hint question. " + current_question);
         return true;
     }else{
-        console.log("Not the hint question. " + questionHint + " != " + current_question);
+        //console.log("Not the hint question. " + questionHint + " != " + current_question);
         return false;
     }
 }
@@ -1303,7 +1389,7 @@ function checkHintNumber(hint_data){
 async function activateAiHint(){
     const quiz_id = sessionStorage.getItem('quiz_id');
     if (globalPowerUps.has_hint == true){ // If hint has been used...
-        console.log("Hint already used.");
+        //console.log("Hint already used.");
         return; // stop function
     }
     const res = await getDataFromUrlWithParams(`/api/game/generate/hints`,{
@@ -1311,7 +1397,7 @@ async function activateAiHint(){
         'question': global_current_question
     });
     if (res){
-        console.log(res);
+        //console.log(res);
         globalPowerUps.hint_data = res;
         displayAiHint(res[global_current_question]);
         disableOtherPowerUps("ask_ai");
@@ -1332,7 +1418,6 @@ function displayAiHint(hintContent){
 //x2
 document.getElementById("x2").addEventListener("click", async function (event) { 
     if (disabledPowerUps.includes("double_dip") ){
-        console.log("INC! DILI PWIDI!!")
         return;
     }
     event.preventDefault(); 
@@ -1353,7 +1438,11 @@ document.getElementById("confirm-x2-but").addEventListener('click', function() {
     document.getElementById("x2-form-pop").style.display = "none";
 });
 
-
+function resetDoubleDip(){
+    doubleDipIsActive = false;
+    temporary_answers = [];
+    temporary_answer = [];
+}
 function glowChoice(choice) {
     // Now add the flash-yellow class to the newly selected SVG element
     const choiceElement = document.querySelector(`.svg-choice-${choice}`);
@@ -1361,7 +1450,7 @@ function glowChoice(choice) {
 }
 
 function checkTemporaryAnswers(){
-    console.log(temporary_answers)
+    //console.log(temporary_answers)
     if (temporary_answers.length == 2){
         showConfirmationPrompt(temporary_answers);
     }
@@ -1383,11 +1472,11 @@ async function processDoubleChoice(final_choices){
                 }
             }
         }
-        temporary_answers = [];
+        resetDoubleDip();
 
     const result = await evaluateChoice(final_choices);
     if (result){
-        console.log(current_question);
+        //console.log(current_question);
         showAnswerEffects(final_choices, current_question);
     }
 
@@ -1397,7 +1486,7 @@ async function processDoubleChoice(final_choices){
 
 async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
     const quiz_id = sessionStorage.getItem('quiz_id');
-    console.log(current_question)
+    //console.log(current_question)
     res = await getDataFromUrlWithParams(`/api/game/get/answer`,{
         'quiz_id': quiz_id,
         'question': current_question
@@ -1407,17 +1496,23 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
         const question = res.question;
         const isCorrect = question.is_correct;
         const correct_answer = res.question.correct_answer;
+
+        const correctSound = new Audio("/static/sounds/SFX/correct-sfx.mp3");
+        const wrongSound = new Audio("/static/sounds/SFX/wrong-sfx.mp3");
+
         if (isCorrect == true){
+            
             const choiceElement = document.querySelector(`.svg-choice-${correct_answer}`);
             resetFlashYellowClass();
             flashGreen(choiceElement);
+            playAudio(correctSound);
         }else{
             resetFlashYellowClass();
             let choiceElement1
             let choiceElement2
             
             if (!choices){ 
-                console.log("Did not make a choice... Timeouted??")
+                //console.log("Did not make a choice... Timeouted??")
                 const correct_answer = res.question.correct_answer;
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashRed(correctAnswerElement); // Flash the correct answer
@@ -1434,7 +1529,7 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
                 const correctAnswerElement = document.querySelector(`.svg-choice-${correct_answer}`)
                 flashGreen(correctAnswerElement); // Flash the correct answer
             }
-            
+            playAudio(wrongSound);
             
         }
         temporary_answers = [];
@@ -1446,13 +1541,12 @@ async function showDoubleDipWrongAndCorrectAnswer(choices, current_question){
 
 document.getElementById("pass").addEventListener("click", async function (event) { 
     if (disabledPowerUps.includes("pass") ){
-        console.log("INC! DILI PWIDI!!")
-        console.log(disabledPowerUps);
+        //console.log(disabledPowerUps);
         return;
     }
 
     if (globalPowerUps.has_pass == true){ // If pass has been used...
-        console.log("Pass already used.");
+        //console.log("Pass already used.");
         return; // stop function
     }
 
@@ -1466,12 +1560,14 @@ document.getElementById("cancel-pass-but").addEventListener('click', function() 
 
 document.getElementById("confirm-pass-but").addEventListener('click', function() {
     document.getElementById("pass-form-pop").style.display = "none";
-    if (cannotAnswer == true){
+    if (cannotAnswer == false){
         processPass();
     }
 });
 
 async function processPass(){
+    //console.log("Pass fired.")
+    stopTimer(true);
     const current_question = global_current_question;
     const quiz_id = sessionStorage.getItem('quiz_id');
     res = await getDataFromUrlWithParams(`/api/game/pass`,{
@@ -1479,7 +1575,7 @@ async function processPass(){
         'question': current_question
     });
     if (res){
-        console.log(res);
+        //console.log(res);
         const questionData = res.question;
         displayQuestion(questionData);
         const buttonPass = document.getElementById('pass');

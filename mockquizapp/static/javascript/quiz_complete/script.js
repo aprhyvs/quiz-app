@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             'quiz_id': quiz_id
         });
         if (res) {
-            console.log(res);
+            //console.log(res);
             document.getElementById('quiz_title').innerText = res.data.quiz_title;
             document.getElementById("score").innerText = `${res.data.number_of_correct} / 20` ;
             if (res.data.number_of_correct >= 15) {
@@ -18,7 +18,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 document.getElementById("status").innerText = "FAILED";
                 document.getElementById("status").style.color = "red";
             }
-            document.getElementById("total_points").innerText = `TOTAL POINTS : ₱${res.data.total_worth}`;
+
+            const worthFormatted = res.data.total_worth.toLocaleString();
+
+
+            document.getElementById("total_points").innerText = `TOTAL POINTS : ₱${worthFormatted}`;
             
         }
     } else {

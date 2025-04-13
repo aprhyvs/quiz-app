@@ -22,7 +22,7 @@ function displayRank(stats){ //Backend already takes care of rank type (weekly/m
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Student Dashboard Loaded");
+    //console.log("Student Dashboard Loaded");
 
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
@@ -90,18 +90,35 @@ document.addEventListener("DOMContentLoaded", function () {
         const correctBar = document.querySelector(".correct-bar");
         const wrongBar = document.querySelector(".wrong-bar");
 
+        if (totalItems > 0) {
+            const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
+            const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
         
-        if (totalItems > 0) { // if the student has stats...
-            // Update the correct-wrong bar
-        const correctAnswerPercentage = getPercentage(studentStats.total_correct_answers, totalItems);
-        const wrongAnswerPercentage = getPercentage(studentStats.total_wrong_answers, totalItems);
+            if (correctAnswerPercentage === 100) {
+                // correct 100%
+                correctBar.style.width = '100%';
+                correctBar.textContent = '100%';
+                correctBar.style.display = 'block';
         
-    
-        correctBar.style.width = `${correctAnswerPercentage}%`;
-        correctBar.textContent = `${correctAnswerPercentage}%`;
-    
-        wrongBar.style.width = `${wrongAnswerPercentage}%`;
-        wrongBar.textContent = `${wrongAnswerPercentage}%`;
+                wrongBar.style.display = 'none';
+            } else if (wrongAnswerPercentage === 100) {
+                // wrong 100%
+                wrongBar.style.width = '100%';
+                wrongBar.textContent = '100%';
+                wrongBar.style.display = 'block';
+        
+                correctBar.style.display = 'none';
+            } else {
+                // Show both bars with their respective percentages
+                correctBar.style.display = 'block';
+                wrongBar.style.display = 'block';
+        
+                correctBar.style.width = `${correctAnswerPercentage}%`;
+                correctBar.textContent = `${correctAnswerPercentage}%`;
+        
+                wrongBar.style.width = `${wrongAnswerPercentage}%`;
+                wrongBar.textContent = `${wrongAnswerPercentage}%`;
+            }
         }else{
             // Hide the bar pag walang quiz stats.    
             correctBar.style.display = "none";

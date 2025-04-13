@@ -6,12 +6,12 @@ const success_pop_up = document.getElementById("success-form-pop");
 function checkFileType(file){
     const fileExtension = file.name.split('.').pop().toLowerCase();
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    console.log(fileExtension, allowedExtensions)
+    //console.log(fileExtension, allowedExtensions)
     if (!allowedExtensions.includes(fileExtension)) {
         console.error("Invalid file type. Only JPG, JPEG, PNG, WEBP, GIF files are allowed.");
         return false;
     }
-    console.log(fileExtension + ' is allowed')
+    //console.log(fileExtension + ' is allowed')
     return true;
 }
 
@@ -20,7 +20,7 @@ function updateImageIcon(image){
     if (image) {
         fileInput = image
     } else {
-        console.log("No file dragged, using the traditional upload")
+        //console.log("No file dragged, using the traditional upload")
         fileInput = document.getElementById('file-input').files[0];
     }
 
@@ -51,10 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(form);
 
         if (document.getElementById('file-input').files[0] ) {
-            console.log("Image Uploaded")
+            //console.log("Image Uploaded")
             formData.append('image', document.getElementById('file-input').files[0]);
         }
-        console.log(formData);
+        //console.log(formData);
 
         try {
             const response = await fetch("/api/register/student", {  // Adjust endpoint if needed
@@ -126,6 +126,14 @@ document.getElementById("save-but").addEventListener("click", async function (){
         return;
     }
 
+    const phoneRegex = /^(0\d{9,10}|\+63\d{10})$/;
+    if (!phoneRegex.test(phone.value)) {
+    alert("Invalid phone number format. Use 09 XXXXXXXXX or +639 XXXXXXXXX.");
+    document.getElementById("save-but").disabled = false;
+    return;
+    }
+
+
     // Trigger the form submit event
     const form = document.querySelector("#registerForm");  // Replace with the actual form ID
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
@@ -146,6 +154,6 @@ document.getElementById("success-but").addEventListener('click', function(){
 });
 
 document.getElementById("upload-image-button").addEventListener('click', function(){
-    console.log("Upload Image Clicked.")
+    //console.log("Upload Image Clicked.")
     document.getElementById("file-input").click();
 });

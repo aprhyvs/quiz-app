@@ -6,12 +6,12 @@ var res;
 function checkFileType(file){
     const fileExtension = file.name.split('.').pop().toLowerCase();
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    console.log(fileExtension, allowedExtensions)
+    //console.log(fileExtension, allowedExtensions)
     if (!allowedExtensions.includes(fileExtension)) {
         console.error("Invalid file type. Only JPG, JPEG, PNG, WEBP, GIF files are allowed.");
         return false;
     }
-    console.log(fileExtension + ' is allowed')
+    //console.log(fileExtension + ' is allowed')
     return true;
 }
 
@@ -20,7 +20,7 @@ function updateImageIcon(image){
     if (image) {
         fileInput = image
     } else {
-        console.log("No file dragged, using the traditional upload")
+        //console.log("No file dragged, using the traditional upload")
         fileInput = document.getElementById('file-input').files[0];
     }
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             'student_id': studentID
         });
         if (res) {
-            console.log(res);  
+            //console.log(res);  
             fname.value = res.fname;
             mname.value = res.mname;
             lname.value = res.lname;
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             username.value = res.username;
             password.value = "";
             const fullURL = getAbsoluteMediaURL(res.profile_pic);
-            console.log(fullURL);
+            //console.log(fullURL);
             profile_pic.style.backgroundImage = `url("${fullURL}")`;
         }
     }
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         })
 
         if (res2){
-            console.log(document.getElementById('file-input').files[0])
+            //console.log(document.getElementById('file-input').files[0])
             document.getElementById("edit-form-pop").style.display = "none";
             document.getElementById("success-text").textContent = "Changes applied successfully";
             document.getElementById("success-form-pop").style.display = "flex";
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     document.getElementById("upload-image-button").addEventListener('click', function(){
-        console.log("Upload Image Clicked.")
+        //console.log("Upload Image Clicked.")
         document.getElementById("file-input").click();
     });
 

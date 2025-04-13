@@ -141,10 +141,10 @@ function displayListOfQuizzes(quizzes) {
 
     
     if (quizzes) {
-        console.log(quizzes);
+        //console.log(quizzes);
         
         if (!quizzes[0]) {
-            console.log("No more quiz yet");
+            //console.log("No more quiz yet");
             let statusText = "NONE";
             const statusElement = document.getElementById("recent-quiz-status");
             const statusParent = document.querySelector("#recent-quiz-status-parent");
@@ -187,7 +187,7 @@ async function uploadFile(file) {
         document.getElementById('uploaded-quiz-file-name').innerText = fileInput.name
     }
 
-    console.log("Uploading file...")
+    //console.log("Uploading file...")
     if (!fileInput) {
         console.error("No file specified!");
         return;
@@ -196,7 +196,7 @@ async function uploadFile(file) {
       alert('Please select a file first!');
       return;
     }
-    console.log("Legit uploading the file to stage 1")
+    //console.log("Legit uploading the file to stage 1")
     document.getElementById("uploadQuizModalLoading").style.display = "flex";
 
     setTimeout(() => {
@@ -207,7 +207,7 @@ async function uploadFile(file) {
     const stage1Data = await getDataFromUrlWithParams('/api/student/upload/stage1', {
         'file': fileInput
     });
-    console.log(stage1Data);
+    //console.log(stage1Data);
     if (!stage1Data) { 
         document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
         document.getElementById("uploadQuizModalError").style.display = "flex";
@@ -230,7 +230,7 @@ async function processFileStage2(data) {
         'quiz_id': quiz_id,
         'stage': upload_stage
     });
-    console.log(stage2Data);
+    //console.log(stage2Data);
     if (!stage2Data) {
         console.error("Stage 2 failed")
         document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
@@ -256,7 +256,7 @@ async function processFileStage3(data) {
         'quiz_id': quiz_id,
         'stage': upload_stage
     });
-        console.log(stage3Data);
+        //console.log(stage3Data);
         if (!stage3Data) {
             console.error("Stage 3 failed")
             document.getElementById("uploaded-quiz-error").innerHTML = "File upload failed";
@@ -286,8 +286,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("open-logout-form").addEventListener("click", async function (event) { 
         event.preventDefault(); 
         document.getElementById("logout-form-pop").style.display = "flex"; 
-        console.log(document.getElementById("logout-form-pop"));
-        console.log("Logout Button Clicked")
+        //console.log(document.getElementById("logout-form-pop"));
+        //console.log("Logout Button Clicked")
     });
     document.getElementById("logout-but").addEventListener("click", async function (event) { 
         event.preventDefault(); 
@@ -360,7 +360,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     uploadFileButton.addEventListener("click", function(){
-        console.log("Lesgoo!")
         document.getElementById('file-input').click();
         
     });

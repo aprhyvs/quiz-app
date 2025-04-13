@@ -337,6 +337,17 @@ async function getGameSettings(){
     return gameSettings
 }
 
+function convertToReadableText(numbersString){
+    let formatted = numbersString.replace(/,/g, ", ");
+    //console.log(formatted);  // Output: "3, 6, 9, 12, 15, 20"
+    return formatted;
+}
+
+function convertToNumbersString(readableText){
+    let compact = readableText.replace(/,\s*/g, ",");
+    return compact;
+}
+
 function refreshGameSettingsForm(settings) {
 
     document.querySelectorAll('input[name="timer"]').forEach(input => {
@@ -352,7 +363,7 @@ function refreshGameSettingsForm(settings) {
     });
 
     document.querySelectorAll('input[name="safe-level"]').forEach(input => {
-        if (input.nextElementSibling.textContent.trim() === settings.safe_level) {
+        if (input.nextElementSibling.textContent.trim() === convertToReadableText(settings.safe_level)) {
             input.checked = true;
         }
     });
@@ -372,7 +383,7 @@ function resetGameSettingsForm(){
     });
 
     document.querySelectorAll('input[name="safe-level"]').forEach(input => {
-        if (input.nextElementSibling.textContent.trim() === "3, 6, 9, 12, 15") {
+        if (input.nextElementSibling.textContent.trim() === "3, 6, 9, 12, 15, 20") {
             input.checked = true;
         }
     });
@@ -399,6 +410,7 @@ function collectFormData() {
     if (safeLevelSelected) {
         formData.safe_level = safeLevelSelected.nextElementSibling.textContent.trim();
     }
+    //console.log(formData);
     return formData;
 }
 
@@ -407,7 +419,7 @@ async function setGameSettings(){
     formData = collectFormData();
     const res = await getDataFromUrlWithParams('/api/admin/update/gamesettings', formData);
     if (res){   
-        console.log("Game settings updated successfully");
+        //console.log("Game settings updated successfully");
     }
 }
 
@@ -498,7 +510,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const ranking = await getDataFromUrl("/api/admin/get/rankings");
     if (ranking) {
-        console.log(ranking);
+        //console.log(ranking);
        displayRankings(ranking);
     }
 
@@ -536,7 +548,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const searchBox = document.getElementById('search-box'); 
     const handleInput = async (event) => {
-        console.log(`Searching for: ${event.target.value}`);
+        //console.log(`Searching for: ${event.target.value}`);
         // Add your logic for handling the input here, like sending a search request.
         const students = await getDataFromUrlWithParams('/api/admin/search/students' , {
             'search_term' : event.target.value

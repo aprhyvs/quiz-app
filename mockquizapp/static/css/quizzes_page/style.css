@@ -244,8 +244,8 @@ p.grey {
     width: 10%;
     padding: 0.25em;
     background-color: var(--primary);
+    color: var(--background);
     border-radius: 0.5em;
-    color: var(--button-fg);
     transition: width 0.5s ease-in-out;
 }
 
