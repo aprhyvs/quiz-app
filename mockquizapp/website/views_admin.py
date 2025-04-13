@@ -49,6 +49,9 @@ def delete_student(request):
             return JsonResponse({"error": "Student ID not provided"}, status=400)
         
         student = StudentData.objects.filter(id=student_id).first()
+        verification = VerificationData.objects.filter(student_id=student.pk).first() 
+        if verification:
+            verification.delete()
         if not student:
             return JsonResponse({"error": "Student not found"}, status=404)
          
