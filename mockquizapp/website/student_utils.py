@@ -142,7 +142,7 @@ def get_monthly_quizzes_taken_for_student(student):
 
 def get_weekly_rankings_student() -> list:
     # Get the current date and calculate the start of the week (Monday)
-    today = now().date()
+    today = localtime(now()).date()
     start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
     end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
 
@@ -175,7 +175,7 @@ def get_weekly_rankings_student() -> list:
     return rankings
 
 def get_monthly_rankings_student() -> list: 
-    current_month = now().month
+    current_month = localtime(now()).month
     
     # Filter QuizData for the current month
     monthly_data = QuizData.objects.filter(
@@ -220,10 +220,10 @@ def get_student_rank(student):
     if leaderboards is None:
         return None
     rankings = leaderboards['rankings']
-    for i, ranking in enumerate(rankings):
+    for ranking in rankings:
         if ranking['id'] == student.pk:
             return ranking['rank']
-        return None
+        
     return None
 
 # def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):
