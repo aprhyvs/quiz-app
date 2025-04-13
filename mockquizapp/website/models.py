@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
+def local_timezone():
+    return timezone.localtime(timezone.now())
 
 class StudentData(models.Model):
     fname = models.CharField(max_length=50 , default="")
@@ -14,7 +16,7 @@ class StudentData(models.Model):
     admin_id = models.IntegerField(blank=True, default=None, null=True)
     username = models.CharField(max_length=50 , default="")
     password = models.CharField(max_length=50  , default="")
-    created_at = models.DateTimeField( default=timezone.now)
+    created_at = models.DateTimeField( default=local_timezone)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True, default=None)
     is_verified = models.BooleanField( default=False)
     account_id = models.IntegerField( blank=True, default=None, null=True)
@@ -43,7 +45,7 @@ class StudentData(models.Model):
 class AdminData(models.Model):
     username = models.CharField(max_length=50 , default="")
     password = models.CharField(max_length=50  , default="")
-    created_at = models.DateTimeField( default=timezone.now)
+    created_at = models.DateTimeField( default=local_timezone)
     timer_countdown = models.IntegerField(default=25)
     leaderboard_reset = models.CharField(
         max_length=50 , 
@@ -82,7 +84,7 @@ class QuizData(models.Model):
     number_of_correct = models.IntegerField(default=0)
     number_of_wrong = models.IntegerField(default=0)
     student_id = models.IntegerField(blank=True, default=None, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField( default=local_timezone)
     is_answered = models.BooleanField(default=False)
     number_of_answered_questions = models.IntegerField(default=0)
     quiz_title = models.CharField(max_length=50 , default="")
@@ -195,7 +197,7 @@ class QuizData(models.Model):
 class VerificationData(models.Model):
     student_id = models.IntegerField(blank=True, default=None, null=True)
     verification_code = models.CharField(max_length=50 , default="")
-    created_at = models.DateTimeField( default=timezone.now)
+    created_at = models.DateTimeField( default=local_timezone)
 
     def __str__(self):
         return f"Verification: {self.student_id}"

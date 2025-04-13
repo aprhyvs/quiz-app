@@ -142,6 +142,7 @@ def register_student(request):
             email=student_data['gmail']
         )
         
+        
         studentDataObject.account_id = user.pk # Connection to its USER account
         studentDataObject.save()
         
