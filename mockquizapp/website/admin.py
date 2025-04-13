@@ -5,4 +5,6 @@ from .models import *
 admin.site.register(AdminData)
 admin.site.register(StudentData)
 admin.site.register(QuizData)
+admin.site.register(VerificationData)
+
 
