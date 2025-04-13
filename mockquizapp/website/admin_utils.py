@@ -4,12 +4,12 @@ from .models import QuizData, StudentData
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.db.models import Count 
 from django.db.models import Sum
-from django.utils.timezone import now, timedelta
+from django.utils.timezone import now, timedelta, localtime
 
 
 def get_quiz_count_per_month_for_year():
     # Automatically get the current year
-    current_year = now().year
+    current_year = localtime(now()).date()  # Ensure it uses the local timezone
 
     # Prepopulate dictionary with all months set to 0
     months_with_zero = {month: 0 for month in range(1, 13)}  # 1 to 12 for January to December
@@ -42,7 +42,7 @@ def get_quiz_count_per_month_for_year():
 
 def get_weekly_rankings() -> list:
     # Get the current date and calculate the start of the week (Monday)
-    today = now().date()
+    today = localtime(now()).date()
     start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
     end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
 
@@ -69,7 +69,7 @@ def get_weekly_rankings() -> list:
     return rankings
 
 def get_monthly_rankings() -> list: 
-    current_month = now().month
+    current_month = localtime(now()).month
     
     # Filter QuizData for the current month
     monthly_data = QuizData.objects.filter(
@@ -91,7 +91,7 @@ def get_monthly_rankings() -> list:
  
 def get_yearly_rankings():
     
-    current_year = now().year
+    current_year = localtime(now()).year
     
     # Filter QuizData for the current year
     yearly_data = QuizData.objects.filter(

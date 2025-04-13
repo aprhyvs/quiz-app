@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
-from django.utils.timezone import now, timedelta
+from django.utils.timezone import now, timedelta, localtime
 
 
 from .models import *
@@ -59,7 +59,8 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         studentData['phone'] = student.phone
         studentData['admin_id'] = student.admin_id
         studentData['username'] = student.username
-        studentData['created_at'] = student.created_at
+        # studentData['created_at'] = student.created_at
+        studentData['created_at'] = localtime(student.created_at)
         studentData['profile_pic'] = student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
     
         stats = {}

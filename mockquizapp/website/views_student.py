@@ -46,7 +46,7 @@ def get_student_data(request):
         studentData['phone'] = student.phone
         studentData['admin_id'] = student.admin_id
         studentData['username'] = student.username
-        studentData['created_at'] = student.created_at
+        studentData['created_at'] = localtime(student.created_at)
 
         return JsonResponse({"studentData": studentData}, status=200)
 

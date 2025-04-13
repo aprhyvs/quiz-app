@@ -25,7 +25,7 @@ class StudentData(models.Model):
         return f" {self.pk}. Student: {self.fname} {self.mname} {self.lname}"
     
     def get_data(self) -> dict:
-        return {
+        data = {
             'fname': self.fname,
             'mname' : self.mname,
             'lname': self.lname,
@@ -36,10 +36,13 @@ class StudentData(models.Model):
             'username': self.username, 
             'school': self.school,
             'id': self.pk,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
+            # 'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
             'profile_pic': self.profile_pic.url if self.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
             'is_verified': self.is_verified
         }
+        local_created_at = timezone.localtime(self.created_at)
+        data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
+        return data
 
 
 class AdminData(models.Model):
@@ -176,11 +179,11 @@ class QuizData(models.Model):
         
     
     def get_data(self) -> dict:
-        return {
+        data = {
             'number_of_correct': self.number_of_correct,
             'number_of_wrong': self.number_of_wrong,
             'student_id': self.student_id,
-            'created_at': self.created_at,
+            # 'created_at': self.created_at,
             'questions': self.questions,
             'id': self.pk,
             'is_answered': self.is_answered,
@@ -191,6 +194,11 @@ class QuizData(models.Model):
             'raw_file_content': self.raw_file_content,
             'file_ext': self.file_ext
         }
+        
+        local_created_at = timezone.localtime(self.created_at)
+        data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
+        
+        return data
     
 
 
