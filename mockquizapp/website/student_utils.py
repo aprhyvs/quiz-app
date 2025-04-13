@@ -162,6 +162,7 @@ def get_weekly_rankings_student() -> list:
         if student is None:
             continue
         rankings.append({
+            'id' : student.pk,
             'rank': rank,
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
@@ -185,9 +186,13 @@ def get_monthly_rankings_student() -> list:
     ).order_by('-total_score')#[:5]  # Order by highest score
     # Add student details to the rankings
     rankings = []
-    for data in monthly_data:
+    for rank, data in enumerate(monthly_data, start=1):
         student = StudentData.objects.filter(id=data['student_id']).first()
+        if student is None:
+            continue
         rankings.append({
+            'id' : student.pk,
+            'rank': rank,
             'student_name': f"{student.fname} {student.lname}" if student else "Unknown",
             'total_score': data['total_score'],
             'total_quizzes': get_total_quizzes_for_student(student),
@@ -216,8 +221,8 @@ def get_student_rank(student):
         return None
     rankings = leaderboards['rankings']
     for i, ranking in enumerate(rankings):
-        if ranking['student_name'] == f"{student.fname} {student.lname}":
-            return i + 1
+        if ranking['id'] == student.pk:
+            return ranking['rank']
         return None
     return None
 
