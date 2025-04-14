@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
                 correctAnswers[quizMonth] += quiz.number_of_correct;
                 wrongAnswers[quizMonth] += quiz.number_of_wrong;
+                console.log(quizMonth);
             }); 
         }
 
@@ -304,6 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
         graphData.forEach(quiz => {
             const quizMonth = new Date(quiz.created_at).getMonth(); // Get the month (0 = Jan, 11 = Dec)
             quizzesTaken[quizMonth]++; // Increment the count for that month
+            console.log(quizMonth);
         });
     }
 
