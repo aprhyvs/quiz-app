@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const recentQuizData = quizData?.quizzes.length > 0 ? quizData?.quizzes[0] : null;
         displayMostRecentQuiz(recentQuizData);
         displayPassedAndFailedQuizzes(quizData.quizzes);
+        console.log(quizData.quizzes);
         showAnswersGraph(quizData.quizzes);
         showQuizzesTakenGraph(quizData.quizzes);
     })
