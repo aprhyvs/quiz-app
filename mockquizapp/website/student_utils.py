@@ -143,9 +143,10 @@ def get_monthly_quizzes_taken_for_student(student):
 def get_weekly_rankings_student() -> list:
     # Get the current date and calculate the start of the week (Monday)
     today = localtime(now()).date()
+    print("today: ", today)
     start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
     end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
-
+    print("start of week: ", start_of_week, "end of week: ", end_of_week)
     # Filter QuizData for the current week
     weekly_data = QuizData.objects.filter(
         is_answered = True,
@@ -207,6 +208,7 @@ def get_student_leaderboards_util():
     # Get leaderboards type from admin data, use the right function to get correct leaderboards
     data = {}
     leaderboard_type = AdminData.objects.first().leaderboard_reset
+    print("leaderboard Type: ", leaderboard_type)
     if leaderboard_type == "weekly":
         data['type'] = "weekly"
         data['rankings'] = get_weekly_rankings_student()
