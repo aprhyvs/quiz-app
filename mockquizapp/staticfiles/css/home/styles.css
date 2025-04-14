@@ -1,0 +1,165 @@
+/* hero section */
+
+main {
+    background-color: var(--background);
+}
+
+.hero {
+    background-color: var(--background);
+    color: var(--text);
+    display: flex;
+    width: 90%;
+    padding: 4em 2em;
+    margin: 0 auto;
+}
+
+.hero-left {
+    width: 55%;
+}
+
+.hero-right {
+    width: 45%;
+    max-width: 640px;
+    min-height: 480px;
+    margin-right: auto;
+}
+
+/* hero-left */
+
+.hero-left h1{
+    font-size: 2rem;
+    font-size: clamp(2rem, 1.6rem + 2vw, 4rem);
+    margin: 0.75em 0;
+}
+
+.hero-left p{
+    font-weight: 300;
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.8rem + 1vw, 2rem);
+    margin: 1em 0;
+    padding-right: 2em;
+}
+
+/* hero-right */
+
+.hero-right {
+    background-image: url("Online\ test-bro.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* information-section */
+
+.info {
+    color: var(--text);
+    width: 100%;
+    background-color: var(--secondary);
+}
+
+.info-wrapper {
+    width: 90%;
+    padding: 4em 2em;
+    margin: 0 auto;
+}
+
+.info h1{
+    font-size: 3rem;
+    font-size: clamp(3rem, 2.8rem + 1vw, 4rem);
+    margin: 0.5em 0;
+    text-align: center;
+}
+
+.info-cards {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 1em;
+    text-align: center;
+}
+
+.info-cards h3{
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+    margin: 1em 0;
+}
+
+.info-cards p {
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    font-weight: 300;
+    margin: 0 1em;
+    line-height: 1.5em;
+}
+
+.card {
+    background-color: var(--background);
+    width: 30%;
+    max-width: 480px;
+    padding: 2em;
+    border-radius: 1em;
+}
+
+/* call-to-action */
+
+.cta {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding: 4em 2em;
+    margin: 0 auto;
+}
+
+.cta-wrapper {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--cta-blue);
+    padding: 4em 3em;
+    border-radius: 1em;
+}
+
+.cta-left {
+    width: 70%;
+    padding-right: 8em;
+}
+
+.cta-right {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cta h4 {
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+    color: var(--background);
+}
+
+.cta p {
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    color: var(--background);
+}
+
+.cta button {
+    padding: 0.5em 2em;
+    background: none;
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    border: 2px solid var(--background);
+    border-radius: 1rem;
+    color: var(--background);
+    cursor: pointer;
+}
+
+/* footer */
+
+.footer {
+    padding: 2em;
+    text-align: center;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+    color: var(--background);
+    background-color: var(--footer);
+}

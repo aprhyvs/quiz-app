@@ -1,0 +1,280 @@
+/* body */
+
+body {
+    background-color: var(--secondary)
+}
+
+/* profile-card */
+
+.profile-card {
+    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-card-wrapper {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.profile-card-content {
+    display: flex;
+    gap: 1em;
+}
+
+.profile-pic {
+    background-color: var(--primary);
+    min-width: 160px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 1;
+}
+
+.profile-text > h3 {
+    padding: 0.5em;
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+}
+
+.ranking-card {
+    border: 2px solid green;
+    flex: 1;
+    max-width: 240px;
+    border: 2px solid var(--outline);
+    border-radius: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.correct-wrong-bar {
+    display: flex;
+    border-radius: 1em;
+    border: 2px solid var(--outline);
+    overflow: hidden; /* Ensures smooth rounding */
+    width: 100%; /* Ensures full-width scaling */
+
+}
+
+.correct-bar,
+.wrong-bar {
+    padding: 1em;
+    color: var(--background);
+    text-align: center;
+    transition: width 0.5s ease-in-out; /* Smooth animation */
+    white-space: nowrap; /* Prevents text wrapping */
+}
+
+.correct-bar {
+    background-color: var(--green);
+    border-top-left-radius: 0.9em;
+    border-bottom-left-radius: 0.9em;
+}
+
+.wrong-bar {
+    background-color: var(--red);
+    border-top-right-radius: 0.9em;
+    border-bottom-right-radius: 0.9em;
+}
+
+/* dashboard */
+
+.dashboard {
+    width: 90%;
+    padding: 4em 2em;
+    padding-bottom: 0;
+    margin: 2em auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.wrapper:not(:last-child) { 
+    margin-bottom: 1.5em;
+}
+
+.wrapper h3 {
+    margin-bottom: 1em
+}
+
+.card-small,
+.card-large,
+.profile-card {
+    color: var(--text);
+    background-color: var(--background);
+    padding: 2em;
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+}
+
+.card-small {
+    width:24.3%;
+    max-width: 450px;
+}
+
+.total-quizzes-taken p,
+.total-correct-answers p,
+.total-wrong-answers p{
+    font-size: 4rem;
+    text-align: center;
+}
+
+.text-stats{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 2em;
+}
+
+.text-stats h4 {
+    font-size: 2rem;
+}
+
+.text-stats p{
+    font-size: 1.5rem;
+}
+
+.text-stats.answers {
+    display: block; 
+    text-align: center; 
+}
+
+.most-recent-quiz p{
+    font-size: 1.5rem;
+    margin: 1em 0;
+    text-align: center;
+}
+
+.most-recent-quiz span{
+    font-weight: 700;
+}
+
+.most-recent-quiz button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+
+    color: var(--background);
+    font-weight: 400;
+    background-color: var(--primary);
+    border: none;
+}
+
+.card-large {
+    width: 49.5%;
+    max-height: 450px;  /* Prevents excessive stretching */
+    display: flex;
+    flex-direction: column; /* Ensures elements stack properly */
+}
+
+#monthlyChart,
+#quizzesChart {
+    max-width: 100%; /* Prevents stretching beyond parent */
+    min-height: 300px; /* Fixes height */
+}
+
+/* quiz */
+
+.quiz {
+    width: 90%;
+    padding: 4em 2em;
+    margin: 2em auto;
+}
+
+.wrapper-quiz {
+    display: flex;
+    justify-content: space-between;
+    padding: 2em 4em;
+    background: var(--background);
+    border: 2px solid var(--outline);
+    border-radius: 16px;
+    margin-bottom: 2em; 
+}
+
+/* upload-quiz-modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.upload-box {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensures content is inside the SVG */
+.upload-content {
+    position: absolute;
+    text-align: center;
+}
+
+.upload-content button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+    display: block;
+    margin: 1em auto;
+    cursor: pointer;
+
+    color: var(--background);
+    font-weight: 400;
+    background-color: var(--primary);
+    border: none;
+}
+
+.upload-content svg {
+    padding: 1em;
+}
+
+.upload-content h2 {
+    font-size: 30px;
+    margin: 0.5em 0;
+}
+
+.upload-content p {
+    font-size: 24px;
+    margin: 0.5em 0;
+}
+
+#grey {
+    font-size: 16px;
+    color: color-mix(in srgb, var(--text) 80%, white 60%);
+
+}
+
+.modal-content {
+    background-color: var(--background);
+    position: absolute;  /* center of screen */
+    top: 50%;  
+    left: 50%;  
+    transform: translate(-50%, -50%);
+    padding: 2em;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 8px;
+}

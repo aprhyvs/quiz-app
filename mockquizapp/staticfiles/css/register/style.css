@@ -1,0 +1,173 @@
+/* body */
+body {
+    background-color: var(--secondary);
+}
+
+/* registers */
+.wrapper {
+    margin: 0 auto;
+    background-color: var(--background);
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+    padding: 2em;
+    max-width: 1200px;
+    margin-bottom: 2em;
+}
+
+.wrapper h1 {
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2.5rem);
+}
+
+.wrapper form {
+    color: var(--text);
+}
+
+.add-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em auto;
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 8em;
+    width: 15%;
+    max-width: 160px;
+    min-height: 160px;  
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.add-image button {
+    color: var(--outline);
+    border: none;
+    background: none;
+}
+
+.add-image button p {
+    color: var(--background);
+    font-size: 2rem;
+}
+
+.wrapper label {
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 0.5em 0;
+}
+
+/* fname - lname */
+.name-field {
+    display: flex;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+.name-group {
+    display: flex;
+    flex-direction: column; 
+    flex-grow: 1;
+    max-width: 360px; 
+}
+
+.name-field input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* school - password */
+.detail-field {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    width: 100%;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column; 
+    flex: 1 1 calc(50% - 20px); /* Each input takes half the row */
+    max-width: 550px; 
+    min-width: 300px;
+}
+
+.detail-group input {
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* input */
+.wrapper input {
+    color: var(--text);
+    background-color: var(--background);
+    font-family: "Roboto";
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.975rem + 0.125vw, 1.125rem);
+    font-weight: 300;
+    border-radius: 8px;
+    border: 2px solid var(--outline);
+    margin-bottom: 1em;
+    padding: 0.5em;
+}
+
+.wrapper label {
+    color: var(--text);   
+}
+
+.wrapper input:focus::placeholder {
+    color: #bbb9b9;
+}
+
+.wrapper input:focus {
+    outline: none;
+    border: #666565 2px solid;
+}
+
+.wrapper button {
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    padding: 0.5em 2em;
+    margin: 0.5em auto;
+    cursor: pointer;
+}
+
+.register{
+    display: flex;
+    color: var(--background);
+    font-weight: 400;
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+/* modals */
+.pop-up {
+    color: var(--text);
+}
+
+#save-but{
+    background: var(--primary);
+    color: var(--background);
+    cursor: pointer; 
+}
+
+#success-but{
+    background: var(--green);
+    color: var(--background);
+    cursor: pointer; 
+}
+
+#error-but{
+    cursor: pointer; 
+    background-color: var(--primary); 
+    color: var(--background);
+}
+
+#error-form-pop h1{
+    color: var(--red);
+}

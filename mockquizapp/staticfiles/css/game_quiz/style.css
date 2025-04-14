@@ -1,0 +1,476 @@
+html, body {
+    overflow: hidden;
+}
+
+#backgroundVideo {
+    background-color: black;
+}
+
+.background-wrapper{
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+
+} 
+
+.background-webm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    min-width: 100%;
+    object-fit: cover;
+}
+
+/* start */
+
+.start {
+    text-align: center;
+    color: #FCFCFC;
+    width: 100%;
+    font-size: 32px;
+}
+
+/* question - choices */
+
+.question-wrapper {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 1em;
+}
+
+.question svg {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.question-text {
+    width: 80%;
+    color: #FCFCFC;
+    font-size: 24px;
+    margin: 0 auto;
+    padding: 1em;
+    min-height: 250px;
+    max-width: 880px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 0;
+}
+
+.choices svg {
+    cursor: pointer;
+    flex-basis: calc(50% - 10px); /* Each block will take up 50% of the container width minus the gap */
+}
+
+.choices svg:hover path {
+    fill: rgb(66, 91, 119); 
+    stroke: #5f8cdf; 
+}
+
+.flash-yellow path {
+    fill: var(--gold); 
+    transition: fill 0.3s ease;
+}
+
+.flash-red path {
+    fill: var(--red); 
+    transition: fill 0.3s ease;
+}
+
+.flash-green path {
+    fill: var(--green);
+    transition: fill 0.3s ease;
+}
+
+.modal-flash-red {
+    background-color: var(--red);
+    transition: 0.3s ease;
+}
+
+.modal-flash-green {
+    background-color: var(--green);
+    transition: 0.3s ease;
+}
+
+.modal-flash-yellow {
+    background-color: var(--gold);
+    transition: 0.3s ease;
+}
+
+.flash-gradient {
+    background: linear-gradient(#0A4DA4, #002157);
+    transition: 0.3s ease;
+} 
+
+.safe-level-text-indicator{
+    color: var(--gold);
+}
+
+
+
+.multiple-choice {
+    display: flex;
+    gap: 0.25em;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+}
+
+.letter {
+    color: #D9A90E;
+}
+
+.answer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: #FCFCFC;
+    width: 100%;
+}
+
+/* text scroll */
+.choice-text {
+    display: inline-block; /* Make sure the text inside is inline and doesn't stretch */
+    white-space: nowrap;
+}
+
+@keyframes scrollText {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-60%);
+    }
+    
+}
+
+.no-scroll {
+    animation: none; /* Remove animation when text is short */
+}
+
+.scroll-text:hover .choice-text {
+    animation: scrollText 7s linear 2 alternate; /* Infinite, alternating forward and reverse */
+    will-change: transform; /* Optimize performance */
+}
+
+/* stats panel */
+.stats-panel {
+    background-image: linear-gradient(#3D68B8, #002157);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5em 3em;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+/* stats-left */
+.power-ups {
+    display: flex;
+    gap: 1em;
+}
+.power-ups button {
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+
+    padding: 0.5em 1.25em;
+    border: 4px solid #FCFCFC;
+    border-radius: 1rem;
+    background: #0F0A0A;
+    color: #FCFCFC;
+    cursor: pointer;
+}
+
+/* stats-right */
+.level-info {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    gap: 1em;
+    border: 4px solid #FCFCFC;
+    border-radius: 1rem;
+    background: #0F0A0A;
+    cursor: pointer;
+}
+
+.q-level,
+.points {
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+}
+
+.q-level {
+    min-width: 160px;
+    color: #D9A90E;
+}
+
+.points {
+    min-width: 160px;
+    text-align: right;
+
+}
+
+
+.total-points {
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+    color: #FCFCFC;
+    min-width: 160px;
+    text-align: right;
+
+}
+
+.q-worth {
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+    color: #FCFCFC;
+    min-width: 160px;
+    text-align: right;
+
+}
+
+/* modal */
+
+.pop-up h1,
+.pop-up h6,
+.pop-up button {
+    color: #FCFCFC;
+}
+
+.ingame-settings-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.ingame-settings-content {
+    background-color: #0F0A0A;
+    padding: 2em 0;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #FCFCFC;
+}
+
+.ingame-settings-content h1 {
+    margin-bottom: 0.75em;
+}
+
+/* The switch container */
+.switch-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin: 1em 2em;
+}
+
+.switch-wrapper div:first-child {
+    width: 60px
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+/* toggle styling */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E55977;
+    border-radius: 24px;
+    transition: 0.4s;
+}
+  
+/* white circle */
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+  
+/* animation */
+input:checked + .slider {
+    background-color: #43ACAC;
+}
+  
+input:checked + .slider::before {
+    transform: translateX(26px);
+}
+
+.ingame-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 2em;
+    gap: 1em;
+}
+
+.ingame-buttons button:nth-child(1),
+.ingame-buttons button:nth-child(2) {
+    flex: 1 1 calc(40% - 5px); /* Adjust for gap */
+}
+
+.ingame-buttons button:nth-child(3) {
+    background-image: linear-gradient(#3D68B8, #002157);
+    border: none;
+    border-radius: 1em;
+    padding: 1em 4em;
+    font-size: 16px;
+    color: #FCFCFC;
+    flex: 0 1 50%;
+    margin: 0 auto;
+}
+
+#cancel-ingame-but,
+#confirm-ingame-but {
+    font-size: 16px;
+    color: #FCFCFC;
+    border: none;
+    border-radius: 1em;
+    padding: 1em 4em;
+}
+
+#cancel-ingame-but {
+    background-color: #E55977;
+    cursor: pointer;
+}
+
+#confirm-ingame-but {
+    background-color: #43ACAC;
+    cursor: pointer;
+}
+
+/* about-game */
+
+.about-game {
+    background-color: #0F0A0A;
+    text-align: center;
+    padding: 0 2em;
+}
+
+.about-game p,
+.about-game h2 {
+    color: #FCFCFC;
+    margin-bottom: 1em;
+}
+
+.about-game p {
+    padding: 0 2em;
+}
+
+/* modal */
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;
+    z-index: 1000; /* Make sure it's on top */
+    background-color: rgb(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #0F0A0A;
+    padding: 2em;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    overflow: auto;
+
+    color: #FCFCFC;
+    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 1.4rem + 0.5vw, 2rem);
+}
+
+.level-point {
+    /* background-color: #002157; for past levels */
+    border-radius: 1em;
+    padding: 16px;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.level,
+.points {
+    flex: 1;
+    text-align: center;
+}
+
+.pop-up-content {
+    background-color: #0F0A0A;
+    border: none;
+    border-radius: 1em;
+}
+
+.pop-up-content button {
+    font-family: 'Roboto';
+    font-weight: 700;
+}
+
+.pop-up-content button:first-child {
+    background: none;
+}
+
+.pop-up-content button:nth-child(2) {
+    background-image: linear-gradient(to left, #3D68B8, #002157);
+}
+
+/* media queries */
+@media (min-aspect-ratio:16/9) {
+    .background-webm{
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio:16/9) {
+    .background-webm{
+        width: auto;
+        height: 100%;
+    }
+}

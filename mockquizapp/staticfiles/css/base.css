@@ -1,0 +1,179 @@
+/* color theme */
+:root[data-theme="light"] {
+  --text: #0F0A0A;        /* fonts */
+  --text-hover: #0F0A0A25; 
+  --background: #FCFCFC;  /* used for background, wrappers, fonts*/
+  --primary: #002157;     /* main color */
+  --secondary: #EFEFF0;   /* background in dashboard */
+  --outline: #C1BFBF;     /* outline for wrappers */
+  --green: #43ACAC;       /* positive */
+  --red: #E55977;         /* negative */
+  --dark-red: #B3261E;
+  --cta-blue: #558EEA;
+  --gold: #D9A90E;
+  --footer: #2B3341;
+}
+.darkmode{
+  --text: #f5f0f0;
+  --text-hover: #f5f0f025;
+  --background: #37373E; /* #030303; */
+  --primary: #a8caff;
+  --secondary:  #28282D; /* #0f0f10; */
+  --outline: #504d4d; /* #413e3e; */
+  --green: #52bcbc;
+  --red: #a81a39;
+  --dark-red: #e1544c;
+  --cta-blue: #558EEA;
+  --gold: #f1c227;
+  --footer: #bfc7d4;
+}
+
+/* fonts */
+.raleway-regular {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.raleway-bold {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.roboto-light{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.roboto-regular{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.roboto-semibold{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+  
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.roboto-extrabold {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+  
+.roboto-black {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+  
+/* modals */
+.pop-up{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.pop-up-content{  
+  background: var(--background);
+  border: 2px solid var(--outline);/*rgba(15, 10, 10, 0.25);*/
+  box-sizing: border-box; 
+  width: 500px;
+  height: fit-content;
+  padding: 2em 0;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pop-up-content h1{
+  color: var(--text);
+  padding: 0;
+  margin: 20px 0; 
+  text-align: center;  
+  font-size: 35px;
+  line-height: 56px;
+  text-align: center; 
+}
+
+.pop-up-content h6{
+  color: var(--text);
+  padding: 0 20px;
+  margin: 20px 0; 
+  text-align: center;   
+  line-height: 35px;
+  text-align: center; 
+  font-size: 25px;   
+}
+
+.pop-up-but{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+  padding-top: 34px;
+}
+
+.pop-up-but button{  
+  background-color: var(--background);
+  color: var(--text);
+  width: 178px;
+  height: 34px;  
+  border-radius: 4px;   
+  font-size: 16px; 
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+#logout-but {  
+  background: var(--dark-red);
+  color: var(--background);
+}
+
+
+#understand-but {  
+  background: var(--cta-blue);
+  color: var(--background);
+  cursor: pointer;
+}
