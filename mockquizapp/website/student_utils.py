@@ -172,7 +172,7 @@ def get_weekly_rankings_student() -> list:
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
             'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
-
+    print(rankings)
     return rankings
 
 def get_monthly_rankings_student() -> list: 
@@ -201,6 +201,7 @@ def get_monthly_rankings_student() -> list:
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
             'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
+    print(rankings)
     return rankings
  
 
@@ -224,6 +225,7 @@ def get_student_rank(student):
         return None
     rankings = leaderboards['rankings']
     for ranking in rankings:
+        print("is " , ranking['id'], " equal to ", student.pk, "?")
         if ranking['id'] == student.pk:
             print(ranking['rank'])
             return ranking['rank']
