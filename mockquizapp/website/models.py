@@ -196,8 +196,8 @@ class QuizData(models.Model):
         }
         
         local_created_at = timezone.localtime(self.created_at)
-        data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
-        
+        #data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
+        data['created_at'] = local_created_at.strftime('%Y-%m-%d %I:%M:%S %p')
         return data
     
 
