@@ -517,6 +517,7 @@ async function showAnswerEffects(choice, current_question) {
     }else{
         displayTimer(false);
         resetTimer();
+        stopTimer(true);
         nextQuestion(current_question);
 
         
