@@ -106,7 +106,7 @@ function checkAndAnimateText() {
             const parentElement = element.closest('.answer');
             const charCount = element.innerText.trim().length;
 
-            if (charCount >= 80) { 
+            if (charCount >= 29) { 
                 parentElement.classList.add('scroll-text');
             } else {
                 parentElement.classList.remove('scroll-text');
