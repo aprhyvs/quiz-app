@@ -151,7 +151,7 @@ html, body {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-60%);
+        transform: translateX(-80%);
     }
     
 }

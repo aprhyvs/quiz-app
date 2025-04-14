@@ -99,34 +99,30 @@ function displayIngameSettings(state){
 }
 
 function checkAndAnimateText() {
-    // Select multiple elements by their IDs
-    const elements = ['choice-A', 'choice-B', 'choice-C', 'choice-D']; // Add your IDs here
+    const elements = ['choice-A', 'choice-B', 'choice-C', 'choice-D'];
     elements.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
             const parentElement = element.closest('.answer');
-            const wordCount = element.innerText.split(' ').length;
+            const charCount = element.innerText.trim().length;
 
-            // Apply the class based on word count
-            if (wordCount >= 8) {
-                parentElement.classList.add('scroll-text'); // Add scroll-text class if word count >= 8
+            if (charCount >= 80) { 
+                parentElement.classList.add('scroll-text');
             } else {
-                parentElement.classList.remove('scroll-text'); // Remove scroll-text class if word count < 8
+                parentElement.classList.remove('scroll-text');
             }
         }
     });
 }
 
-// Call the function on window load and whenever the text changes
 window.onload = checkAndAnimateText;
 
-// Create the MutationObserver for each element
 const elementsToObserve = ['choice-A', 'choice-B', 'choice-C', 'choice-D'];
 elementsToObserve.forEach(id => {
     const element = document.getElementById(id);
     if (element) {
         const observer = new MutationObserver(checkAndAnimateText);
-        observer.observe(element, { childList: true, subtree: true });
+        observer.observe(element, { childList: true, subtree: true, characterData: true });
     }
 });
 
