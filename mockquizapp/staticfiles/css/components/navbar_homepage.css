@@ -1,0 +1,71 @@
+.navbar {
+    background-color: var(--background);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.25em 4.5em;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.left img {
+    width: 100%;
+    max-width: 64px;
+}
+
+.left h1 {
+    color: var(--text);
+    font-size: 2rem;
+    font-size: clamp(2rem, 1.8rem + 1vw, 3rem);
+}
+
+.left span {
+    color: var(--primary);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.right button:not(#theme-switch) {
+    min-width: 90px;
+    border-radius: 4px;
+    font-family: "Roboto";
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    font-weight: 500;
+    padding: 0.5em 2em;
+    cursor: pointer;
+}
+
+.login {
+    color: var(--primary);
+    background-color: var(--background);
+    border: 2px solid var(--primary);
+}
+
+.signup {
+    color: var(--background);
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.right svg {
+    color: var(--primary);
+}
+
+#theme-switch {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+#theme-switch svg{
+    pointer-events: auto;
+}

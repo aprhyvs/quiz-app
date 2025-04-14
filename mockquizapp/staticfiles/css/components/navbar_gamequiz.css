@@ -1,0 +1,51 @@
+.navbar {
+    padding: 2.25em 4.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left, .right {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1em; /* old 0.75em */
+}
+
+.navbar img {
+    width: 100%;
+    max-width: 64px;
+}
+
+.navbar h1 {
+    color: var(--text);
+    font-size: 2rem; /* old 32px */
+    font-size: clamp(2rem, 1.8rem + 1vw, 3rem);
+}
+
+.navbar span {
+    color: var(--primary);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.right svg {
+    cursor: pointer;
+    color: #FCFCFC;
+}
+
+/* timer */
+.timer {
+    color: #FCFCFC;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+}

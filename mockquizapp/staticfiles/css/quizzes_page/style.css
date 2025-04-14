@@ -1,0 +1,355 @@
+/* body */
+
+body {
+    background-color: var(--secondary);
+}
+
+/* dashboard */
+
+.dashboard {
+    width: 90%;
+    padding: 4em 2em;
+    margin: 2em auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.wrapper:not(:last-child) { 
+    margin-bottom: 1.5em;
+}
+
+.wrapper h3 {
+    margin-bottom: 1em;
+    color: var(--text);
+}
+
+.card-small,
+.card-large {
+    background-color: var(--background);
+    padding: 2em;
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+}
+
+.card-small {
+    width:23.3%;
+    max-width: 400px;
+    flex: 1 1 calc((100% - 3 * 1em) / 4); 
+}
+
+.total-quizzes-taken p,
+.total-correct-answers p,
+.total-wrong-answers p{
+    font-size: 4rem;
+    text-align: center;
+}
+
+.text-stats{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 2em;
+}
+
+.text-stats h4 {
+    font-size: 2rem;
+}
+
+.text-stats p{
+    font-size: 1.5rem;
+}
+
+.text-stats.answers {
+    display: block; 
+    text-align: center; 
+}
+
+.most-recent-quiz p {
+    font-size: 1.5rem;
+    margin: 1em 0;
+    text-align: center;
+    color: var(--text);
+}
+
+.most-recent-quiz span {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.most-recent-quiz button,
+.view-quiz-button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+
+    color: var(--background);
+    font-weight: 400;
+    background-color: var(--primary);
+    border: none;
+}
+
+.other-quiz p {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1em 0;
+    color: var(--text)
+}
+
+.other-quiz {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-large {
+    width: 49.5%;
+    max-height: 450px;  /* Prevents excessive stretching */
+    display: flex;
+    flex-direction: column; /* Ensures elements stack properly */
+}
+
+#monthlyChart,
+#quizzesChart {
+    max-width: 100%; /* Prevents stretching beyond parent */
+    min-height: 300px; /* Fixes height */
+}
+
+/* quiz */
+
+.quiz {
+    width: 90%;
+    padding: 4em 2em;
+    margin: 2em auto;
+}
+
+.wrapper-quiz {
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    padding: 2em 4em;
+    background: var(--background);
+    border: 2px solid var(--outline);
+    border-radius: 16px;
+    margin-bottom: 2em; 
+}
+
+.wrapper-quiz button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+
+    color: var(--background);
+    background-color: var(--primary);
+    border: none;
+    cursor: pointer;
+}
+
+/* upload-quiz-modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.upload-box {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-box svg {
+    color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+/* Ensures content is inside the SVG */
+.upload-content {
+    position: absolute;
+    text-align: center;
+}
+
+.upload-content button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+    display: block;
+    margin: 1em auto;
+    cursor: pointer;
+
+    color: var(--background);
+    font-weight: 400;
+    background-color: var(--primary);
+    border: none;
+}
+
+.upload-content svg {
+    color: var(--primary);
+    padding: 1em;
+}
+
+.upload-content h2,
+.upload-content p {
+    color: var(--text);
+    margin: 0.5em 0;
+}
+
+.upload-content h2 {
+    font-size: 30px;
+}
+
+.upload-content p {
+    font-size: 24px;
+}
+
+p.grey {
+    font-size: 16px;
+    color: color-mix(in srgb, var(--text) 80%, white 20%);
+
+}
+
+.modal-content {
+    background-color: var(--background);
+    position: absolute;  /* center of screen */
+    top: 50%;  
+    left: 50%;  
+    transform: translate(-50%, -50%);
+    padding: 2em;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.upload-bar {
+    width: 100%;
+    background-color: color-mix(in srgb, var(--primary) 50%, var(--background) 10%);
+    border-radius: 0.5em;
+}
+
+ 
+
+
+.upload-bar-content {
+    width: 10%;
+    padding: 0.25em;
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 0.5em;
+    transition: width 0.5s ease-in-out;
+}
+
+/* leaderboards */
+
+.wrapper-quiz svg {
+    width: 32px;
+}
+
+.wrapper-quiz button {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5em 2em;
+
+    color: var(--background);
+    background-color: var(--primary);
+    border: none;
+    cursor: pointer;
+}
+
+.wrapper-leaderboard {
+    color: var(--text);
+    padding: 2em 4em;
+    background: var(--background);
+    border: 2px solid var(--outline);
+    border-radius: 16px;
+    margin-bottom: 2em; 
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: start;
+    margin-bottom: 2em;
+}
+
+.leaderboard-header svg {
+    color: var(--text)
+}
+
+/* leaderboards - .leaderboard-table */
+
+.leaderboard-table-card {
+    display: flex;
+    padding: 0 3em;
+}
+
+.leaderboard-table-card svg {
+    width: 40px;
+    color: var(--text);
+}
+
+.student-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.leaderboard-table-card > div {
+    display: flex;
+    flex: 1 1 80px;
+    align-items: center;
+}
+
+.leaderboard-table-card > div:first-child {
+    min-width: 240px;
+    padding: 1em;
+    flex-grow: 3;
+    gap: 1em;
+}
+
+.rank {
+    font-size: 1.5rem;
+}
+
+.leaderboard-table-card > div:nth-child(2),
+.leaderboard-table-card > div:nth-child(3),
+.leaderboard-table-card > div:nth-child(4),
+.leaderboard-table-card > div:nth-child(5) {
+    justify-content: center;
+  
+}
+
+.leaderboard-table-card {
+    background-color: var(--secondary);
+    border-radius: 1em;
+}
+
+
+.leaderboard-table-content{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.card-top {
+    background: none;
+}
+
+
+/* Drag queen */
+.upload-box.dragover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px dashed var(--primary);
+}
