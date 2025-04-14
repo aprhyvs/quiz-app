@@ -143,10 +143,8 @@ def get_monthly_quizzes_taken_for_student(student):
 def get_weekly_rankings_student() -> list:
     # Get the current date and calculate the start of the week (Monday)
     today = localtime(now()).date()
-    print("today: ", today)
     start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
     end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
-    print("start of week: ", start_of_week, "end of week: ", end_of_week)
     # Filter QuizData for the current week
     weekly_data = QuizData.objects.filter(
         is_answered = True,
@@ -172,7 +170,6 @@ def get_weekly_rankings_student() -> list:
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
             'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
-    print(rankings)
     return rankings
 
 def get_monthly_rankings_student() -> list: 
@@ -201,7 +198,6 @@ def get_monthly_rankings_student() -> list:
             'total_wrong_answers': get_total_wrong_answers_for_student(student),
             'student_pic' : student.profile_pic.url if student.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
         })
-    print(rankings)
     return rankings
  
 
@@ -209,14 +205,12 @@ def get_student_leaderboards_util():
     # Get leaderboards type from admin data, use the right function to get correct leaderboards
     data = {}
     leaderboard_type = AdminData.objects.first().leaderboard_reset
-    print("leaderboard Type: ", leaderboard_type)
     if leaderboard_type == "weekly":
         data['type'] = "weekly"
         data['rankings'] = get_weekly_rankings_student()
     elif leaderboard_type == "monthly":
         data['type'] = "monthly"
         data['rankings'] = get_monthly_rankings_student()
-    print(data)
     return data
 
 def get_student_rank(student):
@@ -225,9 +219,7 @@ def get_student_rank(student):
         return None
     rankings = leaderboards['rankings']
     for ranking in rankings:
-        print("is " , ranking['id'], " equal to ", student.pk, "?")
         if ranking['id'] == student.pk:
-            print(ranking['rank'])
             return ranking['rank']
     return None
 
