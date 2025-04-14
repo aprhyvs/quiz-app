@@ -41,7 +41,8 @@ class StudentData(models.Model):
             'is_verified': self.is_verified
         }
         local_created_at = timezone.localtime(self.created_at)
-        data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
+        #data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
+        data['created_at'] = local_created_at.strftime('%Y-%m-%d %I:%M:%S %p')
         return data
 
 

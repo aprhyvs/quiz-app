@@ -9,8 +9,8 @@ from django.utils.timezone import now, timedelta, localtime
 
 def get_quiz_count_per_month_for_year():
     # Automatically get the current year
-    current_year = localtime(now()).date()  # Ensure it uses the local timezone
-
+    current_year = localtime(now()).year  # Ensure it uses the local timezone
+    
     # Prepopulate dictionary with all months set to 0
     months_with_zero = {month: 0 for month in range(1, 13)}  # 1 to 12 for January to December
 
