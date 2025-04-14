@@ -213,6 +213,7 @@ def get_student_leaderboards_util():
     elif leaderboard_type == "monthly":
         data['type'] = "monthly"
         data['rankings'] = get_monthly_rankings_student()
+    print(data)
     return data
 
 def get_student_rank(student):
@@ -222,8 +223,8 @@ def get_student_rank(student):
     rankings = leaderboards['rankings']
     for ranking in rankings:
         if ranking['id'] == student.pk:
+            print(ranking['rank'])
             return ranking['rank']
-        
     return None
 
 # def send_verification_email(user_email, verification_code , template , masbate_locker_email , subject, request):
