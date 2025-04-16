@@ -11,7 +11,7 @@ cohere_client = None
 
 try:
     import cohere
-    cohere_client = cohere.ClientV2("Syr2F0x4B8B77QnUdxBCB3ZI5doGaEDHmtGK8oII")
+    cohere_client = cohere.ClientV2("MiJzrWY2PJOJ3p5HjwcrLK1XbfUC3HnNzfR42hKu")
 except Exception as e:
     print(f"Error: {e}")
     
