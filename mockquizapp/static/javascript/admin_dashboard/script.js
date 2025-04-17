@@ -228,7 +228,7 @@ function displayRankings(rankingsData) {
             }
         }
         if (fourthRank) {
-            if (monthlyRankings.length > 3 && monthlyRankings[3]?.profile_pic) {
+            if (monthlyRankings.length > 3 ) {
                 
                 fourthRank.textContent = monthlyRankings[3]?.student_name || "Vacant";
                 if (monthlyRankings[3]?.profile_pic){
@@ -246,7 +246,7 @@ function displayRankings(rankingsData) {
             }
         }
         if (fifthRank) {
-            if (monthlyRankings.length > 4 && monthlyRankings[4]?.profile_pic) {
+            if (monthlyRankings.length > 4) {
                     
                 fifthRank.textContent = monthlyRankings[4]?.student_name || "Vacant"; 
                 if (monthlyRankings[4]?.profile_pic){
