@@ -20,6 +20,9 @@ class StudentData(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True, default=None)
     is_verified = models.BooleanField( default=False)
     account_id = models.IntegerField( blank=True, default=None, null=True)
+    age = models.IntegerField( blank=True, default=None, null=True)
+    school_attended = models.CharField(max_length=200 , default="")
+    course = models.CharField(max_length=200 , default="")
 
     def __str__(self):
         return f" {self.pk}. Student: {self.fname} {self.mname} {self.lname}"
@@ -38,7 +41,10 @@ class StudentData(models.Model):
             'id': self.pk,
             # 'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S %p'),  
             'profile_pic': self.profile_pic.url if self.profile_pic else None,  # If profile pic is not uploaded, return default picture URL
-            'is_verified': self.is_verified
+            'is_verified': self.is_verified,
+            'course': self.course,
+            'school_attended': self.school_attended,
+            'age': self.age
         }
         local_created_at = timezone.localtime(self.created_at)
         #data['created_at'] = local_created_at.strftime('%Y-%m-%d %H:%M:%S %p')
