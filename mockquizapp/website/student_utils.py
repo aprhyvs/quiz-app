@@ -55,6 +55,9 @@ def get_all_student_data_util(student): ## Returns all student data and stats
         studentData['lname'] = student.lname
         studentData['school'] = student.school
         studentData['address'] = student.address
+        studentData['course'] = student.course
+        studentData['school_attended'] = student.school_attended
+        studentData['age'] = student.age
         studentData['gmail'] = student.gmail
         studentData['phone'] = student.phone
         studentData['admin_id'] = student.admin_id

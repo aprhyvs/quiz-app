@@ -42,6 +42,9 @@ def get_student_data(request):
         studentData['lname'] = student.lname
         studentData['school'] = student.school
         studentData['address'] = student.address
+        studentData['course'] = student.course
+        studentData['school_attended'] = student.school_attended
+        studentData['age'] = student.age
         studentData['gmail'] = student.gmail
         studentData['phone'] = student.phone
         studentData['admin_id'] = student.admin_id
@@ -166,6 +169,9 @@ def update_student_data(request):
         lname = request.POST.get('lname', None)
         school = request.POST.get('school', None)
         address = request.POST.get('address', None)
+        course = request.POST.get('course', None)
+        school_attended = request.POST.get('school_attended', None)
+        age = request.POST.get('age', None)
         gmail = request.POST.get('gmail', None)
         phone = request.POST.get('phone', None)
         username = request.POST.get('username', None) 
@@ -183,11 +189,16 @@ def update_student_data(request):
             student.school = school
         if address:
             student.address = address
+        if course:
+            student.course = course
+        if school_attended:
+            student.school_attended = school_attended
+        if age:
+            student.age = age
         if gmail:
             student.gmail = gmail
         if phone:
             student.phone = phone
-        
         if fname:
             user.first_name =  fname
         if lname:

@@ -117,6 +117,12 @@ def register_student(request):
             student_data['school'] = input_data.get('school')
         if input_data.get('address', None):
             student_data['address'] = input_data.get('address')
+        if input_data.get('course', None):
+            student_data['course'] = input_data.get('course')
+        if input_data.get('school_attended', None):
+            student_data['school_attended'] = input_data.get('school_attended')
+        if input_data.get('age', None):
+            student_data['age'] = input_data.get('age')
         if input_data.get('gmail', None):
             if StudentData.objects.filter(gmail=input_data.get('gmail')).exists():
                 print("Gmail already exists!")
