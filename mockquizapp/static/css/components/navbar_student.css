@@ -25,9 +25,10 @@
 }
 
 .left img {
+    background: #FCFCFC;
     width: 100%;
     max-width: 40px;
-    border: 2.5px solid var(--background);
+    border: 2.5px solid #FCFCFC;
     border-radius: 1.5em;
 }
 

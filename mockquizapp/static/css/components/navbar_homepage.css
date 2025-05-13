@@ -13,8 +13,11 @@
 }
 
 .left img {
+    background: #FCFCFC;
     width: 100%;
     max-width: 64px;
+    border: 2.5px solid #FCFCFC;
+    border-radius: 2em;
 }
 
 .left h1 {
