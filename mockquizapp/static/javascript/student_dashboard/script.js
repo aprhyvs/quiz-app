@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const fullName = `${studentData.fname} ${studentData.mname} ${studentData.lname}`;
         document.getElementById('profile-name').textContent = fullName; 
         document.getElementById('profile-department').textContent = studentData.school;
-        document.getElementById('profile-address').textContent = studentData.address;
+        document.getElementById('profile-address').textContent = studentData.school_attended;
     
         // Calculate percentages
         function getPercentage(score, totalItems) {
