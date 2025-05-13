@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const fname = document.getElementById("fname");
     const mname = document.getElementById("mname");
     const lname = document.getElementById("lname");
+    const age = document.getElementById("age");
+    const course = document.getElementById("course");
     const gmail = document.getElementById("gmail");
     const school = document.getElementById("school");
     const school_attended = document.getElementById("school_attended");
@@ -77,6 +79,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             fname.value = res.fname;
             mname.value = res.mname;
             lname.value = res.lname;
+            age.value = res.age;
+            course.value = res.course;
             gmail.value = res.gmail;
             school.value = res.school;
             school_attended.value = res.school_attended;
@@ -91,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     setInterval(() =>
     {
-        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
+        if (!fname.value ||!mname.value ||!lname.value ||!age.value ||!course.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
             document.getElementById("register").disabled = true;
             document.getElementById("register").style.opacity = 0.5;
         } else {
@@ -105,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("register").addEventListener("click", async function (event){ 
         event.preventDefault();
         // Check if the input is valid
-        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
+        if (!fname.value ||!mname.value ||!lname.value ||!age.value ||!course.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
             alert("Please fill in all the required fields"); 
             return;
         }
@@ -122,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("save-but").disabled = true;
         
         // Check if the input is valid
-        if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value) {
+        if (!fname.value ||!mname.value ||!lname.value ||!age.value ||!course.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value) {
             alert("Please fill in all the required fields");
             document.getElementById("save-but").disabled = false;
             return;
@@ -133,6 +137,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             'fname': fname.value,
             'mname': mname.value,
             'lname': lname.value,
+            'age': age.value,
+            'course': course.value,
             'gmail': gmail.value,
             'school': school.value,
             'school_attended': school_attended.value,

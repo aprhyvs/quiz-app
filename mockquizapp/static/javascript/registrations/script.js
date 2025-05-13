@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("register").addEventListener("click", async function (event){ 
     event.preventDefault();
     // Check if the input is valid
-    if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
+    if (!fname.value ||!mname.value ||!lname.value ||!age.value ||!course.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value ) {
         alert("Please fill in all the required fields"); 
         return;
     }
@@ -120,7 +120,7 @@ document.getElementById("save-but").addEventListener("click", async function (){
     document.getElementById("save-but").disabled = true;
     
     // Check if the input is valid
-    if (!fname.value ||!mname.value ||!lname.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value) {
+    if (!fname.value ||!mname.value ||!lname.value ||!age.value ||!course.value ||!gmail.value ||!school.value ||!school_attended.value ||!phone.value ||!username.value) {
         alert("Please fill in all the required fields");
         document.getElementById("save-but").disabled = false;
         return;
