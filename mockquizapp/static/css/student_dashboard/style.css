@@ -46,6 +46,19 @@ body {
     border-radius: 8px;
 }
 
+.dep-course {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dep-course > h3 {
+    width: 48.5%;
+    padding: 0.5em;
+    border: 2px solid var(--outline);
+    border-radius: 8px;
+}
+
 .ranking-card {
     border: 2px solid green;
     flex: 1;
