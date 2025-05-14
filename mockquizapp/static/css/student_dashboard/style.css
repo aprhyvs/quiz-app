@@ -13,7 +13,7 @@ body {
 }
 
 .profile-card-wrapper {
-    width: 60%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -22,11 +22,13 @@ body {
 .profile-card-content {
     display: flex;
     gap: 1em;
+    align-items: center; /* Add this line */
 }
 
 .profile-pic {
     background-color: var(--primary);
     min-width: 160px;
+    min-height: 160px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
